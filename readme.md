@@ -1,9 +1,9 @@
 #  UniMate  
 > **Your university survival kit**  
-> *"Because adulting is hard, university is harder."*
+> *Because 'I'll do it later' is not a study strategy*
 
 [![Status](https://img.shields.io/badge/status-in%20development-yellow)]()
-[![License](https://img.shields.io/badge/license-MIT-blue)]()
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.x-green)]()
 [![Docker](https://img.shields.io/badge/Docker-Ready-blue)]()
 
