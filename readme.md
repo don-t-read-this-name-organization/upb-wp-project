@@ -113,7 +113,7 @@ This project is designed for **one-command deployment** using Docker.
 
 ##  License
 
-This project is licensed under the **MIT License** for educational purposes.
+This project is licensed under the **GPL v3.0** for educational purposes.
 
 ---
 
