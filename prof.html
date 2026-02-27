@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professors - UniMate</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .prof-layout {
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 2rem;
+        }
+        
+        .prof-sidebar {
+            position: sticky;
+            top: 100px;
+            height: fit-content;
+        }
+        
+        .carousel-wrapper {
+            position: relative;
+        }
+        
+        .carousel-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+        
+        .carousel-nav:hover {
+            background: #357abd;
+            transform: translateY(-50%) scale(1.1);
+        }
+        
+        .carousel-nav.prev { left: -20px; }
+        .carousel-nav.next { right: -20px; }
+        
+        .carousel {
+            display: flex;
+            gap: 1.5rem;
+            overflow-x: auto;
+            padding: 1rem 0.5rem;
+            scroll-behavior: smooth;
+        }
+        
+        .carousel::-webkit-scrollbar {
+            height: 6px;
+        }
+        
+        .carousel::-webkit-scrollbar-track {
+            background: var(--bg-secondary);
+            border-radius: 3px;
+        }
+        
+        .carousel::-webkit-scrollbar-thumb {
+            background: var(--primary-color);
+            border-radius: 3px;
+        }
+        
+        .prof-card {
+            min-width: 220px;
+            max-width: 220px;
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            border: 2px solid transparent;
+        }
+        
+        .prof-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary-color);
+        }
+        
+        .prof-photo {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 0 auto 1rem;
+            border: 3px solid var(--primary-color);
+            background: var(--bg-secondary);
+        }
+        
+        .prof-name {
+            font-weight: 600;
+            margin: 0.5rem 0;
+            color: var(--text-color);
+        }
+        
+        .prof-title {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 0.75rem;
+        }
+        
+        .prof-contact {
+            font-size: 0.85rem;
+        }
+        
+        .prof-contact a {
+            color: var(--primary-color);
+            text-decoration: none;
+            display: block;
+            margin: 0.25rem 0;
+        }
+        
+        .prof-contact a:hover {
+            text-decoration: underline;
+        }
+        
+        .section-title {
+            font-size: 1.3rem;
+            margin: 2rem 0 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--border-color);
+            color: var(--primary-color);
+        }
+        
+        .info-box {
+            background: var(--bg-secondary);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .info-box h4 {
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+        }
+        
+        .info-item {
+            display: flex;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+            font-size: 0.9rem;
+        }
+        
+        .info-item i {
+            color: var(--primary-color);
+            width: 20px;
+        }
+        
+        .office-hours {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            background: var(--card-bg);
+            padding: 0.75rem;
+            border-radius: 5px;
+            margin-top: 0.5rem;
+        }
+        
+        @media (max-width: 992px) {
+            .prof-layout {
+                grid-template-columns: 1fr;
+            }
+            
+            .prof-sidebar {
+                position: static;
+            }
+        }
+    </style>
+</head>
+<body>
+   
+    <header class="header">
+        <div class="header-content">
+           
+            <button class="menu-toggle" type="button" title="Toggle Menu">
+                <i class="fas fa-bars"></i>
+                <span class="menu-text">Menu</span>
+            </button>
+            
+            <a href="index.html" class="logo">
+                <i class="fas fa-graduation-cap"></i> UniMate
+            </a>
+            
+            <div class="header-controls">
+                <a href="https://fils.upb.ro/ro/home/" target="_blank" rel="noopener" class="faculty-link">FILS</a>
+                <span id="userNameDisplay" class="hidden user-display"></span>
+                <button class="theme-toggle" onclick="toggleTheme()" title="Toggle Theme"><i class="fas fa-moon"></i></button>
+                <select class="lang-select" id="langSelect" title="Choose language" onchange="changeLanguage(this.value)">
+                    <option value="en">ENG</option><option value="de">DE</option><option value="fr">FR</option>
+                </select>
+                <button class="btn btn-primary hidden" id="profileBtn" onclick="window.location.href='profile.html'">Profile</button>
+                <button class="btn btn-primary" id="loginBtn" onclick="window.location.href='login.html'">Login</button>
+            </div>
+        </div>
+    </header>
+
+ 
+    <div class="sidebar-overlay"></div>
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            <h3>Menu</h3>
+            
+            <button type="button" class="sidebar-close" title="Close menu">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
+            <li><a href="links.html"><i class="fas fa-link"></i> Links</a></li>
+            <li><a href="prof.html"><i class="fas fa-chalkboard-teacher"></i> Professors</a></li>
+            <li><a href="time.html" class="requires-auth"><i class="fas fa-calendar-alt"></i> Timetable</a></li>
+            <li><a href="notes.html" class="requires-auth"><i class="fas fa-sticky-note"></i> Notes</a></li>
+            <li><a href="kanban.html"><i class="fas fa-columns"></i> Kanban</a></li>
+            <li class="auth-only"><a href="#" onclick="UniMate.logout(); return false;"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+        </ul>
+    </nav>
+
+    <main class="main-content">
+        <div class="prof-layout">
+            
+            <div>
+     
+                <h3 class="section-title">🎓 Decanat (Dean's Office)</h3>
+                <div class="carousel-wrapper">
+                    <button class="carousel-nav prev" title="Previous" onclick="scrollCarousel('decanat-carousel', -300)"><i class="fas fa-chevron-left"></i></button>
+                    <div class="carousel" id="decanat-carousel">
+                        <div class="prof-card">
+                            <img src="https://via.placeholder.com/100/4a90e2/ffffff?text=N1" class="prof-photo" alt="Placeholder">
+                            <div class="prof-name">Name1</div>
+                            <div class="prof-title">Dean, FILS</div>
+                            <div class="prof-contact">
+                                <a href="mailto:mail1@example.com"><i class="fas fa-envelope"></i> mail1@example.com</a>
+                                <a href="tel:+40210000001"><i class="fas fa-phone"></i> +40 21 000 0001</a>
+                                <div class="office-hours">🕐 Office: Mon, Wed 14:00-16:00<br>📍 Building X, Room 101</div>
+                            </div>
+                        </div>
+                        <div class="prof-card">
+                            <img src="https://via.placeholder.com/100/50c878/ffffff?text=N2" class="prof-photo" alt="Placeholder">
+                            <div class="prof-name">Name2</div>
+                            <div class="prof-title">Vice-Dean, Academic Affairs</div>
+                            <div class="prof-contact">
+                                <a href="mailto:mail2@example.com"><i class="fas fa-envelope"></i> mail2@example.com</a>
+                                <a href="tel:+40210000002"><i class="fas fa-phone"></i> +40 21 000 0002</a>
+                                <div class="office-hours">🕐 Office: Tue, Thu 10:00-12:00<br>📍 Building X, Room 102</div>
+                            </div>
+                        </div>
+                        <div class="prof-card">
+                            <img src="https://via.placeholder.com/100/ffc107/333333?text=N3" class="prof-photo" alt="Placeholder">
+                            <div class="prof-name">Name3</div>
+                            <div class="prof-title">Vice-Dean, Research</div>
+                            <div class="prof-contact">
+                                <a href="mailto:mail3@example.com"><i class="fas fa-envelope"></i> mail3@example.com</a>
+                                <a href="tel:+40210000003"><i class="fas fa-phone"></i> +40 21 000 0003</a>
+                                <div class="office-hours">🕐 Office: Fri 13:00-15:00<br>📍 Building X, Room 103</div>
+                            </div>
+                        </div>
+                        <div class="prof-card">
+                            <img src="https://via.placeholder.com/100/dc3545/ffffff?text=N4" class="prof-photo" alt="Placeholder">
+                            <div class="prof-name">Name4</div>
+                            <div class="prof-title">International Relations</div>
+                            <div class="prof-contact">
+                                <a href="mailto:mail4@example.com"><i class="fas fa-envelope"></i> mail4@example.com</a>
+                                <a href="tel:+40210000004"><i class="fas fa-phone"></i> +40 21 000 0004</a>
+                                <div class="office-hours">🕐 Office: Mon-Fri 9:00-11:00<br>📍 Building X, Room 104</div>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="carousel-nav next" title="Next" onclick="scrollCarousel('decanat-carousel', 300)"><i class="fas fa-chevron-right"></i></button>
+                </div>
+
+               
+                <h3 class="section-title"> Professors & Teaching Staff</h3>
+                <div class="carousel-wrapper">
+                    <button class="carousel-nav prev" title="Previous" onclick="scrollCarousel('prof-carousel', -250)"><i class="fas fa-chevron-left"></i></button>
+                    <div class="carousel" id="prof-carousel">
+                        <div class="prof-card">
+                            <img src="https://via.placeholder.com/100/6f42c1/ffffff?text=P1" class="prof-photo" alt="Placeholder">
+                            <div class="prof-name">Name5</div>
+                            <div class="prof-title">Computer Science</div>
+                            <div class="prof-contact">
+                                <a href="mailto:mail5@example.com"><i class="fas fa-envelope"></i> mail5@example.com</a>
+                                <div class="office-hours">🕐 Consultations: Wed 15:00-17:00<br>📍 FILS, Lab 201</div>
+                            </div>
+                        </div>
+                        <div class="prof-card">
+                            <img src="https://via.placeholder.com/100/20c997/ffffff?text=P2" class="prof-photo" alt="Placeholder">
+                            <div class="prof-name">Name6</div>
+                            <div class="prof-title">Mathematics</div>
+                            <div class="prof-contact">
+                                <a href="mailto:mail6@example.com"><i class="fas fa-envelope"></i> mail6@example.com</a>
+                                <div class="office-hours">🕐 Consultations: Tue 10:00-12:00<br>📍 FILS, Room 105</div>
+                            </div>
+                        </div>
+                        <div class="prof-card">
+                            <img src="https://via.placeholder.com/100/fd7e14/ffffff?text=P3" class="prof-photo" alt="Placeholder">
+                            <div class="prof-name">Name7</div>
+                            <div class="prof-title">Physics</div>
+                            <div class="prof-contact">
+                                <a href="mailto:mail7@example.com"><i class="fas fa-envelope"></i> mail7@example.com</a>
+                                <div class="office-hours">🕐 Consultations: Thu 14:00-16:00<br>📍 FILS, Lab 301</div>
+                            </div>
+                        </div>
+                        <div class="prof-card">
+                            <img src="https://via.placeholder.com/100/e83e8c/ffffff?text=P4" class="prof-photo" alt="Placeholder">
+                            <div class="prof-name">Name8</div>
+                            <div class="prof-title">Programming</div>
+                            <div class="prof-contact">
+                                <a href="mailto:mail8@example.com"><i class="fas fa-envelope"></i> mail8@example.com</a>
+                                <div class="office-hours">🕐 Consultations: Mon 11:00-13:00<br>📍 FILS, Computer Lab 1</div>
+                            </div>
+                        </div>
+                        <div class="prof-card">
+                            <img src="https://via.placeholder.com/100/17a2b8/ffffff?text=P5" class="prof-photo" alt="Placeholder">
+                            <div class="prof-name">Name9</div>
+                            <div class="prof-title">English Language</div>
+                            <div class="prof-contact">
+                                <a href="mailto:mail9@example.com"><i class="fas fa-envelope"></i> mail9@example.com</a>
+                                <div class="office-hours">🕐 Consultations: Fri 10:00-12:00<br>📍 FILS, Room 210</div>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="carousel-nav next" title="Next" onclick="scrollCarousel('prof-carousel', 250)"><i class="fas fa-chevron-right"></i></button>
+                </div>
+            </div>
+
+            <aside class="prof-sidebar">
+                <div class="card prof-sidebar">
+                    <h3 class="card-title">🏢 Secretariat & Decanat</h3>
+                    
+                    <div class="info-box">
+                        <h4><i class="fas fa-map-marker-alt"></i> Location</h4>
+                        <div class="info-item">
+                            <i class="fas fa-building"></i>
+                            <span>FILS Building, Politehnica University<br>313 Splaiul Independenței, Sector 6<br>Bucharest, Romania</span>
+                        </div>
+                    </div>
+                    
+                    <div class="info-box">
+                        <h4><i class="fas fa-clock"></i> Working Hours</h4>
+                        <div class="office-hours">
+                            <strong>Secretariat:</strong><br>
+                            Mon-Thu: 9:00 - 16:00<br>
+                            Fri: 9:00 - 14:00<br><br>
+                            <strong>Decanat:</strong><br>
+                            Mon-Fri: 10:00 - 15:00<br>
+                            (Consultations by appointment)
+                        </div>
+                    </div>
+                    
+                    <div class="info-box">
+                        <h4><i class="fas fa-headset"></i> Contact</h4>
+                        <div class="info-item">
+                            <i class="fas fa-phone"></i>
+                            <span>+40 21 345 1000</span>
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-envelope"></i>
+                            <a href="mailto:secretariat@example.com">secretariat@example.com</a>
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-globe"></i>
+                            <a href="https://fils.upb.ro" target="_blank" rel="noopener">fils.upb.ro</a>
+                        </div>
+                    </div>
+                    
+                    <div class="info-box">
+                        <h4><i class="fas fa-info-circle"></i> Quick Info</h4>
+                        <p class="quick-info-text">
+                             For academic issues: contact your year's coordinator first<br>
+                             For certificates & documents: visit Secretariat in person with student ID<br>
+                             Erasmus/Exchange: contact International Relations office
+                        </p>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&copy; 2026 UniMate. All rights reserved.</p>
+            <p>Created by Gladkykh Daria, Bachynskyi Roi, Huzhn Sofiia</p>
+            <p class="footer-joke">"Built because we needed it ourselves - procrastination is the mother of invention!" 😊</p>
+        </div>
+    </footer>
+
+    <script src="js/app.js"></script>
+    <script>
+        function scrollCarousel(id, distance) {
+            const carousel = document.getElementById(id);
+            if (carousel) {
+                carousel.scrollBy({ left: distance, behavior: 'smooth' });
+            }
+        }
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            UniMate.updateUI();
+        });
+    </script>
+</body>
+</html>

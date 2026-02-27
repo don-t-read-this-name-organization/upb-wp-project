@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - UniMate</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+ 
+    <header class="header">
+        <div class="header-content">
+            <button class="menu-toggle" onclick="toggleSidebar()" title="Toggle Menu">
+                <i class="fas fa-bars"></i>
+                <span class="menu-text">Menu</span>
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <a href="index.html" class="logo">
+                <i class="fas fa-graduation-cap"></i>
+                UniMate
+            </a>
+            
+            <div class="header-controls">
+                <a href="https://fils.upb.ro/ro/home/" target="_blank" rel="noopener" class="faculty-link">FILS</a>
+                
+                <span id="userNameDisplay" class="user-display"></span>
+                
+                <button class="theme-toggle" onclick="toggleTheme()" title="Toggle Theme">
+                    <i class="fas fa-moon"></i>
+                </button>
+                
+                <select class="lang-select" id="langSelect" title="Choose language" onchange="changeLanguage(this.value)">
+                    <option value="en">ENG</option>
+                    <option value="de">DE</option>
+                    <option value="fr">FR</option>
+                </select>
+                
+                <button class="btn btn-secondary" onclick="window.location.href='index.html'">
+                    <i class="fas fa-home"></i> Home
+                </button>
+            </div>
+        </div>
+    </header>
+
+   
+    <div class="sidebar-overlay"></div>
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            <h3>Menu</h3>
+            <button onclick="toggleSidebar()" title="Close menu" class="sidebar-close">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
+            <li><a href="links.html"><i class="fas fa-link"></i> Links</a></li>
+            <li><a href="prof.html"><i class="fas fa-chalkboard-teacher"></i> Professors</a></li>
+            <li><a href="time.html" class="requires-auth"><i class="fas fa-calendar-alt"></i> Timetable</a></li>
+            <li><a href="notes.html" class="requires-auth"><i class="fas fa-sticky-note"></i> Notes</a></li>
+            <li><a href="kanban.html"><i class="fas fa-columns"></i> Kanban</a></li>
+            <li class="auth-only"><a href="#" onclick="UniMate.logout()"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+        </ul>
+    </nav>
+
+  
+    <main class="main-content">
+        <div class="card fade-in">
+            <div class="profile-header">
+                <img src="https://via.placeholder.com/150" alt="Profile Photo" class="profile-photo">
+                <h2 id="profileName">Loading...</h2>
+                <span id="userTypeBadge" class="user-badge"></span>
+            </div>
+            
+            <div class="profile-info card">
+                <div class="info-row">
+                    <span class="info-label"><i class="fas fa-user"></i> Name:</span>
+                    <span class="info-value" id="displayName">-</span>
+                </div>
+                
+                <div class="info-row">
+                    <span class="info-label"><i class="fas fa-envelope"></i> Email:</span>
+                    <span class="info-value" id="displayEmail">-</span>
+                </div>
+                
+                <div class="info-row">
+                    <span class="info-label"><i class="fas fa-users"></i> Group:</span>
+                    <span class="info-value" id="displayGroup">-</span>
+                </div>
+                
+                <div class="info-row">
+                    <span class="info-label"><i class="fas fa-shield-alt"></i> Account Type:</span>
+                    <span class="info-value" id="displayType">-</span>
+                </div>
+                
+                <div class="info-row sef-only hidden">
+                    <span class="info-label"><i class="fas fa-crown"></i> Sef Email:</span>
+                    <span class="info-value" id="displaySefEmail">-</span>
+                </div>
+            </div>
+            
+            <div class="profile-center-content">
+                <button class="btn btn-primary" onclick="UniMate.logout()">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+        </div>
+    </main>
+
+
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&copy; 2026 UniMate. All rights reserved.</p>
+            <p>Created by Gladkykh Daria, Bachynskyi Roi, Huzhn Sofiia</p>
+            <p class="footer-joke">"Built because we needed it ourselves - procrastination is the mother of invention!" 😊</p>
+        </div>
+    </footer>
+
+    <script src="js/app.js"></script>
+    <script>
+     
+        document.addEventListener('DOMContentLoaded', () => {
+            if (!UniMate.currentUser) {
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            const user = UniMate.currentUser;
+            document.getElementById('profileName').textContent = user.name;
+            document.getElementById('displayName').textContent = user.name;
+            document.getElementById('displayEmail').textContent = user.email;
+            document.getElementById('displayGroup').textContent = user.group;
+            document.getElementById('displayType').textContent = user.type.toUpperCase();
+            
+            const badge = document.getElementById('userTypeBadge');
+            badge.textContent = user.type.toUpperCase();
+            badge.className = 'user-badge badge-' + user.type;
+            
+            if (user.sefEmail) {
+                document.getElementById('displaySefEmail').textContent = user.sefEmail;
+            }
+            
+            UniMate.updateUI();
+        });
+    </script>
+</body>
+</html>
