@@ -1,0 +1,10 @@
+# Maven / Spring Boot
+unimate/target/
+
+# IDE
+unimate/.idea/
+unimate/*.iml
+
+# Logs
+*.log
+
