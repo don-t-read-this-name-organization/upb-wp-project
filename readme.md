@@ -74,9 +74,9 @@ Unlike generic platforms, UniMate focuses on **role-based customization** (e.g.,
 
 | Layer | Technology |
 |-------|------------|
-| **Backend** | Spring Boot 3.x, Spring Security, Spring Data JPA |
+| **Backend** | Spring Boot 4 , Maven Wrapper |
 | **Frontend** |React / NextJS |
-| **Database** | **MariaDB** |
+| **Database** | MySQL 8 (Dockerized) |
 | **DevOps** | Docker, docker-compose, GitHub Actions |
 | **APIs** | OpenWeatherMap (Weather), Internal (Quotes) |
 
