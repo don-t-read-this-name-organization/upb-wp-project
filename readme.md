@@ -47,7 +47,6 @@ Unlike generic platforms, UniMate focuses on **role-based customization** (e.g.,
 -  **Professor Directory:** Contact info, office locations, and consultation hours.
 -  **Task Board:** Kanban-style exam tracker (To Do → In Progress → Done).
 -  **Campus Map:** Static map with key locations for easy orientation.
--  **Erasmus Mode:** Curated links, help guides, and simplified navigation for exchange students.
 -  **Widgets:** Live weather forecast & random motivational quotes.
 -  **Deployment:** Fully containerized with Docker & docker-compose.
 
@@ -66,8 +65,8 @@ Unlike generic platforms, UniMate focuses on **role-based customization** (e.g.,
 > **Acceptance:** Role-based access control (RBAC), upload restricted to assigned group, version history optional.
 
 ### 3. Erasmus Student Orientation
-> *"As an **Erasmus student**, I want to **easily orient myself via campus maps, help guides, and curated links**, so that I can **manage the new university system without needing to ask for help constantly**."*  
-> **Acceptance:** Dedicated "Erasmus" access, which in future can have translation to the FR, DE languages.
+> *"As an **Erasmus student**, I want to **easily orient myself via campus maps, and curated links**, so that I can **manage the new university system without needing to ask for help constantly**."*  
+
 
 ---
 
