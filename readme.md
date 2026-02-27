@@ -78,7 +78,7 @@ Unlike generic platforms, UniMate focuses on **role-based customization** (e.g.,
 | **Frontend** |React / NextJS |
 | **Database** | MySQL 8 (Dockerized) |
 | **DevOps** | Docker, docker-compose, GitHub Actions |
-| **APIs** | OpenWeatherMap (Weather), Internal (Quotes) |
+
 
 ---
 
