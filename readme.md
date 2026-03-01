@@ -67,19 +67,6 @@ Unlike generic platforms, UniMate focuses on **role-based customization** (e.g.,
 ### 3. Erasmus Student Orientation
 > *"As an **Erasmus student**, I want to **easily orient myself via campus maps, and curated links**, so that I can **manage the new university system without needing to ask for help constantly**."*  
 
-
----
-
-##  Tech Stack
-
-| Layer | Technology |
-|-------|------------|
-| **Backend** | Spring Boot 4 , Maven Wrapper |
-| **Frontend** |React / NextJS |
-| **Database** | MySQL 8 (Dockerized) |
-| **DevOps** | Docker, docker-compose, GitHub Actions |
-
-
 ---
 
 ##  Deployment & Setup
