@@ -106,18 +106,16 @@ const toggleSidebar = () => {
 
   <footer class="footer">
     <div class="footer-content">
-      <p>&copy; 2026 UniMate. Created by Daria, Roi, and Sofiia</p>
+                  <p>&copy; 2026 UniMate. All rights reserved.</p>
+            <p>Created by Gladkykh Daria, Bachynskyi Roi, Huzhn Sofiia</p>
+            <p class="footer-joke">"Built because we needed it ourselves - procrastination is the mother of invention!" 😊</p>
     </div>
   </footer>
 </template>
 
 <style>
-/* IMPORTANT: Remove 'scoped' here or move your original styles.css content 
-   into a global file like /assets/main.css so it affects the whole app.
-*/
 @import '@/assets/styles.css';
 
-/* Add transition logic for sidebar in Vue */
 .sidebar {
   transition: transform 0.3s ease;
   transform: translateX(-100%);
