@@ -15,6 +15,7 @@ export const useAppStore = defineStore('app', {
     setLanguage(lang: string) {
       this.language = lang
       i18n.global.locale.value = lang as any
+      document.documentElement.setAttribute('lang', lang)
     },
     logout() {
       this.user = null

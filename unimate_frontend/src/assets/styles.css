@@ -812,9 +812,27 @@ body {
   transition: var(--transition);
   text-decoration: none;
   color: var(--text-color);
+  min-height: 120px; 
+  height: auto;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 1rem;
+  overflow: hidden;
+}
+
+.link-card h3 {
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  hyphens: auto;
+  
+  line-height: 1.2;
+  margin-bottom: 4px;
+}
+
+.link-card P {
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  hyphens: auto;
 }
 
 .link-card:hover {
@@ -824,9 +842,18 @@ body {
   color: var(--primary-color);
 }
 
+.link-content {
+  flex: 1;
+  min-width: 0;
+}
+
 .link-icon {
+  flex-shrink: 0;
+  width: 2.5rem;
   font-size: 1.6rem;
   opacity: 0.75;
+  display: flex;
+  justify-content: center;
 }
 
 .admin-table {
