@@ -1,0 +1,51 @@
+databaseChangeLog:
+  - changeSet:
+      id: "02-create-users-table"
+      author: "demesup"
+      changes:
+        - createTable:
+            tableName: users
+            columns:
+                - column:
+                    name: id
+                    type: INT
+                    autoIncrement: true
+                    constraints:
+                      primaryKey: true
+                      nullable: false
+                - column:
+                    name: username
+                    type: VARCHAR(50)
+                    constraints:
+                      nullable: false
+                - column:
+                    name: email
+                    type: VARCHAR(255)
+                    constraints:
+                      nullable: false
+                - column:
+                    name: password_hash
+                    type: VARCHAR(255)
+                    constraints:
+                      nullable: false
+                - column:
+                    name: role
+                    type: VARCHAR(50)
+                - column:
+                    name: created_at
+                    type: TIMESTAMP
+                - column:
+                    name: active
+                    type: BOOLEAN
+                    defaultValueBoolean: true
+                    constraints:
+                      nullable: false
+        - addUniqueConstraint:
+            columnNames: username
+            tableName: users
+            constraintName: uq_users_username
+        - addUniqueConstraint:
+            columnNames: email
+            tableName: users
+            constraintName: uq_users_email
+        # role is stored as string name of RoleName enum (STUDENT, CHIEF, ADMIN, VISITOR)

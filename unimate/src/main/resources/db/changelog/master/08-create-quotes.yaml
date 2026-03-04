@@ -1,0 +1,27 @@
+databaseChangeLog:
+  - changeSet:
+      id: "08-create-quotes-table"
+      author: "demesup"
+      changes:
+        - createTable:
+            tableName: quotes
+            columns:
+                - column:
+                    name: id
+                    type: INT
+                    autoIncrement: true
+                    constraints:
+                      primaryKey: true
+                      nullable: false
+                - column:
+                    name: text
+                    type: CLOB
+                - column:
+                    name: author
+                    type: VARCHAR(255)
+                - column:
+                    name: active
+                    type: BOOLEAN
+                    defaultValueBoolean: true
+                    constraints:
+                      nullable: false
