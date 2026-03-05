@@ -1,3 +1,44 @@
+node_modules
+
+# Logs
+unimate_frontend/logs
+unimate_frontend/*.log
+unimate_frontend/npm-debug.log*
+unimate_frontend/yarn-debug.log*
+unimate_frontend/yarn-error.log*
+unimate_frontend/pnpm-debug.log*
+unimate_frontend/lerna-debug.log*
+
+unimate_frontend/node_modules
+unimate_frontend/.DS_Store
+unimate_frontend/dist
+unimate_frontend/dist-ssr
+unimate_frontend/coverage
+unimate_frontend/*.local
+
+# Editor directories and files
+unimate_frontend/.vscode/*
+!unimate_frontend/.vscode/extensions.json
+unimate_frontend/.idea
+unimate_frontend/*.suo
+unimate_frontend/*.ntvs*
+unimate_frontend/*.njsproj
+unimate_frontend/*.sln
+unimate_frontend/*.sw?
+
+unimate_frontend/*.tsbuildinfo
+
+unimate_frontend/.eslintcache
+
+# Cypress
+unimate_frontend/cypress/videos/
+unimate_frontend/cypress/screenshots/
+
+# Vitest
+unimate_frontend/__screenshots__/
+
+# Vite
+unimate_frontend/*.timestamp-*-*.mjs
 # Maven / Spring Boot
 unimate/target/
 

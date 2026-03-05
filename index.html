@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UniMate - Your Student Assistant</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  
+    <header class="header">
+        <div class="header-content">
+            
+            <button class="menu-toggle" type="button" title="Toggle Menu">
+                <i class="fas fa-bars"></i>
+                <span class="menu-text">Menu</span>
+            </button>
+            
+            <a href="index.html" class="logo">
+                <i class="fas fa-graduation-cap"></i>
+                UniMate
+            </a>
+            
+            <div class="header-controls">
+                <a href="https://fils.upb.ro/ro/home/" target="_blank" rel="noopener" class="faculty-link" id="facultyLink">
+                    FILS
+                </a>
+                
+                <span id="userNameDisplay" class="hidden user-display"></span>
+                
+                <button class="theme-toggle" onclick="toggleTheme()" title="Toggle Theme">
+                    <i class="fas fa-moon"></i>
+                </button>
+                
+                <select class="lang-select" id="langSelect" title="Choose language" onchange="changeLanguage(this.value)">
+                    <option value="en">ENG</option>
+                    <option value="de">DE</option>
+                    <option value="fr">FR</option>
+                </select>
+                
+                <button class="btn btn-primary" id="loginBtn" onclick="window.location.href='login.html'">
+                    <i class="fas fa-sign-in-alt"></i>
+                    <span data-i18n="login">Login</span>
+                </button>
+                
+                <button class="btn btn-secondary hidden" id="profileBtn" onclick="window.location.href='profile.html'">
+                    <i class="fas fa-user"></i>
+                    <span data-i18n="profile">My Profile</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+   
+    <div class="sidebar-overlay"></div>
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            <h3>Menu</h3>
+          
+            <button type="button" class="sidebar-close" title="Close menu">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
+            <li><a href="links.html"><i class="fas fa-link"></i> <span data-i18n="links">Links</span></a></li>
+            <li><a href="prof.html"><i class="fas fa-chalkboard-teacher"></i> <span data-i18n="professors">Professors</span></a></li>
+            <li><a href="time.html" class="requires-auth"><i class="fas fa-calendar-alt"></i> <span data-i18n="timetable">Timetable</span></a></li>
+            <li><a href="notes.html" class="requires-auth"><i class="fas fa-sticky-note"></i> <span data-i18n="notes">Notes</span></a></li>
+            <li><a href="kanban.html"><i class="fas fa-columns"></i> <span data-i18n="kanban">Kanban</span></a></li>
+            <li class="admin-only hidden"><a href="admin.html"><i class="fas fa-user-shield"></i> <span data-i18n="admin">Admin Panel</span></a></li>
+            <li class="auth-only"><a href="#" onclick="UniMate.logout(); return false;"><i class="fas fa-sign-out-alt"></i> <span data-i18n="logout">Logout</span></a></li>
+        </ul>
+    </nav>
+
+    <main class="main-content">
+       
+        <section class="card fade-in">
+            <h1 class="card-title" data-i18n="welcome">Welcome to UniMate</h1>
+            <p class="welcome-subtitle">
+                <span data-i18n="description">Your all-in-one student assistant platform</span>
+            </p>
+            <p class="welcome-text">
+                UniMate helps you manage your academic life with ease. Access timetables, connect with professors, 
+                organize notes, track tasks, and navigate campus - all in one place.
+            </p>
+        </section>
+
+        <section class="card map-container fade-in">
+            <h2 class="card-title" data-i18n="campusMap">Campus Map</h2>
+           <img src="images/campus-map.png" 
+     alt="Campus Map" 
+     class="map-image">
+            <div class="map-locations">
+                <span class="location-tag">📍 Main Building (Rectorat)</span>
+                <span class="location-tag">📍 Library</span>
+                <span class="location-tag">📍 Sports Hall</span>
+                <span class="location-tag">📍 Cafeteria</span>
+                <span class="location-tag">📍 FILS Building</span>
+                <span class="location-tag">📍 Computer Labs</span>
+            </div>
+        </section>
+
+        <section class="fade-in">
+            <h2 class="card-title" data-i18n="news">Faculty News</h2>
+            <!-- the news section we can say that it should be renovated by the admin user bla bla. but if its too much work - i can delete,idk -->
+            <div class="news-grid">
+                <div class="news-card">
+                    <div class="news-content">
+                        <div class="news-date">February 25, 2026</div>
+                        <h3>Exam Session Schedule Released</h3>
+                        <p>The summer exam session schedule has been published. Check your group's timetable in the Timetable section.</p>
+                    </div>
+                </div>
+                
+                <div class="news-card">
+                    <div class="news-content">
+                        <div class="news-date">February 20, 2026</div>
+                        <h3>Erasmus Application Period Open</h3>
+                        <p>Applications for Erasmus+ mobility programs are now open. Deadline: March 15, 2026.</p>
+                    </div>
+                </div>
+                
+                <div class="news-card">
+                    <div class="news-content">
+                        <div class="news-date">February 15, 2026</div>
+                        <h3>New Computer Labs Inaugurated</h3>
+                        <p>State-of-the-art computer labs with latest software are now available for students.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div class="bottom-panel collapsed">
+        <button class="panel-toggle">
+            <span class="arrow">▼</span>
+            <span>Weather & Daily Quote</span>
+        </button>
+        <div class="panel-content">
+            <div class="weather-widget">
+                <i class="fas fa-cloud-sun widget-icon"></i>
+                <h3 data-i18n="weather">Weather</h3>
+                <p>Bucharest: <span id="weatherTemp">--</span>°C - Partly Cloudy</p>
+                <small id="weatherUpdated">Updated: Just now</small>
+            </div>
+            
+            <div class="quote-widget">
+                <i class="fas fa-quote-left widget-icon-quote"></i>
+                <h3 data-i18n="quote">Quote of the Day</h3>
+                <p id="quoteText" class="quote-text">Loading...</p>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&copy; 2026 UniMate. All rights reserved.</p>
+            <p>Created by Gladkykh Daria, Bachynskyi Roi, Huzhn Sofiia</p>
+            <p class="footer-joke">"Built because we needed it ourselves - procrastination is the mother of invention!" 😊</p>
+        </div>
+    </footer>
+
+    <script src="js/app.js"></script>
+</body>
+</html>

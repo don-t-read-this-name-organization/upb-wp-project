@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Timetable - UniMate</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .timetable-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .group-badge {
+            background: var(--primary-color);
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 25px;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        
+        .timetable-actions {
+            display: flex;
+            gap: 0.75rem;
+            align-items: center;
+        }
+        
+        .upload-section {
+            background: var(--bg-secondary);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border: 2px dashed var(--border-color);
+        }
+        
+        .upload-section.dragover {
+            border-color: var(--primary-color);
+            background: rgba(74, 144, 226, 0.1);
+        }
+        
+        .upload-area {
+            text-align: center;
+            padding: 2rem;
+            cursor: pointer;
+        }
+        
+        .upload-area i {
+            font-size: 3rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+        
+        .upload-area p {
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+        }
+        
+        .upload-area small {
+            color: var(--text-muted);
+            opacity: 0.8;
+        }
+        
+        .timetable-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+            background: var(--card-bg);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            font-size: 0.9rem;
+        }
+        
+        .timetable-table th {
+            background: var(--primary-color);
+            color: white;
+            padding: 1rem;
+            text-align: center;
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+        }
+        
+        .timetable-table td {
+            padding: 1rem;
+            text-align: center;
+            border-bottom: 1px solid var(--border-color);
+            border-right: 1px solid var(--border-color);
+            min-height: 80px;
+            vertical-align: top;
+        }
+        
+        .timetable-table td:first-child {
+            font-weight: 600;
+            background: var(--bg-secondary);
+            border-right: 2px solid var(--border-color);
+        }
+        
+        .timetable-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .timetable-table td:last-child {
+            border-right: none;
+        }
+        
+        .course-cell {
+            background: var(--bg-secondary);
+            padding: 0.5rem;
+            border-radius: 5px;
+            font-size: 0.85rem;
+        }
+        
+        .course-cell strong {
+            display: block;
+            color: var(--primary-color);
+            margin-bottom: 0.25rem;
+        }
+        
+        .course-cell small {
+            color: var(--text-muted);
+            display: block;
+        }
+        
+        .sef-info {
+            background: var(--bg-secondary);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .sef-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+        
+        .sef-details h4 {
+            margin-bottom: 0.25rem;
+        }
+        
+        .sef-details a {
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+        
+        .sef-details a:hover {
+            text-decoration: underline;
+        }
+        
+        .pdf-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.75rem 1.5rem;
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            transition: var(--transition);
+            margin-top: 1rem;
+        }
+        
+        .pdf-link:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .pdf-link i {
+            font-size: 1.2rem;
+        }
+        
+        .empty-cell {
+            color: var(--text-muted);
+            font-style: italic;
+            font-size: 0.85rem;
+        }
+        
+        @media (max-width: 768px) {
+            .timetable-table {
+                font-size: 0.75rem;
+            }
+            .timetable-table th,
+            .timetable-table td {
+                padding: 0.5rem;
+            }
+            .sef-info {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <div class="header-content">
+            <button class="menu-toggle" onclick="toggleSidebar()" title="Toggle Menu">
+                <i class="fas fa-bars"></i>
+                <span class="menu-text">Menu</span>
+            </button>
+            <a href="index.html" class="logo"><i class="fas fa-graduation-cap"></i> UniMate</a>
+            <div class="header-controls">
+                <a href="https://fils.upb.ro/ro/home/" target="_blank" rel="noopener" class="faculty-link">FILS</a>
+                <span id="userNameDisplay" class="hidden user-display"></span>
+                <button class="theme-toggle" onclick="toggleTheme()" title="Toggle Theme"><i class="fas fa-moon"></i></button>
+                <select class="lang-select" id="langSelect" title="Choose language" onchange="changeLanguage(this.value)">
+                    <option value="en">ENG</option><option value="de">DE</option><option value="fr">FR</option>
+                </select>
+                <button class="btn btn-primary hidden" id="profileBtn" onclick="window.location.href='profile.html'">Profile</button>
+                <button class="btn btn-primary" id="loginBtn" onclick="window.location.href='login.html'">Login</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Sidebar -->
+    <div class="sidebar-overlay"></div>
+    <nav class="sidebar">
+        <div class="sidebar-header"><h3>Menu</h3><button onclick="toggleSidebar()" title="Close menu" class="sidebar-close"><i class="fas fa-times"></i></button></div>
+        <ul class="sidebar-menu">
+            <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
+            <li><a href="links.html"><i class="fas fa-link"></i> Links</a></li>
+            <li><a href="prof.html"><i class="fas fa-chalkboard-teacher"></i> Professors</a></li>
+            <li><a href="time.html" class="requires-auth"><i class="fas fa-calendar-alt"></i> Timetable</a></li>
+            <li><a href="notes.html" class="requires-auth"><i class="fas fa-sticky-note"></i> Notes</a></li>
+            <li><a href="kanban.html"><i class="fas fa-columns"></i> Kanban</a></li>
+            <li class="auth-only"><a href="#" onclick="UniMate.logout()"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+        </ul>
+    </nav>
+
+ 
+    <main class="main-content">
+        <div class="card fade-in">
+            <div class="timetable-header">
+                <h2 class="card-title card-title-no-margin">
+                    <i class="fas fa-calendar-week"></i> Weekly Timetable
+                </h2>
+                <span class="group-badge" id="groupDisplay">Group: 1231EB</span>
+            </div>
+            
+     
+            <div class="upload-section sef-only hidden" id="uploadSection">
+                <div class="upload-area" onclick="document.getElementById('fileInput').click()">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <p><strong>Upload Group Timetable</strong></p>
+                    <p>Drag & drop PNG/JPG or click to browse</p>
+                    <small>Only Sef de Grupă can update the group schedule</small>
+                    <input type="file" id="fileInput" accept="image/png,image/jpeg" class="hidden-input" title="Upload timetable image" onchange="handleFileUpload(event)">
+                </div>
+            </div>
+            
+<div class="timetable-wrapper">
+    <table class="timetable-table">
+        <thead>
+            <tr>
+                <th>Time</th>
+                <th>Monday</th>
+                <th>Tuesday</th>
+                <th>Wednesday</th>
+                <th>Thursday</th>
+                <th>Friday</th>
+                <th>Saturday</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>08:00-10:00</td>
+                <td class="empty-cell">—</td>
+                <td class="empty-cell">—</td>
+                <td><div class="course-cell"><strong>DCP (C)</strong><small>AN024</small></div></td>
+                <td class="empty-cell">—</td>
+                <td class="empty-cell">—</td>
+                <td class="empty-cell">—</td>
+            </tr>
+            <tr>
+                <td>10:00-12:00</td>
+                <td><div class="course-cell"><strong>SDM (P)</strong><small>CJ104</small></div></td>
+                <td><div class="course-cell"><strong>WP2 (C)</strong><small>AN024</small></div></td>
+                <td><div class="course-cell"><strong>AI (C)</strong><small>AN024</small></div></td>
+                <td class="empty-cell">—</td>
+                <td class="empty-cell">—</td>
+                <td class="empty-cell">—</td>
+            </tr>
+            <tr>
+                <td>12:00-14:00</td>
+                <td><div class="course-cell"><strong>SDM (L)</strong><small>CJ201</small></div></td>
+                <td><div class="course-cell"><strong>SDM (C)</strong><small>AN024</small></div></td>
+                <td><div class="course-cell"><strong>HCI (C)</strong><small>CB205</small></div></td>
+                <td class="empty-cell">—</td>
+                <td><div class="course-cell"><strong>NN&GA (L)</strong><small>CJ102</small></div></td>
+                <td class="empty-cell">—</td>
+            </tr>
+            <tr>
+                <td>14:00-16:00</td>
+                <td><div class="course-cell"><strong>HCI (P)</strong><small>CJ201</small></div></td>
+                <td><div class="course-cell"><strong>FP (C)</strong><small>EC102</small></div></td>
+                <td class="empty-cell">—</td>
+                <td><div class="course-cell"><strong>WP2 (P)</strong><small>CB105</small></div></td>
+                <td><div class="course-cell"><strong>FP (L)</strong><small>cantiCTI</small></div></td>
+                <td class="empty-cell">—</td>
+            </tr>
+            <tr>
+                <td>16:00-18:00</td>
+                <td class="empty-cell">—</td>
+                <td class="empty-cell">—</td>
+                <td><div class="course-cell"><strong>DCP (L)</strong><small>CJ205</small></div></td>
+                <td><div class="course-cell"><strong>BA (S)</strong><small>CB205</small></div></td>
+                <td class="empty-cell">—</td>
+                <td class="empty-cell">—</td>
+            </tr>
+            <tr>
+                <td>18:00-20:00</td>
+                <td class="empty-cell">—</td>
+                <td class="empty-cell">—</td>
+                <td><div class="course-cell"><strong>WP2 (L)</strong><small>CJ101</small></div></td>
+                <td class="empty-cell">—</td>
+                <td class="empty-cell">—</td>
+                <td class="empty-cell">—</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+          
+            <div class="sef-info">
+                <div class="sef-avatar">S</div>
+                <div class="sef-details">
+                    <h4>Your Sef de Grupă</h4>
+                    <p><strong>Maria Sef(whatever name will be specified via js i believe)</strong> - Group 1231EB</p>
+                    <p><a href="mailto:sef@unimate.ro"><i class="fas fa-envelope"></i> sef@unimate.ro</a></p>
+                    <p class="sef-office-hours">
+                        Contact your Sef for timetable updates, group announcements, or academic questions.
+                    </p>
+                </div>
+            </div>
+            
+           
+                <a href="https://fils.upb.ro/ro/orar/" target="_blank" rel="noopener" class="pdf-link">
+                <i class="fas fa-file-pdf"></i>
+                View Full Faculty Timetable (All Groups & Years)
+            </a>
+        </div>
+    </main>
+
+
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&copy; 2026 UniMate. All rights reserved.</p>
+            <p>Created by Gladkykh Daria, Bachynskyi Roi, Huzhn Sofiia</p>
+            <p class="footer-joke">"Built because we needed it ourselves - procrastination is the mother of invention!" 😊</p>
+        </div>
+    </footer>
+
+    <script src="js/app.js"></script>
+    <script>
+     
+        document.addEventListener('DOMContentLoaded', () => {
+            UniMate.updateUI();
+            
+            if (UniMate.currentUser) {
+                document.getElementById('groupDisplay').textContent = `Group: ${UniMate.currentUser.group}`;
+            }
+         
+            const uploadArea = document.querySelector('.upload-area');
+            if (uploadArea) {
+                ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                    uploadArea.addEventListener(eventName, e => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                    });
+                });
+                
+                ['dragenter', 'dragover'].forEach(eventName => {
+                    uploadArea.addEventListener(eventName, () => {
+                        uploadArea.closest('.upload-section').classList.add('dragover');
+                    });
+                });
+                
+                ['dragleave', 'drop'].forEach(eventName => {
+                    uploadArea.addEventListener(eventName, () => {
+                        uploadArea.closest('.upload-section').classList.remove('dragover');
+                    });
+                });
+                
+                uploadArea.addEventListener('drop', e => {
+                    const files = e.dataTransfer.files;
+                    if (files.length) handleFileUpload({ target: { files } });
+                });
+            }
+        });
+        
+        function handleFileUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                UniMate.showNotification(`Timetable "${file.name}" uploaded successfully!`, 'success');
+               
+                setTimeout(() => location.reload(), 1500);
+            }
+        }
+    </script>
+</body>
+</html>

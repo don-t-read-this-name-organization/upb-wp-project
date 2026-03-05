@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kanban Board - UniMate</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .kanban-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .kanban-board {
+            display: flex;
+            gap: 1.5rem;
+            overflow-x: auto;
+            padding: 1rem 0.5rem;
+            min-height: 500px;
+            scroll-behavior: smooth;
+        }
+        
+        .kanban-board::-webkit-scrollbar {
+            height: 8px;
+        }
+        
+        .kanban-board::-webkit-scrollbar-track {
+            background: var(--bg-secondary);
+            border-radius: 4px;
+        }
+        
+        .kanban-board::-webkit-scrollbar-thumb {
+            background: var(--primary-color);
+            border-radius: 4px;
+        }
+        
+        .kanban-column {
+            min-width: 300px;
+            max-width: 300px;
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .column-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 0.5rem;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid var(--border-color);
+        }
+        
+        .column-title {
+            font-weight: 600;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .column-title.todo { color: #6c757d; }
+        .column-title.inprogress { color: #fd7e14; }
+        .column-title.done { color: #28a745; }
+        
+        .task-count {
+            background: var(--border-color);
+            color: var(--text-color);
+            padding: 0.2rem 0.6rem;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        
+        .add-task-btn {
+            background: none;
+            border: none;
+            color: var(--primary-color);
+            cursor: pointer;
+            font-size: 1.2rem;
+            padding: 0.25rem;
+            transition: var(--transition);
+        }
+        
+        .add-task-btn:hover {
+            transform: scale(1.2);
+            color: #357abd;
+        }
+        
+        .tasks-container {
+            flex: 1;
+            min-height: 100px;
+            padding: 0.25rem;
+        }
+        
+        .tasks-container.drag-over {
+            background: rgba(74, 144, 226, 0.1);
+            border-radius: 8px;
+        }
+        
+        .task-card {
+            background: var(--card-bg);
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+            box-shadow: var(--shadow);
+            cursor: grab;
+            transition: var(--transition);
+            border-left: 4px solid var(--primary-color);
+            position: relative;
+        }
+        
+        .task-card:active {
+            cursor: grabbing;
+        }
+        
+        .task-card.dragging {
+            opacity: 0.5;
+            transform: scale(1.02);
+        }
+        
+        .task-card.priority-high {
+            border-left-color: #dc3545;
+        }
+        
+        .task-card.priority-medium {
+            border-left-color: #ffc107;
+        }
+        
+        .task-card.priority-low {
+            border-left-color: #28a745;
+        }
+        
+        .task-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--text-color);
+        }
+        
+        .task-description {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 0.75rem;
+            line-height: 1.4;
+        }
+        
+        .task-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+        
+        .task-date {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+        
+        .task-actions {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            display: flex;
+            gap: 0.25rem;
+            opacity: 0;
+            transition: var(--transition);
+        }
+        
+        .task-card:hover .task-actions {
+            opacity: 1;
+        }
+        
+        .task-actions button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.25rem;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            transition: var(--transition);
+        }
+        
+        .task-actions button:hover {
+            color: var(--primary-color);
+        }
+        
+        .task-actions button.delete:hover {
+            color: #dc3545;
+        }
+        
+        /* Add Task Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+        
+        .modal.active {
+            display: flex;
+        }
+        
+        .modal-content {
+            background: var(--card-bg);
+            border-radius: 15px;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        .modal-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-header h3 {
+            margin: 0;
+            color: var(--primary-color);
+        }
+        
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-muted);
+            transition: var(--transition);
+        }
+        
+        .modal-close:hover {
+            color: var(--text-color);
+            transform: rotate(90deg);
+        }
+        
+        .modal-body {
+            padding: 1.5rem;
+        }
+        
+        .modal-footer {
+            padding: 1rem 1.5rem;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.75rem;
+        }
+        
+        .priority-select {
+            display: flex;
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+        
+        .priority-btn {
+            flex: 1;
+            padding: 0.5rem;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            background: var(--bg-color);
+            cursor: pointer;
+            text-align: center;
+            transition: var(--transition);
+            font-size: 0.9rem;
+        }
+        
+        .priority-btn.active,
+        .priority-btn:hover {
+            border-color: var(--primary-color);
+            background: rgba(74, 144, 226, 0.1);
+        }
+        
+        .priority-btn.high { border-color: #dc3545; }
+        .priority-btn.high.active { background: rgba(220, 53, 69, 0.1); }
+        .priority-btn.medium { border-color: #ffc107; }
+        .priority-btn.medium.active { background: rgba(255, 193, 7, 0.1); }
+        .priority-btn.low { border-color: #28a745; }
+        .priority-btn.low.active { background: rgba(40, 167, 69, 0.1); }
+        
+        .empty-column {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-muted);
+            font-style: italic;
+        }
+        
+        .empty-column i {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            opacity: 0.5;
+        }
+        
+        @media (max-width: 768px) {
+            .kanban-board {
+                flex-direction: column;
+                align-items: center;
+            }
+            .kanban-column {
+                min-width: 100%;
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <div class="header-content">
+            <button class="menu-toggle" onclick="toggleSidebar()" title="Toggle Menu">
+                <i class="fas fa-bars"></i>
+                <span class="menu-text">Menu</span>
+            </button>
+            <a href="index.html" class="logo"><i class="fas fa-graduation-cap"></i> UniMate</a>
+            <div class="header-controls">
+                <a href="https://fils.upb.ro/ro/home/" target="_blank" rel="noopener" class="faculty-link">FILS</a>
+                <span id="userNameDisplay" class="hidden user-display"></span>
+                <button class="theme-toggle" onclick="toggleTheme()" title="Toggle Theme"><i class="fas fa-moon"></i></button>
+                <select class="lang-select" id="langSelect" title="Choose language" onchange="changeLanguage(this.value)">
+                    <option value="en">ENG</option><option value="de">DE</option><option value="fr">FR</option>
+                </select>
+                <button class="btn btn-primary hidden" id="profileBtn" onclick="window.location.href='profile.html'">Profile</button>
+                <button class="btn btn-primary" id="loginBtn" onclick="window.location.href='login.html'">Login</button>
+            </div>
+        </div>
+    </header>
+
+ 
+    <div class="sidebar-overlay"></div>
+    <nav class="sidebar">
+        <div class="sidebar-header"><h3>Menu</h3><button onclick="toggleSidebar()" title="Close menu" class="sidebar-close"><i class="fas fa-times"></i></button></div>
+        <ul class="sidebar-menu">
+            <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
+            <li><a href="links.html"><i class="fas fa-link"></i> Links</a></li>
+            <li><a href="prof.html"><i class="fas fa-chalkboard-teacher"></i> Professors</a></li>
+            <li><a href="time.html" class="requires-auth"><i class="fas fa-calendar-alt"></i> Timetable</a></li>
+            <li><a href="notes.html" class="requires-auth"><i class="fas fa-sticky-note"></i> Notes</a></li>
+            <li><a href="kanban.html"><i class="fas fa-columns"></i> Kanban</a></li>
+            <li class="auth-only"><a href="#" onclick="UniMate.logout()"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+        </ul>
+    </nav>
+
+    
+    <main class="main-content">
+        <div class="card fade-in">
+            <div class="kanban-header">
+                <h2 class="card-title card-title-no-margin">
+                    <i class="fas fa-columns"></i> Task Board
+                </h2>
+                <button class="btn btn-primary" onclick="openTaskModal()">
+                    <i class="fas fa-plus"></i> Add Task
+                </button>
+            </div>
+            
+            <div class="kanban-board">
+        
+                <div class="kanban-column" data-column="todo">
+                    <div class="column-header">
+                        <span class="column-title todo">
+                            <i class="fas fa-list"></i> To Do
+                        </span>
+                        <span class="task-count" id="todo-count">0</span>
+                        <button class="add-task-btn" title="Add task" onclick="openTaskModal('todo')"><i class="fas fa-plus"></i></button>
+                    </div>
+                    <div class="tasks-container" id="todo-container" ondragover="handleDragOver(event)" ondrop="handleDrop(event, 'todo')">
+                       
+                        <div class="task-card priority-high" draggable="true" data-task-id="1">
+                            <div class="task-actions">
+                                <button title="Edit task" onclick="editTask(1)"><i class="fas fa-edit"></i></button>
+                                <button class="delete" title="Delete task" onclick="deleteTask(1)"><i class="fas fa-trash"></i></button>
+                            </div>
+                            <div class="task-title">Study for Math Exam</div>
+                            <div class="task-description">Review integration techniques and practice problems from chapters 5-7</div>
+                            <div class="task-meta">
+                                <span class="task-date"><i class="fas fa-calendar"></i> Mar 15</span>
+                                <span class="task-priority">🔴 High</span>
+                            </div>
+                        </div>
+                        
+                        <div class="task-card priority-medium" draggable="true" data-task-id="2">
+                            <div class="task-actions">
+                                <button title="Edit task" onclick="editTask(2)"><i class="fas fa-edit"></i></button>
+                                <button class="delete" title="Delete task" onclick="deleteTask(2)"><i class="fas fa-trash"></i></button>
+                            </div>
+                            <div class="task-title">Complete CTI Project Proposal</div>
+                            <div class="task-description">Write user stories and technical description for professor validation</div>
+                            <div class="task-meta">
+                                <span class="task-date"><i class="fas fa-calendar"></i> Mar 10</span>
+                                <span class="task-priority">🟡 Medium</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="kanban-column" data-column="inprogress">
+                    <div class="column-header">
+                        <span class="column-title inprogress">
+                            <i class="fas fa-spinner"></i> In Progress
+                        </span>
+                        <span class="task-count" id="inprogress-count">0</span>
+                        <button class="add-task-btn" title="Add task" onclick="openTaskModal('inprogress')"><i class="fas fa-plus"></i></button>
+                    </div>
+                    <div class="tasks-container" id="inprogress-container" ondragover="handleDragOver(event)" ondrop="handleDrop(event, 'inprogress')">
+                        <div class="task-card priority-medium" draggable="true" data-task-id="3">
+                            <div class="task-actions">
+                                <button title="Edit task" onclick="editTask(3)"><i class="fas fa-edit"></i></button>
+                                <button class="delete" title="Delete task" onclick="deleteTask(3)"><i class="fas fa-trash"></i></button>
+                            </div>
+                            <div class="task-title">Build UniMate Frontend</div>
+                            <div class="task-description">Create responsive pages with Bootstrap and implement drag-and-drop</div>
+                            <div class="task-meta">
+                                <span class="task-date"><i class="fas fa-calendar"></i> Mar 20</span>
+                                <span class="task-priority">🟡 Medium</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        
+                <div class="kanban-column" data-column="done">
+                    <div class="column-header">
+                        <span class="column-title done">
+                            <i class="fas fa-check-circle"></i> Done
+                        </span>
+                        <span class="task-count" id="done-count">0</span>
+                        <button class="add-task-btn" title="Add task" onclick="openTaskModal('done')"><i class="fas fa-plus"></i></button>
+                    </div>
+                    <div class="tasks-container" id="done-container" ondragover="handleDragOver(event)" ondrop="handleDrop(event, 'done')">
+                        <div class="task-card priority-low" draggable="true" data-task-id="4">
+                            <div class="task-actions">
+                                <button title="Edit task" onclick="editTask(4)"><i class="fas fa-edit"></i></button>
+                                <button class="delete" title="Delete task" onclick="deleteTask(4)"><i class="fas fa-trash"></i></button>
+                            </div>
+                            <div class="task-title">Set up GitHub Repo</div>
+                            <div class="task-description">Create repository, add README, invite team members</div>
+                            <div class="task-meta">
+                                <span class="task-date"><i class="fas fa-calendar"></i> Feb 28</span>
+                                <span class="task-priority">🟢 Low</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+ 
+    <div class="modal" id="taskModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="taskModalTitle">Add New Task</h3>
+                <button class="modal-close" onclick="closeTaskModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Task Title *</label>
+                    <input type="text" id="taskTitleInput" class="form-control" placeholder="e.g., Study for Physics Exam" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea id="taskDescInput" class="form-control" rows="3" placeholder="Add details..."></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label>Due Date</label>
+                    <input type="date" id="taskDateInput" class="form-control">
+                </div>
+                
+                <div class="form-group">
+                    <label>Priority</label>
+                    <div class="priority-select">
+                        <button class="priority-btn low active" onclick="setPriority('low', this)">🟢 Low</button>
+                        <button class="priority-btn medium" onclick="setPriority('medium', this)">🟡 Medium</button>
+                        <button class="priority-btn high" onclick="setPriority('high', this)">🔴 High</button>
+                    </div>
+                </div>
+                
+                <input type="hidden" id="taskColumnInput" value="todo">
+                <input type="hidden" id="editingTaskId" value="">
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeTaskModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="saveTask()">Save Task</button>
+            </div>
+        </div>
+    </div>
+
+   
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&copy; 2026 UniMate. All rights reserved.</p>
+            <p>Created by Gladkykh Daria, Bachynskyi Roi, Huzhn Sofiia</p>
+            <p class="footer-joke">"Built because we needed it ourselves - procrastination is the mother of invention!" 😊</p>
+        </div>
+    </footer>
+
+    <script src="js/app.js"></script>
+    <script>
+        let currentPriority = 'low';
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            UniMate.updateUI();
+            initKanban();
+            updateTaskCounts();
+        });
+        
+        function initKanban() {
+            const cards = document.querySelectorAll('.task-card');
+            cards.forEach(card => {
+                card.addEventListener('dragstart', handleDragStart);
+                card.addEventListener('dragend', handleDragEnd);
+            });
+         
+            ['dragstart', 'dragover', 'dragenter', 'drop'].forEach(eventName => {
+                document.addEventListener(eventName, e => { e.preventDefault(); }, false);
+            });
+        }
+        
+        function handleDragStart(e) {
+            e.target.classList.add('dragging');
+            e.dataTransfer.setData('text/plain', e.target.dataset.taskId);
+            e.dataTransfer.effectAllowed = 'move';
+        }
+        
+        function handleDragEnd(e) {
+            e.target.classList.remove('dragging');
+        }
+        
+        function handleDragOver(e) {
+            e.currentTarget.classList.add('drag-over');
+        }
+        
+        function handleDrop(e, column) {
+            e.currentTarget.classList.remove('drag-over');
+            const taskId = e.dataTransfer.getData('text/plain');
+            const task = document.querySelector(`[data-task-id="${taskId}"]`);
+            
+            if (task) {
+               
+                e.currentTarget.appendChild(task);
+                updateTaskCounts();
+                UniMate.showNotification('Task moved!', 'success');
+                // normally the app status should be saved to api, but idk how we want to proceed. we can leave it as it is
+            }
+        }
+        
+        
+        document.querySelectorAll('.tasks-container').forEach(container => {
+            container.addEventListener('dragleave', () => {
+                container.classList.remove('drag-over');
+            });
+        });
+        
+        function updateTaskCounts() {
+            ['todo', 'inprogress', 'done'].forEach(column => {
+                const count = document.querySelectorAll(`#${column}-container .task-card`).length;
+                document.getElementById(`${column}-count`).textContent = count;
+            });
+        }
+        
+        function openTaskModal(column = 'todo') {
+            document.getElementById('taskModalTitle').textContent = 'Add New Task';
+            document.getElementById('taskTitleInput').value = '';
+            document.getElementById('taskDescInput').value = '';
+            document.getElementById('taskDateInput').value = '';
+            document.getElementById('taskColumnInput').value = column;
+            document.getElementById('editingTaskId').value = '';
+            setPriority('low', document.querySelector('.priority-btn.low'));
+            document.getElementById('taskModal').classList.add('active');
+        }
+        
+        function closeTaskModal() {
+            document.getElementById('taskModal').classList.remove('active');
+        }
+        
+        function setPriority(priority, btn) {
+            currentPriority = priority;
+            document.querySelectorAll('.priority-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+        }
+        
+        function saveTask() {
+            const title = document.getElementById('taskTitleInput').value.trim();
+            const desc = document.getElementById('taskDescInput').value.trim();
+            const date = document.getElementById('taskDateInput').value;
+            const column = document.getElementById('taskColumnInput').value;
+            const editId = document.getElementById('editingTaskId').value;
+            
+            if (!title) {
+                UniMate.showNotification('Task title is required', 'error');
+                return;
+            }
+            
+            if (editId) {
+              
+                UniMate.showNotification('Task updated!', 'success');
+            } else {
+                
+                const container = document.getElementById(`${column}-container`);
+                const taskCard = createTaskCard(Date.now(), title, desc, date, currentPriority);
+                container.appendChild(taskCard);
+                
+                taskCard.addEventListener('dragstart', handleDragStart);
+                taskCard.addEventListener('dragend', handleDragEnd);
+                
+                UniMate.showNotification('Task added!', 'success');
+            }
+            
+            closeTaskModal();
+            updateTaskCounts();
+        }
+        
+        function createTaskCard(id, title, desc, date, priority) {
+            const card = document.createElement('div');
+            card.className = `task-card priority-${priority}`;
+            card.draggable = true;
+            card.dataset.taskId = id;
+            card.innerHTML = `
+                <div class="task-actions">
+                    <button class="edit-btn" data-task-id="${id}"><i class="fas fa-edit"></i></button>
+                    <button class="delete-btn" data-task-id="${id}"><i class="fas fa-trash"></i></button>
+                </div>
+                <div class="task-title">${title}</div>
+                <div class="task-description">${desc || 'No description'}</div>
+                <div class="task-meta">
+                    <span class="task-date"><i class="fas fa-calendar"></i> ${date || 'No date'}</span>
+                    <span class="task-priority">${priority === 'high' ? '🔴' : priority === 'medium' ? '🟡' : '🟢'} ${priority.charAt(0).toUpperCase() + priority.slice(1)}</span>
+                </div>
+            `;
+ 
+            const editBtn = card.querySelector('.edit-btn');
+            const deleteBtn = card.querySelector('.delete-btn');
+            
+            editBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                editTask(id);
+            });
+            
+            deleteBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                deleteTask(id);
+            });
+            
+            card.addEventListener('dragstart', handleDragStart);
+            card.addEventListener('dragend', handleDragEnd);
+            return card;
+        }
+        
+        function editTask(id) {
+         
+            UniMate.showNotification('Edit task functionality - coming soon!', 'info');
+      
+        }
+        
+        function deleteTask(id) {
+            if (confirm('Delete this task?')) {
+                const task = document.querySelector(`[data-task-id="${id}"]`);
+                if (task) {
+                    task.remove();
+                    updateTaskCounts();
+                    UniMate.showNotification('Task deleted', 'success');
+                }
+            }
+        }
+        
+   
+        document.getElementById('taskModal').addEventListener('click', (e) => {
+            if (e.target.id === 'taskModal') closeTaskModal();
+        });
+    </script>
+</body>
+</html>

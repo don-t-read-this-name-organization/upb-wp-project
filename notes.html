@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notes - UniMate</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .notes-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .notes-actions {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+        
+        .collection-filter {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 1.5rem;
+        }
+        
+        .collection-btn {
+            padding: 0.4rem 1rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: var(--transition);
+        }
+        
+        .collection-btn.active,
+        .collection-btn:hover {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+        
+        .notes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .note-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            position: relative;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+        
+        .note-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary-color);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+        
+        .note-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+        
+        .note-title {
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: var(--primary-color);
+            margin: 0;
+            flex: 1;
+        }
+        
+        .note-actions {
+            display: flex;
+            gap: 0.25rem;
+            opacity: 0;
+            transition: var(--transition);
+        }
+        
+        .note-card:hover .note-actions {
+            opacity: 1;
+        }
+        
+        .note-actions button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.25rem;
+            font-size: 1rem;
+            color: var(--text-muted);
+            transition: var(--transition);
+        }
+        
+        .note-actions button:hover {
+            color: var(--primary-color);
+            transform: scale(1.2);
+        }
+        
+        .note-actions button.delete:hover {
+            color: #dc3545;
+        }
+        
+        .note-preview {
+            color: var(--text-color);
+            font-size: 0.95rem;
+            line-height: 1.5;
+            margin-bottom: 1rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 4;
+            line-clamp: 4;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        
+        .note-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-color);
+        }
+        
+        .note-collection {
+            background: var(--bg-secondary);
+            padding: 0.2rem 0.75rem;
+            border-radius: 12px;
+            font-weight: 500;
+        }
+        
+        .note-date {
+            font-style: italic;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-muted);
+        }
+        
+        .empty-state i {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+        
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+        
+        .modal.active {
+            display: flex;
+        }
+        
+        .modal-content {
+            background: var(--card-bg);
+            border-radius: 15px;
+            width: 100%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        .modal-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-header h3 {
+            margin: 0;
+            color: var(--primary-color);
+        }
+        
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-muted);
+            transition: var(--transition);
+        }
+        
+        .modal-close:hover {
+            color: var(--text-color);
+            transform: rotate(90deg);
+        }
+        
+        .modal-body {
+            padding: 1.5rem;
+        }
+        
+        .modal-footer {
+            padding: 1rem 1.5rem;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.75rem;
+        }
+        
+        .note-editor {
+            width: 100%;
+            min-height: 300px;
+            padding: 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background: var(--bg-color);
+            color: var(--text-color);
+            font-family: inherit;
+            font-size: 1rem;
+            line-height: 1.6;
+            resize: vertical;
+        }
+        
+        .note-editor:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1);
+        }
+        
+        .file-upload {
+            border: 2px dashed var(--border-color);
+            border-radius: 10px;
+            padding: 2rem;
+            text-align: center;
+            margin: 1rem 0;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .file-upload:hover,
+        .file-upload.dragover {
+            border-color: var(--primary-color);
+            background: rgba(74, 144, 226, 0.05);
+        }
+        
+        .file-upload i {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+        
+        .file-list {
+            margin-top: 1rem;
+        }
+        
+        .file-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.5rem;
+            background: var(--bg-secondary);
+            border-radius: 5px;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+        
+        .file-item i {
+            color: var(--primary-color);
+        }
+        
+        .file-item .remove-file {
+            margin-left: auto;
+            background: none;
+            border: none;
+            color: #dc3545;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        
+        @media (max-width: 768px) {
+            .notes-grid {
+                grid-template-columns: 1fr;
+            }
+            .notes-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+ 
+    <header class="header">
+        <div class="header-content">
+            <button class="menu-toggle" onclick="toggleSidebar()" title="Toggle Menu">
+                <i class="fas fa-bars"></i>
+                <span class="menu-text">Menu</span>
+            </button>
+            <a href="index.html" class="logo"><i class="fas fa-graduation-cap"></i> UniMate</a>
+            <div class="header-controls">
+                <a href="https://fils.upb.ro/ro/home/" target="_blank" rel="noopener" class="faculty-link">FILS</a>
+                <span id="userNameDisplay" class="hidden user-display"></span>
+                <button class="theme-toggle" onclick="toggleTheme()" title="Toggle Theme"><i class="fas fa-moon"></i></button>
+                <select class="lang-select" id="langSelect" title="Choose language" onchange="changeLanguage(this.value)">
+                    <option value="en">ENG</option><option value="de">DE</option><option value="fr">FR</option>
+                </select>
+                <button class="btn btn-primary hidden" id="profileBtn" onclick="window.location.href='profile.html'">Profile</button>
+                <button class="btn btn-primary" id="loginBtn" onclick="window.location.href='login.html'">Login</button>
+            </div>
+        </div>
+    </header>
+
+
+    <div class="sidebar-overlay"></div>
+    <nav class="sidebar">
+        <div class="sidebar-header"><h3>Menu</h3><button onclick="toggleSidebar()" title="Close menu" class="sidebar-close"><i class="fas fa-times"></i></button></div>
+        <ul class="sidebar-menu">
+            <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
+            <li><a href="links.html"><i class="fas fa-link"></i> Links</a></li>
+            <li><a href="prof.html"><i class="fas fa-chalkboard-teacher"></i> Professors</a></li>
+            <li><a href="time.html" class="requires-auth"><i class="fas fa-calendar-alt"></i> Timetable</a></li>
+            <li><a href="notes.html" class="requires-auth"><i class="fas fa-sticky-note"></i> Notes</a></li>
+            <li><a href="kanban.html"><i class="fas fa-columns"></i> Kanban</a></li>
+            <li class="auth-only"><a href="#" onclick="UniMate.logout()"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+        </ul>
+    </nav>
+
+
+    <main class="main-content">
+        <div class="card fade-in">
+            <div class="notes-header">
+                <h2 class="card-title card-title-no-margin">
+                    <i class="fas fa-sticky-note"></i> My Notes
+                </h2>
+                <div class="notes-actions">
+                    <button class="btn btn-secondary" onclick="openNoteModal()">
+                        <i class="fas fa-plus"></i> New Note
+                    </button>
+                    <button class="btn btn-secondary" onclick="document.getElementById('fileUploadInput').click()">
+                        <i class="fas fa-upload"></i> Upload File
+                    </button>
+                    <input type="file" id="fileUploadInput" multiple accept=".pdf,.doc,.docx,.png,.jpg,.jpeg" class="file-input-hidden" title="Upload files" onchange="handleFileUpload(event)">
+                </div>
+            </div>
+            
+        
+            <div class="collection-filter">
+                <button class="collection-btn active" onclick="filterNotes('all', this)">All</button>
+                <button class="collection-btn" onclick="filterNotes('Math', this)">Math</button>
+                <button class="collection-btn" onclick="filterNotes('Physics', this)">Physics</button>
+                <button class="collection-btn" onclick="filterNotes('Programming', this)">Programming</button>
+                <button class="collection-btn" onclick="filterNotes('English', this)">English</button>
+            </div>
+            
+          
+            <div class="notes-grid" id="notesGrid">
+                
+                <div class="note-card" data-collection="Math" onclick="viewNote(1)">
+                    <div class="note-card-header">
+                        <h3 class="note-title">Integration Techniques</h3>
+                        <div class="note-actions">
+                            <button onclick="event.stopPropagation(); editNote(1)" title="Edit note"><i class="fas fa-edit"></i></button>
+                            <button class="delete" onclick="event.stopPropagation(); deleteNote(1)" title="Delete note"><i class="fas fa-trash"></i></button>
+                        </div>
+                    </div>
+                    <div class="note-preview">Key methods: substitution, integration by parts, partial fractions. Remember: ∫u dv = uv - ∫v du...</div>
+                    <div class="note-meta">
+                        <span class="note-collection"> Math</span>
+                        <span class="note-date">Feb 24, 2026</span>
+                    </div>
+                </div>
+                
+                <div class="note-card" data-collection="Physics" onclick="viewNote(2)">
+                    <div class="note-card-header">
+                        <h3 class="note-title">Lab Report: Optics</h3>
+                        <div class="note-actions">
+                            <button onclick="event.stopPropagation(); editNote(2)" title="Edit note"><i class="fas fa-edit"></i></button>
+                            <button class="delete" onclick="event.stopPropagation(); deleteNote(2)" title="Delete note"><i class="fas fa-trash"></i></button>
+                        </div>
+                    </div>
+                    <div class="note-preview">Experiment: Measuring focal length of converging lens. Results: f = 15.2 ± 0.3 cm. Sources of error: parallax, alignment...</div>
+                    <div class="note-meta">
+                        <span class="note-collection"> Physics</span>
+                        <span class="note-date">Feb 20, 2026</span>
+                    </div>
+                </div>
+                
+                <div class="note-card" data-collection="Programming" onclick="viewNote(3)">
+                    <div class="note-card-header">
+                        <h3 class="note-title">Spring Boot Cheat Sheet</h3>
+                        <div class="note-actions">
+                            <button onclick="event.stopPropagation(); editNote(3)" title="Edit note"><i class="fas fa-edit"></i></button>
+                            <button class="delete" onclick="event.stopPropagation(); deleteNote(3)" title="Delete note"><i class="fas fa-trash"></i></button>
+                        </div>
+                    </div>
+                    <div class="note-preview">@SpringBootApplication, @RestController, @Autowired, @Repository. Dependency injection tips and common annotations...</div>
+                    <div class="note-meta">
+                        <span class="note-collection">Programming</span>
+                        <span class="note-date">Feb 18, 2026</span>
+                    </div>
+                </div>
+            </div>
+            
+         
+            <div class="empty-state hidden" id="emptyState">
+                <i class="fas fa-clipboard-list"></i>
+                <h3>No notes yet</h3>
+                <p>Create your first note or upload a file to get started!</p>
+                <button class="btn btn-primary add-button-margin" onclick="openNoteModal()">
+                    <i class="fas fa-plus"></i> Create Note
+                </button>
+            </div>
+        </div>
+    </main>
+
+ 
+    <div class="modal" id="noteModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">New Note</h3>
+                <button class="modal-close" onclick="closeNoteModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <input type="text" id="noteTitleInput" class="form-control note-title-bold" placeholder="Note title...">
+                
+                <select id="noteCollectionInput" class="form-control note-collection-margin">
+                    <option value="Math"> Mathematics</option>
+                    <option value="Physics"> Physics</option>
+                    <option value="Programming">Programming</option>
+                    <option value="English"> English</option>
+                    <option value="Other"> Other</option>
+                </select>
+                
+                <textarea id="noteContentInput" class="note-editor" placeholder="Start typing your note..."></textarea>
+                
+                <div class="file-upload" onclick="document.getElementById('modalFileInput').click()">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <p><strong>Attach Files</strong></p>
+                    <small>PDF, DOC, PNG, JPG (max 10MB)</small>
+                    <input type="file" id="modalFileInput" multiple class="modal-file-hidden" onchange="addFilesToNote(event)">
+                </div>
+                
+                <div class="file-list" id="attachedFiles"></div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeNoteModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="saveNote()">Save Note</button>
+            </div>
+        </div>
+    </div>
+
+
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&copy; 2026 UniMate. All rights reserved.</p>
+            <p>Created by Gladkykh Daria, Bachynskyi Roi, Huzhn Sofiia</p>
+            <p class="footer-joke">"Built because we needed it ourselves - procrastination is the mother of invention!" 😊</p>
+        </div>
+    </footer>
+
+    <script src="js/app.js"></script>
+    <script>
+        let currentNoteId = null;
+        let attachedFiles = [];
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            UniMate.updateUI();
+            loadNotes();
+        });
+        
+        function loadNotes() {
+            // In real app: fetch from API
+            // For demo we use mock data from app.js
+            const grid = document.getElementById('notesGrid');
+            const empty = document.getElementById('emptyState');
+            
+            if (grid.children.length === 0) {
+                empty.classList.remove('hidden');
+            } else {
+                empty.classList.add('hidden');
+            }
+        }
+        
+        function filterNotes(collection, btn) {
+            document.querySelectorAll('.collection-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            
+            const cards = document.querySelectorAll('.note-card');
+            cards.forEach(card => {
+                if (collection === 'all' || card.dataset.collection === collection) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+        
+        function openNoteModal(noteId = null) {
+            currentNoteId = noteId;
+            const modal = document.getElementById('noteModal');
+            const title = document.getElementById('modalTitle');
+            const titleInput = document.getElementById('noteTitleInput');
+            const contentInput = document.getElementById('noteContentInput');
+            const collectionInput = document.getElementById('noteCollectionInput');
+            
+            if (noteId) {
+                // Edit mode = load existing note (demo: mock data)
+                title.textContent = 'Edit Note';
+                titleInput.value = 'Sample Note';
+                contentInput.value = 'This is the note content...';
+                collectionInput.value = 'Math';
+            } else {
+                
+                title.textContent = 'New Note';
+                titleInput.value = '';
+                contentInput.value = '';
+                collectionInput.value = 'Math';
+            }
+            
+            attachedFiles = [];
+            document.getElementById('attachedFiles').innerHTML = '';
+            modal.classList.add('active');
+        }
+        
+        function closeNoteModal() {
+            document.getElementById('noteModal').classList.remove('active');
+            currentNoteId = null;
+        }
+        
+        function saveNote() {
+            const title = document.getElementById('noteTitleInput').value.trim();
+            const content = document.getElementById('noteContentInput').value.trim();
+            const collection = document.getElementById('noteCollectionInput').value;
+            
+            if (!title || !content) {
+                UniMate.showNotification('Please fill in title and content', 'error');
+                return;
+            }
+            
+            // again, in rl it needs to be saved to api, but idk how we will decide to proceed
+            UniMate.showNotification('Note saved successfully! ✓', 'success');
+            closeNoteModal();
+            setTimeout(() => location.reload(), 1000);
+        }
+        
+        function editNote(id) {
+            openNoteModal(id);
+        }
+        
+        function deleteNote(id) {
+            if (confirm('Delete this note permanently?')) {
+             
+                UniMate.showNotification('Note deleted', 'success');
+                setTimeout(() => location.reload(), 1000);
+            }
+        }
+        
+        function viewNote(id) {
+        //HERE SHOULD BE A FUNCTION TO OPEN NOTE IN VIEW MODE, BUT WE DIDN'T DESIGN IT, SO FOR NOW IT JUST SHOWS A NOTIFICATION
+            UniMate.showNotification('Opening note...', 'info');
+        }
+        
+        function handleFileUpload(event) {
+            const files = Array.from(event.target.files);
+            files.forEach(file => {
+                if (file.size > 10 * 1024 * 1024) {
+                    UniMate.showNotification(`File too large: ${file.name}`, 'error');
+                    return;
+                }
+                UniMate.showNotification(`Uploaded: ${file.name}`, 'success');
+                //in rl it should upload to server, but idk how we do it
+            });
+        }
+        
+        function addFilesToNote(event) {
+            const files = Array.from(event.target.files);
+            const list = document.getElementById('attachedFiles');
+            
+            files.forEach(file => {
+                attachedFiles.push(file);
+                const item = document.createElement('div');
+                item.className = 'file-item';
+                item.innerHTML = `
+                    <i class="fas fa-file"></i>
+                    <span>${file.name} (${(file.size/1024).toFixed(1)} KB)</span>
+                    <button class="remove-file" onclick="this.parentElement.remove()">✕</button>
+                `;
+                list.appendChild(item);
+            });
+        }
+        
+        document.getElementById('noteModal').addEventListener('click', (e) => {
+            if (e.target.id === 'noteModal') closeNoteModal();
+        });
+
+        const fileUpload = document.querySelector('.file-upload');
+        if (fileUpload) {
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                fileUpload.addEventListener(eventName, e => { e.preventDefault(); e.stopPropagation(); });
+            });
+            ['dragenter', 'dragover'].forEach(eventName => {
+                fileUpload.addEventListener(eventName, () => fileUpload.classList.add('dragover'));
+            });
+            ['dragleave', 'drop'].forEach(eventName => {
+                fileUpload.addEventListener(eventName, () => fileUpload.classList.remove('dragover'));
+            });
+            fileUpload.addEventListener('drop', e => {
+                const dt = e.dataTransfer;
+                const files = dt.files;
+                handleFileUpload({ target: { files } });
+            });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - UniMate</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <button class="menu-toggle" type="button" onclick="toggleSidebar()" title="Toggle Menu">
+                <i class="fas fa-bars"></i>
+                <span class="menu-text">Menu</span>
+            </button>
+
+            <a href="index.html" class="logo">
+                <i class="fas fa-graduation-cap"></i>
+                UniMate
+            </a>
+            
+            <div class="header-controls">
+                <button class="theme-toggle" onclick="toggleTheme()" title="Toggle Theme">
+                    <i class="fas fa-moon"></i>
+                </button>
+                
+                <select class="lang-select" id="langSelect" title="Choose language" onchange="changeLanguage(this.value)">
+                    <option value="en">ENG</option>
+                    <option value="de">DE</option>
+                    <option value="fr">FR</option>
+                </select>
+            </div>
+        </div>
+    </header>
+
+ 
+    <div class="sidebar-overlay"></div>
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            <h3>Menu</h3>
+            <button onclick="toggleSidebar()" title="Close menu" class="sidebar-close">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
+            <li><a href="links.html"><i class="fas fa-link"></i> <span data-i18n="links">Links</span></a></li>
+            <li><a href="prof.html"><i class="fas fa-chalkboard-teacher"></i> <span data-i18n="professors">Professors</span></a></li>
+            <li><a href="time.html" class="requires-auth"><i class="fas fa-calendar-alt"></i> <span data-i18n="timetable">Timetable</span></a></li>
+            <li><a href="notes.html" class="requires-auth"><i class="fas fa-sticky-note"></i> <span data-i18n="notes">Notes</span></a></li>
+            <li><a href="kanban.html"><i class="fas fa-columns"></i> <span data-i18n="kanban">Kanban</span></a></li>
+            <li class="admin-only hidden"><a href="admin.html"><i class="fas fa-user-shield"></i> <span data-i18n="admin">Admin Panel</span></a></li>
+            <li class="auth-only"><a href="#" onclick="UniMate.logout()"><i class="fas fa-sign-out-alt"></i> <span data-i18n="logout">Logout</span></a></li>
+        </ul>
+    </nav>
+
+    <main class="main-content">
+        <div class="card login-container fade-in">
+            <h2 class="card-title text-center">
+                <i class="fas fa-sign-in-alt"></i>
+                <span data-i18n="login">Login</span>
+            </h2>
+            
+            <form id="loginForm" onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label for="email" data-i18n="email">Email</label>
+                    <input type="email" id="email" class="form-control" required 
+                           placeholder="Enter your email">
+                </div>
+                
+                <div class="form-group">
+                    <label for="password" data-i18n="password">Password</label>
+                    <input type="password" id="password" class="form-control" required 
+                           placeholder="Enter your password">
+                </div>
+                
+                <button type="submit" class="btn btn-primary btn-full-width">
+                    <i class="fas fa-sign-in-alt"></i>
+                    <span data-i18n="login">Login</span>
+                </button>
+            </form>
+            
+            <div class="demo-accounts-divider">
+                <p class="demo-accounts-title">
+                    <strong>Demo Accounts:</strong>
+                </p>
+                <div class="demo-accounts-box">
+                    <p><strong>Admin:</strong> admin@unimate.ro / admin123</p>
+                    <p><strong>Student:</strong> student@unimate.ro / student123</p>
+                    <p><strong>Sef de Grupa:</strong> sef@unimate.ro / sef123</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&copy; 2026 UniMate. All rights reserved.</p>
+            <p>Created by Gladkykh Daria, Bachynskyi Roi, Huzhn Sofiia</p>
+            <p class="footer-joke">"Built because we needed it ourselves - procrastination is the mother of invention!" 😊</p>
+        </div>
+    </footer>
+
+    <script src="js/app.js"></script>
+    <script>
+        function handleLogin(e) {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            if (UniMate.login(email, password)) {
+                UniMate.showNotification('Login successful! Welcome back!', 'success');
+            } else {
+                UniMate.showNotification('Invalid credentials. Please try again.', 'error');
+            }
+        }
+    </script>
+</body>
+</html>
