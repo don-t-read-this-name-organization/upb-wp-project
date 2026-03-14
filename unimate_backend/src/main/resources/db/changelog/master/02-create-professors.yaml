@@ -1,0 +1,32 @@
+databaseChangeLog:
+  - changeSet:
+      id: "03-create-professors-table"
+      author: "demesup"
+      changes:
+        - createTable:
+            tableName: professors
+            columns:
+                - column:
+                    name: id
+                    type: INT
+                    autoIncrement: true
+                    constraints:
+                      primaryKey: true
+                      nullable: false
+                - column:
+                    name: name
+                    type: VARCHAR(255)
+                    constraints:
+                      nullable: false
+                - column:
+                    name: department
+                    type: VARCHAR(255)
+                - column:
+                    name: faculty
+                    type: VARCHAR(255)
+                - column:
+                    name: active
+                    type: BOOLEAN
+                    defaultValueBoolean: true
+                    constraints:
+                      nullable: false
