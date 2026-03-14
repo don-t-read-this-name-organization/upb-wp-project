@@ -75,7 +75,7 @@ const toggleSidebar = () => {
         >
       </li>
 
-      <template v-if="store.user">
+      <template v-if="!store.user">
         <li>
           <RouterLink to="/timetable" @click="toggleSidebar"
             ><i class="fas fa-calendar-alt"></i> Timetable</RouterLink
@@ -106,9 +106,11 @@ const toggleSidebar = () => {
 
   <footer class="footer">
     <div class="footer-content">
-                  <p>&copy; 2026 UniMate. All rights reserved.</p>
-            <p>Created by Gladkykh Daria, Bachynskyi Roi, Huzhn Sofiia</p>
-            <p class="footer-joke">"Built because we needed it ourselves - procrastination is the mother of invention!" 😊</p>
+      <p>&copy; 2026 UniMate. All rights reserved.</p>
+      <p>Created by Gladkykh Daria, Bachynskyi Roi, Huzhn Sofiia</p>
+      <p class="footer-joke">
+        "Built because we needed it ourselves - procrastination is the mother of invention!" 😊
+      </p>
     </div>
   </footer>
 </template>

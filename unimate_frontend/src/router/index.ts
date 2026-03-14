@@ -42,7 +42,7 @@ const router = createRouter({
       path: '/notes',
       name: 'notes',
       component: () => import('../views/NotesView.vue'),
-    }
+    },
   ],
 })
 

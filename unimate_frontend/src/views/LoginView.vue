@@ -1,44 +1,44 @@
 <script setup lang="ts">
-import { ref } from 'vue';
-import { useRouter } from 'vue-router';
-import { useAppStore } from '@/stores/appStore';
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { useAppStore } from '@/stores/appStore'
 
-const router = useRouter();
-const store = useAppStore();
-const email = ref('');
-const password = ref('');
-const error = ref('');
-const loading = ref(false);
+const router = useRouter()
+const store = useAppStore()
+const email = ref('')
+const password = ref('')
+const error = ref('')
+const loading = ref(false)
 
 const handleLogin = async () => {
-  error.value = '';
-  loading.value = true;
-  
+  error.value = ''
+  loading.value = true
+
   try {
     const response = await fetch('/api/auth/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email: email.value, password: password.value })
-    });
-    
-    const data = await response.json();
-    
+      body: JSON.stringify({ email: email.value, password: password.value }),
+    })
+
+    const data = await response.json()
+
     if (response.ok) {
-      store.user = { 
-        name: data.user.username, 
-        role: data.user.role 
-      };
-      localStorage.setItem('user', JSON.stringify(store.user));
-      router.push('/'); 
+      store.user = {
+        name: data.user.username,
+        role: data.user.role,
+      }
+      localStorage.setItem('user', JSON.stringify(store.user))
+      router.push('/')
     } else {
-      error.value = data.error || 'Login failed';
+      error.value = data.error || 'Login failed'
     }
   } catch (e) {
-    error.value = 'Connection error. Is the backend running?';
+    error.value = 'Connection error. Is the backend running?'
   } finally {
-    loading.value = false;
+    loading.value = false
   }
-};
+}
 </script>
 
 <template>
@@ -48,40 +48,40 @@ const handleLogin = async () => {
         <i class="fas fa-sign-in-alt"></i>
         <span>Login</span>
       </h2>
-      
+
       <form id="loginForm" @submit.prevent="handleLogin">
         <div class="form-group">
           <label for="email">Email</label>
-          <input 
-            v-model="email" 
-            type="email" 
-            id="email" 
-            class="form-control" 
-            required 
+          <input
+            v-model="email"
+            type="email"
+            id="email"
+            class="form-control"
+            required
             placeholder="Enter your email"
-          >
+          />
         </div>
-        
+
         <div class="form-group">
           <label for="password">Password</label>
-          <input 
-            v-model="password" 
-            type="password" 
-            id="password" 
-            class="form-control" 
-            required 
+          <input
+            v-model="password"
+            type="password"
+            id="password"
+            class="form-control"
+            required
             placeholder="Enter your password"
-          >
+          />
         </div>
-        
+
         <button type="submit" class="btn btn-primary btn-full-width" :disabled="loading">
           <i class="fas fa-sign-in-alt"></i>
           <span>{{ loading ? 'Logging in...' : 'Login' }}</span>
         </button>
-        
+
         <p v-if="error" class="error-message">{{ error }}</p>
       </form>
-      
+
       <div class="demo-accounts-divider">
         <p class="demo-accounts-title">
           <strong>Demo Accounts:</strong>
@@ -143,7 +143,13 @@ const handleLogin = async () => {
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 </style>

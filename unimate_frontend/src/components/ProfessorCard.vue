@@ -1,36 +1,34 @@
 <script setup lang="ts">
 defineProps<{
   prof: {
-    name: string;
-    title: string;
-    email: string;
-    phone?: string;
-    hours: string;
-    room: string;
-    color: string;
-    initials: string;
+    name: string
+    title: string
+    email: string
+    phone?: string
+    hours: string
+    room: string
+    color: string
+    initials: string
   }
 }>()
 </script>
 
 <template>
   <div class="prof-card">
-    <img 
-      :src="`https://via.placeholder.com/100/${prof.color}/ffffff?text=${prof.initials}`" 
-      class="prof-photo" 
+    <img
+      :src="`https://via.placeholder.com/100/${prof.color}/ffffff?text=${prof.initials}`"
+      class="prof-photo"
       :alt="prof.name"
-    >
+    />
     <div class="prof-name">{{ prof.name }}</div>
     <div class="prof-title">{{ prof.title }}</div>
     <div class="prof-contact">
-      <a :href="`mailto:${prof.email}`">
-        <i class="fas fa-envelope"></i> {{ prof.email }}
-      </a>
+      <a :href="`mailto:${prof.email}`"> <i class="fas fa-envelope"></i> {{ prof.email }} </a>
       <a v-if="prof.phone" :href="`tel:${prof.phone.replace(/\s/g, '')}`">
         <i class="fas fa-phone"></i> {{ prof.phone }}
       </a>
       <div class="office-hours">
-        🕐 {{ prof.hours }}<br>
+        🕐 {{ prof.hours }}<br />
         📍 {{ prof.room }}
       </div>
     </div>

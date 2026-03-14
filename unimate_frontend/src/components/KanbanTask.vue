@@ -1,20 +1,22 @@
 <script setup>
-defineProps(['task']);
-defineEmits(['edit', 'delete']);
+defineProps(['task'])
+defineEmits(['edit', 'delete'])
 </script>
 
 <template>
   <div :class="['task-card', `priority-${task.priority}`]">
     <div class="task-actions">
       <button @click="$emit('edit', task.id)" title="Edit task"><i class="fas fa-edit"></i></button>
-      <button @click="$emit('delete', task.id)" class="delete" title="Delete task"><i class="fas fa-trash"></i></button>
+      <button @click="$emit('delete', task.id)" class="delete" title="Delete task">
+        <i class="fas fa-trash"></i>
+      </button>
     </div>
     <div class="task-title">{{ task.title }}</div>
     <div class="task-description">{{ task.description }}</div>
     <div class="task-meta">
       <span class="task-date"><i class="fas fa-calendar"></i> {{ task.date }}</span>
       <span class="task-priority">
-        {{ task.priority === 'high' ? '🔴' : task.priority === 'medium' ? '🟡' : '🟢' }} 
+        {{ task.priority === 'high' ? '🔴' : task.priority === 'medium' ? '🟡' : '🟢' }}
         {{ task.priority.charAt(0).toUpperCase() + task.priority.slice(1) }}
       </span>
     </div>
@@ -43,9 +45,15 @@ defineEmits(['edit', 'delete']);
 }
 
 /* --- Priority Indicators --- */
-.task-card.priority-high { border-left-color: #d4a5a5; }   /* Using your --accent-blush */
-.task-card.priority-medium { border-left-color: #c8ad7f; } /* Muted Gold */
-.task-card.priority-low { border-left-color: var(--secondary-color); } /* Sage */
+.task-card.priority-high {
+  border-left-color: #d4a5a5;
+} /* Using your --accent-blush */
+.task-card.priority-medium {
+  border-left-color: #c8ad7f;
+} /* Muted Gold */
+.task-card.priority-low {
+  border-left-color: var(--secondary-color);
+} /* Sage */
 
 /* --- Typography --- */
 .task-title {

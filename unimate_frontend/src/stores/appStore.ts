@@ -23,7 +23,7 @@ export const useAppStore = defineStore('app', {
     logout() {
       this.user = null
       localStorage.removeItem('user')
-      window.location.href = '/login' 
+      window.location.href = '/login'
     },
   },
 })

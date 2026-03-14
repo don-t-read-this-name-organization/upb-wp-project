@@ -812,7 +812,7 @@ body {
   transition: var(--transition);
   text-decoration: none;
   color: var(--text-color);
-  min-height: 120px; 
+  min-height: 120px;
   height: auto;
   display: flex;
   align-items: flex-start;
@@ -824,7 +824,7 @@ body {
   overflow-wrap: break-word;
   word-wrap: break-word;
   hyphens: auto;
-  
+
   line-height: 1.2;
   margin-bottom: 4px;
 }
