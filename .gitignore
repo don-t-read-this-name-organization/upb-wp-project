@@ -40,11 +40,9 @@ unimate_frontend/__screenshots__/
 # Vite
 unimate_frontend/*.timestamp-*-*.mjs
 # Maven / Spring Boot
-unimate/target/
+unimate_backend/target/
 
-# IDE
-unimate/.idea/
-unimate/*.iml
+unimate_backend/*.iml
 
 # Logs
 *.log
