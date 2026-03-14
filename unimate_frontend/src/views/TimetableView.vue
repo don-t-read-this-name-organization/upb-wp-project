@@ -249,4 +249,39 @@ const dayLabels: Record<string, string> = {
   background: var(--primary-color);
   color: white;
 }
+
+.timetable-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+  background-color: var(--card-bg);
+  border-radius: var(--radius);
+  overflow: hidden;
+  border: 1px solid var(--border-light);
+  box-shadow: var(--shadow-sm);
+}
+
+.timetable-table th,
+.timetable-table td {
+  padding: 0.9rem 1.1rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.timetable-table th {
+  background-color: var(--bg-secondary);
+  color: var(--text-muted);
+  font-weight: 600;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.timetable-table tr:last-child td {
+  border-bottom: none;
+}
+
+.timetable-table tr:hover td {
+  background-color: var(--bg-secondary);
+}
 </style>

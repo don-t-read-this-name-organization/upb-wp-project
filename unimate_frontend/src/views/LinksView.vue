@@ -90,14 +90,93 @@ const usefulLinks = [
 </template>
 
 <style scoped>
+.links-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.25rem;
+  margin-top: 1.5rem;
+}
+
 .link-card {
+  background-color: var(--card-bg);
+  border-radius: var(--radius);
+  padding: 1.4rem;
+  border: 1px solid var(--border-light);
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition);
+  text-decoration: none;
+  color: var(--text-color);
+  min-height: 120px;
+  height: auto;
   display: flex;
-  align-items: center;
-  gap: 1.5rem;
-  transition: transform 0.2s ease;
+  align-items: flex-start;
+  gap: 1rem;
+  overflow: hidden;
+}
+
+.link-card h3 {
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  hyphens: auto;
+  line-height: 1.2;
+  margin-bottom: 4px;
+}
+
+.link-card p {
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  hyphens: auto;
 }
 
 .link-card:hover {
-  transform: scale(1.02);
+  transform: translateY(-3px);
+  box-shadow: var(--shadow);
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+}
+
+.link-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.link-icon {
+  flex-shrink: 0;
+  width: 2.5rem;
+  font-size: 1.6rem;
+  opacity: 0.75;
+  display: flex;
+  justify-content: center;
+}
+
+.link-icon-globe {
+  color: #7b9cbe;
+}
+.link-icon-university {
+  color: #8db5a0;
+}
+.link-icon-tasks {
+  color: #c8ad7f;
+}
+.link-icon-users {
+  color: #c49090;
+}
+.link-icon-concierge {
+  color: #a093c4;
+}
+.link-icon-calendar {
+  color: #c49a72;
+}
+.link-icon-clipboard {
+  color: #7ab8a4;
+}
+.link-icon-idcard {
+  color: #7ab4c8;
+}
+.link-icon-laptop {
+  color: #c47a99;
+}
+.link-icon-ticket {
+  color: #9ea0a4;
 }
 </style>

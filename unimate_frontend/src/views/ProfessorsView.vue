@@ -180,6 +180,31 @@ const scrollCarousel = (id: string, distance: number) => {
   margin-bottom: 0.5rem;
 }
 
+.prof-card {
+  min-width: 220px;
+  background-color: var(--card-bg);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  text-align: center;
+  border: 1px solid var(--border-light);
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition);
+}
+
+.prof-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow);
+}
+
+.prof-photo {
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 1rem;
+  border: 2px solid var(--border-color);
+}
+
 @media (max-width: 992px) {
   .prof-layout {
     grid-template-columns: 1fr;

@@ -7,6 +7,8 @@ const messages = {
     locations: {
       fils: '📍 FILS Building',
       library: '📍 Library',
+      canteen: '📍 Canteen',
+      sports: '📍 Sports Hall',
     },
     menu: {
       home: 'Home',
@@ -42,6 +44,8 @@ const messages = {
     locations: {
       fils: '📍 FILS-Gebäude',
       library: '📍 Bibliothek',
+      canteen: '📍 Mensa',
+      sports: '📍 Sporthalle',
     },
     menu: {
       home: 'Startseite',
@@ -86,6 +90,8 @@ const messages = {
     locations: {
       fils: '📍 Bâtiment FILS',
       library: '📍 Bibliothèque',
+      canteen: '📍 Cantine',
+      sports: '📍 Salle de Sport',
     },
     menu: {
       home: 'Accueil',
