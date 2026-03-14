@@ -1,19 +1,42 @@
-<script setup>
+<script setup lang="ts">
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
+import { useAppStore } from '@/stores/appStore';
 
 const router = useRouter();
+const store = useAppStore();
 const email = ref('');
 const password = ref('');
+const error = ref('');
+const loading = ref(false);
 
-const handleLogin = () => {
-  // API from Backend
-  if (email.value && password.value) {
-    console.log('Logging in with:', email.value);
+const handleLogin = async () => {
+  error.value = '';
+  loading.value = true;
+  
+  try {
+    const response = await fetch('/api/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: email.value, password: password.value })
+    });
     
-    router.push('/'); 
-  } else {
-    alert('Please enter your credentials');
+    const data = await response.json();
+    
+    if (response.ok) {
+      store.user = { 
+        name: data.user.username, 
+        role: data.user.role 
+      };
+      localStorage.setItem('user', JSON.stringify(store.user));
+      router.push('/'); 
+    } else {
+      error.value = data.error || 'Login failed';
+    }
+  } catch (e) {
+    error.value = 'Connection error. Is the backend running?';
+  } finally {
+    loading.value = false;
   }
 };
 </script>
@@ -51,10 +74,12 @@ const handleLogin = () => {
           >
         </div>
         
-        <button type="submit" class="btn btn-primary btn-full-width">
+        <button type="submit" class="btn btn-primary btn-full-width" :disabled="loading">
           <i class="fas fa-sign-in-alt"></i>
-          <span>Login</span>
+          <span>{{ loading ? 'Logging in...' : 'Login' }}</span>
         </button>
+        
+        <p v-if="error" class="error-message">{{ error }}</p>
       </form>
       
       <div class="demo-accounts-divider">
@@ -106,6 +131,15 @@ const handleLogin = () => {
 
 .fade-in {
   animation: fadeIn 0.5s ease-in-out;
+}
+
+.error-message {
+  color: var(--color-error, #dc3545);
+  text-align: center;
+  margin-top: 1rem;
+  padding: 0.5rem;
+  background: rgba(220, 53, 69, 0.1);
+  border-radius: 4px;
 }
 
 @keyframes fadeIn {

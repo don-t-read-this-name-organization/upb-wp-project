@@ -4,7 +4,10 @@ import { i18n } from '@/i18n'
 export const useAppStore = defineStore('app', {
   state: () => ({
     isDark: false,
-    user: null as { name: string; role: string } | null,
+    user: (() => {
+      const stored = localStorage.getItem('user')
+      return stored ? JSON.parse(stored) : null
+    })() as { name: string; role: string } | null,
     language: 'en',
   }),
   actions: {
@@ -19,7 +22,8 @@ export const useAppStore = defineStore('app', {
     },
     logout() {
       this.user = null
-      // window.location.href = '/login' 
+      localStorage.removeItem('user')
+      window.location.href = '/login' 
     },
   },
 })
