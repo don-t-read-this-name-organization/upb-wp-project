@@ -2,6 +2,7 @@ package org.unimate.unimate.api.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -26,6 +27,7 @@ public class SecurityConfig {
                         "/swagger-ui.html",
                         "/swagger-ui/index.html"
                     ).permitAll()
+                    .requestMatchers(HttpMethod.POST, "/api/users", "/api/auth/login").permitAll()
                     .anyRequest().authenticated()
                 )
                 .httpBasic(Customizer.withDefaults());

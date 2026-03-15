@@ -31,7 +31,6 @@ public class Note {
   @Column
   String title;
 
-  @Lob
   @Column(columnDefinition = "LONGTEXT")
   String content;
 
