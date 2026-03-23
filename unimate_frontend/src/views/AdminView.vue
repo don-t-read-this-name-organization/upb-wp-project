@@ -1,48 +1,183 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 
 interface User {
   id: number
   username: string
   email: string
-  role: 'admin' | 'sef' | 'student'
-  group?: string
+  role: 'ADMIN' | 'CHIEF' | 'STUDENT' | 'VISITOR'
 }
 
-const users = ref<User[]>([
-  { id: 1, username: 'admin', email: 'admin@unimate.ro', role: 'admin' },
-  { id: 2, username: 'student', email: 'student@unimate.ro', role: 'student', group: '1231EB' },
-  { id: 3, username: 'sef', email: 'sef@unimate.ro', role: 'sef', group: '1231EB' },
-])
+interface UserForm {
+  username: string
+  email: string
+  password: string
+  role: 'ADMIN' | 'CHIEF' | 'STUDENT' | 'VISITOR'
+}
+
+const users = ref<User[]>([])
+const loading = ref(false)
+const error = ref('')
+const showModal = ref(false)
+const editingUser = ref<User | null>(null)
+const form: UserForm = ref({
+  username: '',
+  email: '',
+  password: '',
+  role: 'STUDENT',
+})
+
+const hasAdmin = computed(() => users.value.some(u => u.role === 'ADMIN'))
+
+const stats = computed(() => ({
+  total: users.value.length,
+  students: users.value.filter((u) => u.role === 'STUDENT').length,
+  chiefs: users.value.filter((u) => u.role === 'CHIEF').length,
+  admins: users.value.filter((u) => u.role === 'ADMIN').length,
+}))
 
 const getRoleBadgeClass = (role: string) => {
   switch (role) {
-    case 'admin':
+    case 'ADMIN':
       return 'badge-admin'
-    case 'sef':
+    case 'CHIEF':
       return 'badge-sef'
     default:
       return 'badge-student'
   }
 }
+
+const getRoleLabel = (role: string) => {
+  switch (role) {
+    case 'ADMIN':
+      return 'Admin'
+    case 'CHIEF':
+      return 'Sef de Grupa'
+    case 'STUDENT':
+      return 'Student'
+    default:
+      return role
+  }
+}
+
+const fetchUsers = async () => {
+  loading.value = true
+  error.value = ''
+  try {
+    const token = localStorage.getItem('token')
+    const response = await fetch('/api/users', {
+      headers: {
+        Authorization: `Basic ${token}`,
+      },
+    })
+    if (!response.ok) throw new Error('Failed to fetch users')
+    users.value = await response.json()
+  } catch {
+    error.value = 'Failed to load users. Is the backend running?'
+  } finally {
+    loading.value = false
+  }
+}
+
+const openAddModal = () => {
+  editingUser.value = null
+  form.value = { username: '', email: '', password: '', role: 'STUDENT' }
+  showModal.value = true
+}
+
+const openEditModal = (user: User) => {
+  editingUser.value = user
+  form.value = {
+    username: user.username,
+    email: user.email,
+    password: '',
+    role: user.role,
+  }
+  showModal.value = true
+}
+
+const closeModal = () => {
+  showModal.value = false
+  editingUser.value = null
+  form.value = { username: '', email: '', password: '', role: 'STUDENT' }
+}
+
+const handleSubmit = async () => {
+  error.value = ''
+  const token = localStorage.getItem('token')
+  const url = editingUser.value ? `/api/users/${editingUser.value.id}` : '/api/users'
+  const method = editingUser.value ? 'PUT' : 'POST'
+
+  try {
+    const response = await fetch(url, {
+      method,
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Basic ${token}`,
+      },
+      body: JSON.stringify(form.value),
+    })
+    if (!response.ok) {
+      const data = await response.json()
+      throw new Error(data.message || 'Operation failed')
+    }
+    closeModal()
+    await fetchUsers()
+  } catch (err: unknown) {
+    error.value = err instanceof Error ? err.message : 'Operation failed'
+  }
+}
+
+const deleteUser = async (user: User) => {
+  if (!confirm(`Are you sure you want to delete user "${user.username}"?`)) return
+  error.value = ''
+  const token = localStorage.getItem('token')
+  try {
+    const response = await fetch(`/api/users/${user.id}`, {
+      method: 'DELETE',
+      headers: {
+        Authorization: `Basic ${token}`,
+      },
+    })
+    if (!response.ok) throw new Error('Delete failed')
+    await fetchUsers()
+  } catch {
+    error.value = 'Failed to delete user'
+  }
+}
+
+onMounted(fetchUsers)
 </script>
 
 <template>
   <main class="main-content">
     <div class="card fade-in">
-      <h2 class="card-title"><i class="fas fa-user-shield"></i> Admin Panel</h2>
-      <p class="admin-subtitle">Manage users and system settings</p>
+      <div class="card-header">
+        <div>
+          <h2 class="card-title"><i class="fas fa-user-shield"></i> Admin Panel</h2>
+          <p class="admin-subtitle">Manage users and system settings</p>
+        </div>
+        <button class="btn btn-primary" @click="openAddModal">
+          <i class="fas fa-plus"></i> Add User
+        </button>
+      </div>
+
+      <div v-if="error" class="error-alert">
+        <i class="fas fa-exclamation-circle"></i> {{ error }}
+      </div>
 
       <div class="admin-section">
         <h3 class="section-title">User Management</h3>
-        <table class="admin-table">
+        <div v-if="loading" class="loading-state">
+          <i class="fas fa-spinner fa-spin"></i> Loading users...
+        </div>
+        <table v-else class="admin-table">
           <thead>
             <tr>
               <th>ID</th>
               <th>Username</th>
               <th>Email</th>
               <th>Role</th>
-              <th>Group</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -53,18 +188,20 @@ const getRoleBadgeClass = (role: string) => {
               <td>{{ user.email }}</td>
               <td>
                 <span :class="['user-badge', getRoleBadgeClass(user.role)]">
-                  {{ user.role }}
+                  {{ getRoleLabel(user.role) }}
                 </span>
               </td>
-              <td>{{ user.group || '—' }}</td>
-              <td>
-                <button class="btn-icon" title="Edit">
+              <td class="actions-cell">
+                <button class="btn-icon" title="Edit" @click="openEditModal(user)">
                   <i class="fas fa-edit"></i>
                 </button>
-                <button class="btn-icon delete" title="Delete">
+                <button class="btn-icon delete" title="Delete" @click="deleteUser(user)">
                   <i class="fas fa-trash"></i>
                 </button>
               </td>
+            </tr>
+            <tr v-if="users.length === 0">
+              <td colspan="5" class="empty-state">No users found</td>
             </tr>
           </tbody>
         </table>
@@ -75,34 +212,119 @@ const getRoleBadgeClass = (role: string) => {
         <div class="stats-grid">
           <div class="stat-card">
             <i class="fas fa-users stat-icon"></i>
-            <div class="stat-value">3</div>
+            <div class="stat-value">{{ stats.total }}</div>
             <div class="stat-label">Total Users</div>
           </div>
           <div class="stat-card">
             <i class="fas fa-user-graduate stat-icon"></i>
-            <div class="stat-value">1</div>
+            <div class="stat-value">{{ stats.students }}</div>
             <div class="stat-label">Students</div>
           </div>
           <div class="stat-card">
             <i class="fas fa-clipboard-list stat-icon"></i>
-            <div class="stat-value">12</div>
-            <div class="stat-label">Active Tasks</div>
+            <div class="stat-value">{{ stats.chiefs }}</div>
+            <div class="stat-label">Sefi de Grupa</div>
           </div>
           <div class="stat-card">
-            <i class="fas fa-sticky-note stat-icon"></i>
-            <div class="stat-value">8</div>
-            <div class="stat-label">Notes</div>
+            <i class="fas fa-user-shield stat-icon"></i>
+            <div class="stat-value">{{ stats.admins }}</div>
+            <div class="stat-label">Admins</div>
           </div>
         </div>
+      </div>
+    </div>
+
+    <div v-if="showModal" class="modal-overlay" @click.self="closeModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>{{ editingUser ? 'Edit User' : 'Add New User' }}</h3>
+          <button class="modal-close" @click="closeModal">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <form @submit.prevent="handleSubmit">
+          <div class="form-group">
+            <label for="username">Username</label>
+            <input
+              v-model="form.username"
+              type="text"
+              id="username"
+              class="form-control"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input
+              v-model="form.email"
+              type="email"
+              id="email"
+              class="form-control"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="password">{{ editingUser ? 'New Password (leave blank to keep)' : 'Password' }}</label>
+            <input
+              v-model="form.password"
+              type="password"
+              id="password"
+              class="form-control"
+              :required="!editingUser"
+            />
+          </div>
+          <div class="form-group">
+            <label for="role">Role</label>
+            <select v-model="form.role" id="role" class="form-control">
+              <option value="STUDENT">Student</option>
+              <option value="CHIEF">Sef de Grupa</option>
+            </select>
+          </div>
+          <div class="modal-actions">
+            <button type="button" class="btn btn-secondary" @click="closeModal">Cancel</button>
+            <button type="submit" class="btn btn-primary">
+              {{ editingUser ? 'Save Changes' : 'Add User' }}
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   </main>
 </template>
 
 <style scoped>
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
 .admin-subtitle {
   color: var(--text-muted);
-  margin-bottom: 2rem;
+  margin-top: 0.25rem;
+}
+
+.error-alert {
+  background: rgba(220, 53, 69, 0.1);
+  color: #dc3545;
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius);
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.loading-state {
+  text-align: center;
+  padding: 2rem;
+  color: var(--text-muted);
+}
+
+.empty-state {
+  text-align: center;
+  padding: 2rem;
+  color: var(--text-muted);
 }
 
 .admin-section {
@@ -159,7 +381,6 @@ const getRoleBadgeClass = (role: string) => {
   font-size: 0.75rem;
   font-weight: 600;
   letter-spacing: 0.03em;
-  text-transform: capitalize;
 }
 
 .badge-admin {
@@ -175,6 +396,10 @@ const getRoleBadgeClass = (role: string) => {
 .badge-student {
   background-color: #d6eadf;
   color: #2a5c3f;
+}
+
+.actions-cell {
+  white-space: nowrap;
 }
 
 .btn-icon {
@@ -232,4 +457,64 @@ const getRoleBadgeClass = (role: string) => {
   color: var(--text-muted);
   margin-top: 0.25rem;
 }
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  width: 100%;
+  max-width: 450px;
+  box-shadow: var(--shadow);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.modal-header h3 {
+  margin: 0;
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-muted);
+  font-size: 1.25rem;
+}
+
+.modal-close:hover {
+  color: var(--text-color);
+}
+
+.modal-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+  margin-top: 1.5rem;
+}
+
+.form-hint {
+  display: block;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  margin-top: 0.25rem;
+}
+
 </style>

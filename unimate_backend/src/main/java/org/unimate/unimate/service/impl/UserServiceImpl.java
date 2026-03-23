@@ -9,7 +9,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.unimate.unimate.api.dto.user.request.UserRequest;
 import org.unimate.unimate.api.dto.user.response.UserResponse;
 import org.unimate.unimate.domain.entities.User;
+import org.unimate.unimate.domain.enums.RoleName;
 import org.unimate.unimate.exception.AlreadyExistsException;
+import org.unimate.unimate.exception.ValidationException;
 import org.unimate.unimate.repository.UserRepository;
 import org.unimate.unimate.service.UserService;
 
@@ -49,6 +51,9 @@ public class UserServiceImpl implements UserService {
     if (userRepository.findIdByEmail(email).isPresent()) {
       throw new AlreadyExistsException("User", email);
     }
+    if (request.getRole() == RoleName.ADMIN) {
+      throw new ValidationException("An admin already exists. Only one admin is allowed.");
+    }
     final User user =
           save(User.create(request, passwordEncoder.encode(request.getPassword())));
 
@@ -59,6 +64,9 @@ public class UserServiceImpl implements UserService {
   @Transactional
   @Override
   public UserResponse update(User user, UserRequest request) {
+    if (request.getRole() == RoleName.ADMIN && user.getRole() != RoleName.ADMIN) {
+      throw new ValidationException("An admin already exists. Only one admin is allowed.");
+    }
     user.update(request);
     User updatedUser = save(user);
     log.info("User updated: {}", user.getEmail());
@@ -81,4 +89,5 @@ public class UserServiceImpl implements UserService {
   public Optional<User> findByEmail(String email) {
     return userRepository.findByEmail(email);
   }
+
 }

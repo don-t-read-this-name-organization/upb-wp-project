@@ -1,0 +1,14 @@
+databaseChangeLog:
+  - changeSet:
+      id: "08-add-task-fields"
+      author: "system"
+      changes:
+        - addColumn:
+            tableName: tasks
+            columns:
+              - column:
+                  name: description
+                  type: TEXT
+              - column:
+                  name: deadline
+                  type: DATE

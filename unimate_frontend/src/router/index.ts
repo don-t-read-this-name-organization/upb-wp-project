@@ -32,6 +32,7 @@ const router = createRouter({
       path: '/admin',
       name: 'admin',
       component: () => import('../views/AdminView.vue'),
+      meta: { requiresAdmin: true },
     },
     {
       path: '/timetable',
@@ -44,6 +45,20 @@ const router = createRouter({
       component: () => import('../views/NotesView.vue'),
     },
   ],
+})
+
+router.beforeEach((to, from, next) => {
+  const userStr = localStorage.getItem('user')
+  const user = userStr ? JSON.parse(userStr) : null
+  if (to.meta.requiresAdmin && user?.role !== 'ADMIN') {
+    if (user) {
+      next('/')
+    } else {
+      next('/login')
+    }
+  } else {
+    next()
+  }
 })
 
 export default router

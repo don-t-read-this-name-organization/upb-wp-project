@@ -1,0 +1,59 @@
+databaseChangeLog:
+  - changeSet:
+      id: "07-seed-users"
+      author: "system"
+      changes:
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: username
+                  value: admin
+              - column:
+                  name: email
+                  value: admin@unimate.ro
+              - column:
+                  name: password_hash
+                  value: admin123
+              - column:
+                  name: role
+                  value: ADMIN
+              - column:
+                  name: active
+                  valueBoolean: true
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: username
+                  value: student
+              - column:
+                  name: email
+                  value: student@unimate.ro
+              - column:
+                  name: password_hash
+                  value: student123
+              - column:
+                  name: role
+                  value: STUDENT
+              - column:
+                  name: active
+                  valueBoolean: true
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: username
+                  value: sef
+              - column:
+                  name: email
+                  value: sef@unimate.ro
+              - column:
+                  name: password_hash
+                  value: sef123
+              - column:
+                  name: role
+                  value: CHIEF
+              - column:
+                  name: active
+                  valueBoolean: true

@@ -17,21 +17,32 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-            @Bean
-            public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-            http.csrf(csrf -> csrf.disable())
-                .authorizeHttpRequests(auth -> auth
-                    .requestMatchers(
-                        "/v3/api-docs/**",
-                        "/swagger-ui/**",
-                        "/swagger-ui.html",
-                        "/swagger-ui/index.html"
-                    ).permitAll()
-                    .requestMatchers(HttpMethod.POST, "/api/users", "/api/auth/login").permitAll()
-                    .anyRequest().authenticated()
-                )
-                .httpBasic(Customizer.withDefaults());
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http.csrf(csrf -> csrf.disable())
+            .authorizeHttpRequests(auth -> auth
+                .requestMatchers(
+                    "/v3/api-docs/**",
+                    "/swagger-ui/**",
+                    "/swagger-ui.html",
+                    "/swagger-ui/index.html"
+                ).permitAll()
+                .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
+                    .requestMatchers(HttpMethod.POST, "/api/tasks/**").permitAll()
+                    .requestMatchers(HttpMethod.GET, "/api/tasks/**").permitAll()
+                    .requestMatchers(HttpMethod.DELETE, "/api/tasks/**").permitAll()
+                    .requestMatchers(HttpMethod.PUT, "/api/tasks/**").permitAll()
+                    .requestMatchers(HttpMethod.POST, "/api/subtasks/**").permitAll()
+                    .requestMatchers(HttpMethod.GET, "/api/subtasks/**").permitAll()
+                    .requestMatchers(HttpMethod.DELETE, "/api/subtasks/**").permitAll()
+                    .requestMatchers(HttpMethod.PUT, "/api/subtasks/**").permitAll()
+                    .requestMatchers(HttpMethod.GET, "/api/users/**").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.PUT, "/api/users/**").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.DELETE, "/api/users/**").hasRole("ADMIN")
+                .anyRequest().authenticated()
+            )
+            .httpBasic(Customizer.withDefaults());
 
-            return http.build();
-            }
+        return http.build();
+    }
 }

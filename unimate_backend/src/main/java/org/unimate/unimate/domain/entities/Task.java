@@ -5,7 +5,10 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.CreationTimestamp;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import static lombok.AccessLevel.PRIVATE;
 
@@ -31,6 +34,9 @@ public class Task {
   @Column
   String title;
 
+  @Column(columnDefinition = "TEXT")
+  String description;
+
   @Column
   String status;
 
@@ -39,6 +45,13 @@ public class Task {
 
   @Column(name = "kanban_column")
   String kanbanColumn;
+
+  @Column(name = "deadline")
+  LocalDate deadline;
+
+  @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, orphanRemoval = true)
+  @Builder.Default
+  List<Subtask> subtasks = new ArrayList<>();
 
   @Column(name = "created_at")
   @CreationTimestamp

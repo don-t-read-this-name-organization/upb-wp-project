@@ -88,7 +88,7 @@ const toggleSidebar = () => {
         </li>
       </template>
 
-      <li v-if="store.user?.role === 'admin'">
+      <li v-if="store.user?.role === 'ADMIN'">
         <RouterLink to="/admin" @click="toggleSidebar"
           ><i class="fas fa-user-shield"></i> Admin Panel</RouterLink
         >

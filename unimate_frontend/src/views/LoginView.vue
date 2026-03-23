@@ -24,16 +24,19 @@ const handleLogin = async () => {
     const data = await response.json()
 
     if (response.ok) {
+      const token = btoa(`${email.value}:${password.value}`)
+      localStorage.setItem('token', token)
       store.user = {
         name: data.user.username,
         role: data.user.role,
+        id: data.user.id,
       }
       localStorage.setItem('user', JSON.stringify(store.user))
       router.push('/')
     } else {
       error.value = data.error || 'Login failed'
     }
-  } catch (e) {
+  } catch {
     error.value = 'Connection error. Is the backend running?'
   } finally {
     loading.value = false

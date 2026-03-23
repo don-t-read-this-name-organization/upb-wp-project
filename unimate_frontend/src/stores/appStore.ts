@@ -7,7 +7,7 @@ export const useAppStore = defineStore('app', {
     user: (() => {
       const stored = localStorage.getItem('user')
       return stored ? JSON.parse(stored) : null
-    })() as { name: string; role: string } | null,
+    })() as { name: string; role: string; id?: number } | null,
     language: 'en',
   }),
   actions: {
