@@ -107,7 +107,7 @@ const toggleSidebar = () => {
   <footer class="footer">
     <div class="footer-content">
       <p>&copy; 2026 UniMate. All rights reserved.</p>
-      <p>Created by Gladkykh Daria, Bachynskyi Roi, Huzhn Sofiia</p>
+      <p>Created by Gladkykh Daria, Bachynskyi Roi, Huzhan Sofiia</p>
       <p class="footer-joke">
         "Built because we needed it ourselves - procrastination is the mother of invention!" 😊
       </p>

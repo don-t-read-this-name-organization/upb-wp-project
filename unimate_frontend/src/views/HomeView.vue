@@ -1,4 +1,6 @@
 <script setup>
+import { ref } from 'vue'
+
 const news = [
   {
     id: 1,
@@ -25,6 +27,25 @@ const news = [
     body: 'Annual tech career fair happening next month. Register now for company interviews.',
   },
 ]
+
+const maps = [
+  { name: 'Campus Central', src: '/src/assets/images/campus-map.png' },
+  { name: 'Polizu', src: '/src/assets/images/polizu.jpg' },
+  { name: 'Leu', src: '/src/assets/images/leu.jpg' },
+  { name: 'Regie', src: '/src/assets/images/regie.jpg' },
+  { name: 'Pitesti 1', src: '/src/assets/images/pitesti_1_campus.jpg' },
+  { name: 'Pitesti 2', src: '/src/assets/images/pitesti_2_campus.jpg' },
+]
+
+const currentMapIndex = ref(0)
+
+const prevMap = () => {
+  currentMapIndex.value = currentMapIndex.value === 0 ? maps.length - 1 : currentMapIndex.value - 1
+}
+
+const nextMap = () => {
+  currentMapIndex.value = currentMapIndex.value === maps.length - 1 ? 0 : currentMapIndex.value + 1
+}
 </script>
 
 <template>
@@ -36,12 +57,29 @@ const news = [
 
     <section class="card map-container fade-in">
       <h2 class="card-title">{{ $t('map') }}</h2>
-      <img src="@/assets/images/campus-map.png" class="map-image" alt="Campus Map" />
-      <div class="map-locations">
-        <span class="location-tag">{{ $t('locations.fils') }}</span>
-        <span class="location-tag">{{ $t('locations.library') }}</span>
-        <span class="location-tag">{{ $t('locations.canteen') }}</span>
-        <span class="location-tag">{{ $t('locations.sports') }}</span>
+      <div class="map-carousel">
+        <button class="map-arrow map-arrow-left" @click="prevMap" aria-label="Previous map">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="15 18 9 12 15 6"></polyline>
+          </svg>
+        </button>
+        <div class="map-wrapper">
+          <img :src="maps[currentMapIndex].src" class="map-image" :alt="maps[currentMapIndex].name" />
+        </div>
+        <button class="map-arrow map-arrow-right" @click="nextMap" aria-label="Next map">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </button>
+      </div>
+      <div class="map-dots">
+        <span 
+          v-for="(map, index) in maps" 
+          :key="index" 
+          class="map-dot" 
+          :class="{ active: index === currentMapIndex }"
+          @click="currentMapIndex = index"
+        ></span>
       </div>
     </section>
 
@@ -75,6 +113,19 @@ const news = [
   margin: 2rem 0;
 }
 
+.map-carousel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.map-wrapper {
+  flex: 1;
+  max-width: 800px;
+  position: relative;
+}
+
 .map-image {
   max-width: 100%;
   height: auto;
@@ -83,22 +134,57 @@ const news = [
   border: 1px solid var(--border-color);
 }
 
-.map-locations {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 0.6rem;
-  margin-top: 1.25rem;
+.map-name {
+  position: absolute;
+  bottom: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius);
+  font-size: 0.9rem;
 }
 
-.location-tag {
-  background-color: var(--bg-secondary);
-  padding: 0.3rem 0.9rem;
-  border-radius: 50px;
+.map-arrow {
+  background-color: var(--card-bg);
   border: 1px solid var(--border-color);
-  font-size: 0.8rem;
-  color: var(--text-muted);
-  font-weight: 500;
+  border-radius: 50%;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: var(--transition);
+  color: var(--text-color);
+}
+
+.map-arrow:hover {
+  background-color: var(--primary-color);
+  color: white;
+  border-color: var(--primary-color);
+}
+
+.map-dots {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.map-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: var(--border-color);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.map-dot:hover,
+.map-dot.active {
+  background-color: var(--primary-color);
 }
 
 .section-heading {
