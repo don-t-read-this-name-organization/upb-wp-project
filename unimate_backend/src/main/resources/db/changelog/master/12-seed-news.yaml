@@ -1,0 +1,284 @@
+databaseChangeLog:
+  - changeSet:
+      id: "12-seed-news"
+      author: "frihetselsker"
+      changes:
+        - insert:
+            tableName: news
+            columns:
+              - column:
+                  name: id
+                  valueNumeric: 1
+              - column:
+                  name: publish_date
+                  valueDate: "2026-03-14 10:00:00"
+        - insert:
+            tableName: news_translations
+            columns:
+              - column:
+                  name: news_id
+                  valueNumeric: 1
+              - column:
+                  name: language
+                  value: "en"
+              - column:
+                  name: title
+                  value: "Exam Schedule"
+              - column:
+                  name: body
+                  value: "The summer session exam schedule has been published. Check your dates and rooms!"
+        - insert:
+            tableName: news_translations
+            columns:
+              - column:
+                  name: news_id
+                  valueNumeric: 1
+              - column:
+                  name: language
+                  value: "ro"
+              - column:
+                  name: title
+                  value: "Programare Examene"
+              - column:
+                  name: body
+                  value: "Programarea examenelor de vară a fost publicată. Verificați datele și sălile!"
+        - insert:
+            tableName: news_translations
+            columns:
+              - column:
+                  name: news_id
+                  valueNumeric: 1
+              - column:
+                  name: language
+                  value: "de"
+              - column:
+                  name: title
+                  value: "Prüfungsplan"
+              - column:
+                  name: body
+                  value: "Der Prüfungsplan für die Sommersession wurde veröffentlicht. Überprüfen Sie Ihre Daten und Räume!"
+        - insert:
+            tableName: news_translations
+            columns:
+              - column:
+                  name: news_id
+                  valueNumeric: 1
+              - column:
+                  name: language
+                  value: "fr"
+              - column:
+                  name: title
+                  value: "Calendrier d'examens"
+              - column:
+                  name: body
+                  value: "Le calendrier des examens de la session d'été a été publié. Vérifiez vos dates et salles!"
+
+        - insert:
+            tableName: news
+            columns:
+              - column:
+                  name: id
+                  valueNumeric: 2
+              - column:
+                  name: publish_date
+                  valueDate: "2026-03-10 14:30:00"
+        - insert:
+            tableName: news_translations
+            columns:
+              - column:
+                  name: news_id
+                  valueNumeric: 2
+              - column:
+                  name: language
+                  value: "en"
+              - column:
+                  name: title
+                  value: "Erasmus+"
+              - column:
+                  name: body
+                  value: "Applications for Erasmus+ program are open until March 31st. Don't miss this opportunity!"
+        - insert:
+            tableName: news_translations
+            columns:
+              - column:
+                  name: news_id
+                  valueNumeric: 2
+              - column:
+                  name: language
+                  value: "ro"
+              - column:
+                  name: title
+                  value: "Erasmus+"
+              - column:
+                  name: body
+                  value: "Aplicațiile pentru programul Erasmus+ sunt deschise până pe 31 martie. Nu ratați această oportunitate!"
+        - insert:
+            tableName: news_translations
+            columns:
+              - column:
+                  name: news_id
+                  valueNumeric: 2
+              - column:
+                  name: language
+                  value: "de"
+              - column:
+                  name: title
+                  value: "Erasmus+"
+              - column:
+                  name: body
+                  value: "Bewerbungen für das Erasmus+ Programm sind bis zum 31. März möglich. Verpassen Sie diese Gelegenheit nicht!"
+        - insert:
+            tableName: news_translations
+            columns:
+              - column:
+                  name: news_id
+                  valueNumeric: 2
+              - column:
+                  name: language
+                  value: "fr"
+              - column:
+                  name: title
+                  value: "Erasmus+"
+              - column:
+                  name: body
+                  value: "Les candidatures pour le programme Erasmus+ sont ouvertes jusqu'au 31 mars. Ne manquez pas cette opportunité!"
+
+        - insert:
+            tableName: news
+            columns:
+              - column:
+                  name: id
+                  valueNumeric: 3
+              - column:
+                  name: publish_date
+                  valueDate: "2026-03-08 09:00:00"
+        - insert:
+            tableName: news_translations
+            columns:
+              - column:
+                  name: news_id
+                  valueNumeric: 3
+              - column:
+                  name: language
+                  value: "en"
+              - column:
+                  name: title
+                  value: "Library Hours"
+              - column:
+                  name: body
+                  value: "During exam period, FILS library extends opening hours until 10 PM."
+        - insert:
+            tableName: news_translations
+            columns:
+              - column:
+                  name: news_id
+                  valueNumeric: 3
+              - column:
+                  name: language
+                  value: "ro"
+              - column:
+                  name: title
+                  value: "Program Bibliotecă"
+              - column:
+                  name: body
+                  value: "În perioada examenelor, biblioteca FILS prelungește programul de funcționare până la ora 22:00."
+        - insert:
+            tableName: news_translations
+            columns:
+              - column:
+                  name: news_id
+                  valueNumeric: 3
+              - column:
+                  name: language
+                  value: "de"
+              - column:
+                  name: title
+                  value: "Bibliothekszeiten"
+              - column:
+                  name: body
+                  value: "Während der Prüfungszeit verlängert die FILS-Bibliothek ihre Öffnungszeiten bis 22 Uhr."
+        - insert:
+            tableName: news_translations
+            columns:
+              - column:
+                  name: news_id
+                  valueNumeric: 3
+              - column:
+                  name: language
+                  value: "fr"
+              - column:
+                  name: title
+                  value: "Horaires de la bibliothèque"
+              - column:
+                  name: body
+                  value: "Pendant la période d'examens, la bibliothèque FILS prolonge ses horaires d'ouverture jusqu'à 22h."
+
+        - insert:
+            tableName: news
+            columns:
+              - column:
+                  name: id
+                  valueNumeric: 4
+              - column:
+                  name: publish_date
+                  valueDate: "2026-03-05 16:00:00"
+        - insert:
+            tableName: news_translations
+            columns:
+              - column:
+                  name: news_id
+                  valueNumeric: 4
+              - column:
+                  name: language
+                  value: "en"
+              - column:
+                  name: title
+                  value: "Career Fair"
+              - column:
+                  name: body
+                  value: "Annual tech career fair happening next month. Register now for company interviews."
+        - insert:
+            tableName: news_translations
+            columns:
+              - column:
+                  name: news_id
+                  valueNumeric: 4
+              - column:
+                  name: language
+                  value: "ro"
+              - column:
+                  name: title
+                  value: "Târg de Carier"
+              - column:
+                  name: body
+                  value: "Târgul anual de cariere tehnice are loc luna viitoare. Înscrieți-vă acum pentru interviuri cu companiile."
+        - insert:
+            tableName: news_translations
+            columns:
+              - column:
+                  name: news_id
+                  valueNumeric: 4
+              - column:
+                  name: language
+                  value: "de"
+              - column:
+                  name: title
+                  value: "Karriere-Messe"
+              - column:
+                  name: body
+                  value: "Die jährliche Tech-Karrieremesse findet nächsten Monat statt. Jetzt für Unternehmensinterviews registrieren."
+        - insert:
+            tableName: news_translations
+            columns:
+              - column:
+                  name: news_id
+                  valueNumeric: 4
+              - column:
+                  name: language
+                  value: "fr"
+              - column:
+                  name: title
+                  value: "Salon de l'emploi"
+              - column:
+                  name: body
+                  value: "Le salon annuel des carrières technologiques aura lieu le mois prochain. Inscrivez-vous dès maintenant pour les entretiens avec les entreprises."

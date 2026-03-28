@@ -1,0 +1,49 @@
+databaseChangeLog:
+  - changeSet:
+      id: "11-create-news-tables"
+      author: "frihetselsker"
+      changes:
+        - createTable:
+            tableName: news
+            columns:
+              - column:
+                  name: id
+                  type: INT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: publish_date
+                  type: DATETIME
+                  defaultValueComputed: CURRENT_TIMESTAMP
+        - createTable:
+            tableName: news_translations
+            columns:
+              - column:
+                  name: id
+                  type: INT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: news_id
+                  type: INT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_news_translations
+                    references: news(id)
+              - column:
+                  name: language
+                  type: VARCHAR(2)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: title
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: body
+                  type: LONGTEXT
