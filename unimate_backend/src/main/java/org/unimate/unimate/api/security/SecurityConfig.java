@@ -17,6 +17,7 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
+    // It needs a remake, it becomes a mess...
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(csrf -> csrf.disable())

@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: "07-create-faculty-links-table"
+      id: "05-create-faculty-links-table"
       author: "demesup"
       changes:
         - createTable:

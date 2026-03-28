@@ -1,7 +1,7 @@
 databaseChangeLog:
   - changeSet:
       id: "08-add-task-fields"
-      author: "system"
+      author: "frihetselsker"
       changes:
         - addColumn:
             tableName: tasks

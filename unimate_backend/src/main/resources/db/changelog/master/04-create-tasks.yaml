@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: "06-create-tasks-table"
+      id: "04-create-tasks-table"
       author: "demesup"
       changes:
         - createTable:

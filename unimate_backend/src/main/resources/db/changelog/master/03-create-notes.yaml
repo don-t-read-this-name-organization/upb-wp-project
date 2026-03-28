@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: "05-create-notes-table"
+      id: "03-create-notes-table"
       author: "demesup"
       changes:
         - createTable:

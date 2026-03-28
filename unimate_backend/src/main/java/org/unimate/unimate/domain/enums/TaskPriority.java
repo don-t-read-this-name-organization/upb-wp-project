@@ -1,5 +1,8 @@
 package org.unimate.unimate.domain.enums;
 
+import lombok.Getter;
+
+@Getter
 public enum TaskPriority {
     LOW(1),
     MEDIUM(2),
@@ -11,7 +14,4 @@ public enum TaskPriority {
         this.value = value;
     }
 
-    public int getValue() {
-        return value;
-    }
 }
