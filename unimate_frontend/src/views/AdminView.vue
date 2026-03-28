@@ -27,6 +27,9 @@ const loading = ref(false)
 const quotesLoading = ref(false)
 const error = ref('')
 const showModal = ref(false)
+const showConfirmModal = ref(false)
+const confirmAction = ref<'approve' | 'reject' | null>(null)
+const confirmQuote = ref<Quote | null>(null)
 const editingUser = ref<User | null>(null)
 const form: UserForm = ref({
   username: '',
@@ -73,11 +76,12 @@ const fetchUsers = async () => {
   error.value = ''
   try {
     const token = localStorage.getItem('token')
-    const response = await fetch('/api/users', {
-      headers: {
-        Authorization: `Basic ${token}`,
-      },
-    })
+    // const response = await fetch('/api/users', {
+    //   headers: {
+    //     Authorization: `Basic ${token}`,
+    //   },
+    // })
+    const response = await fetch('/api/users')
     if (!response.ok) throw new Error('Failed to fetch users')
     users.value = await response.json()
   } catch {
@@ -158,11 +162,12 @@ const fetchPendingQuotes = async () => {
   quotesLoading.value = true
   try {
     const token = localStorage.getItem('token')
-    const response = await fetch('/api/quotes/pending', {
-      headers: {
-        Authorization: `Basic ${token}`,
-      },
-    })
+    // const response = await fetch('/api/quotes/pending', {
+    //   headers: {
+    //     Authorization: `Basic ${token}`,
+    //   },
+    // })
+    const response = await fetch('/api/quotes/pending')
     if (!response.ok) throw new Error('Failed to fetch pending quotes')
     pendingQuotes.value = await response.json()
   } catch (e) {
@@ -172,37 +177,39 @@ const fetchPendingQuotes = async () => {
   }
 }
 
-const approveQuote = async (quote: Quote) => {
-  if (!confirm(`Approve this quote by "${quote.author}"?`)) return
-  try {
-    const token = localStorage.getItem('token')
-    const response = await fetch(`/api/quotes/${quote.id}/approve`, {
-      method: 'POST',
-      headers: {
-        Authorization: `Basic ${token}`,
-      },
-    })
-    if (!response.ok) throw new Error('Failed to approve quote')
-    await fetchPendingQuotes()
-  } catch {
-    error.value = 'Failed to approve quote'
-  }
+const openConfirmModal = (action: 'approve' | 'reject', quote: Quote) => {
+  confirmAction.value = action
+  confirmQuote.value = quote
+  showConfirmModal.value = true
 }
 
-const rejectQuote = async (quote: Quote) => {
-  if (!confirm(`Reject and delete this quote by "${quote.author}"?`)) return
+const closeConfirmModal = () => {
+  showConfirmModal.value = false
+  confirmAction.value = null
+  confirmQuote.value = null
+}
+
+const handleConfirmAction = async () => {
+  if (!confirmQuote.value || !confirmAction.value) return
+
+  const quote = confirmQuote.value
+  closeConfirmModal()
+
   try {
-    const token = localStorage.getItem('token')
-    const response = await fetch(`/api/quotes/${quote.id}/reject`, {
-      method: 'POST',
-      headers: {
-        Authorization: `Basic ${token}`,
-      },
-    })
-    if (!response.ok) throw new Error('Failed to reject quote')
+    if (confirmAction.value === 'approve') {
+      const response = await fetch(`/api/quotes/${quote.id}/approve`, {
+        method: 'POST',
+      })
+      if (!response.ok) throw new Error('Failed to approve quote')
+    } else {
+      const response = await fetch(`/api/quotes/${quote.id}/reject`, {
+        method: 'POST',
+      })
+      if (!response.ok) throw new Error('Failed to reject quote')
+    }
     await fetchPendingQuotes()
   } catch {
-    error.value = 'Failed to reject quote'
+    error.value = `Failed to ${confirmAction.value} quote`
   }
 }
 
@@ -309,10 +316,10 @@ onMounted(() => {
             <div class="quote-text">{{ quote.text }}</div>
             <div class="quote-author">- {{ quote.author }}</div>
             <div class="quote-actions">
-              <button class="btn btn-success btn-sm" @click="approveQuote(quote)">
+              <button class="btn btn-success btn-sm" @click="openConfirmModal('approve', quote)">
                 <i class="fas fa-check"></i> Approve
               </button>
-              <button class="btn btn-danger btn-sm" @click="rejectQuote(quote)">
+              <button class="btn btn-danger btn-sm" @click="openConfirmModal('reject', quote)">
                 <i class="fas fa-times"></i> Reject
               </button>
             </div>
@@ -374,6 +381,33 @@ onMounted(() => {
             </button>
           </div>
         </form>
+      </div>
+    </div>
+
+    <div v-if="showConfirmModal" class="modal-overlay" @click.self="closeConfirmModal">
+      <div class="modal-content modal-confirm">
+        <div class="modal-icon" :class="confirmAction">
+          <i :class="confirmAction === 'approve' ? 'fas fa-check-circle' : 'fas fa-times-circle'"></i>
+        </div>
+        <h3>{{ confirmAction === 'approve' ? 'Approve Quote' : 'Reject Quote' }}</h3>
+        <p v-if="confirmAction === 'approve'">
+          Are you sure you want to approve this quote by "{{ confirmQuote?.author }}"?
+        </p>
+        <p v-else>
+          Are you sure you want to reject and delete this quote by "{{ confirmQuote?.author }}"?
+          <br><small>This action cannot be undone.</small>
+        </p>
+        <div class="modal-actions confirm-actions">
+          <button type="button" class="btn btn-secondary" @click="closeConfirmModal">Cancel</button>
+          <button 
+            type="button" 
+            class="btn" 
+            :class="confirmAction === 'approve' ? 'btn-success' : 'btn-danger'"
+            @click="handleConfirmAction"
+          >
+            {{ confirmAction === 'approve' ? 'Approve' : 'Reject' }}
+          </button>
+        </div>
       </div>
     </div>
   </main>
@@ -665,6 +699,42 @@ onMounted(() => {
 
 .btn-danger:hover {
   background-color: #c08080;
+}
+
+.modal-confirm {
+  text-align: center;
+  max-width: 380px;
+}
+
+.modal-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.modal-icon.approve {
+  color: var(--secondary-color);
+}
+
+.modal-icon.reject {
+  color: var(--accent-blush);
+}
+
+.modal-confirm h3 {
+  margin-bottom: 0.75rem;
+}
+
+.modal-confirm p {
+  color: var(--text-muted);
+  margin-bottom: 1.5rem;
+  line-height: 1.5;
+}
+
+.modal-confirm small {
+  color: var(--text-subtle);
+}
+
+.confirm-actions {
+  justify-content: center;
 }
 
 </style>
