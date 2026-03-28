@@ -1,0 +1,173 @@
+databaseChangeLog:
+  - changeSet:
+      id: "10-seed-quotes"
+      author: "frihetselsker"
+      changes:
+        - insert:
+            tableName: quotes
+            columns:
+              - column:
+                  name: author
+                  value: Iosif Nemoianu
+              - column:
+                  name: text
+                  value: But we are flexible!
+              - column:
+                  name: active
+                  valueBoolean: true
+        - insert:
+            tableName: quotes
+            columns:
+              - column:
+                  name: author
+                  value: Matei Popovici
+              - column:
+                  name: text
+                  value: Learning comes from struggle
+              - column:
+                  name: active
+                  valueBoolean: true
+        - insert:
+            tableName: quotes
+            columns:
+              - column:
+                  name: author
+                  value: Dan Gârlașu
+              - column:
+                  name: text
+                  value: I cannot see a cloud in the sky
+              - column:
+                  name: active
+                  valueBoolean: true
+        - insert:
+            tableName: quotes
+            columns:
+              - column:
+                  name: author
+                  value: Nicolae Goga
+              - column:
+                  name: text
+                  value: Friends, are we friends to some extent?
+              - column:
+                  name: active
+                  valueBoolean: true
+        - insert:
+            tableName: quotes
+            columns:
+              - column:
+                  name: author
+                  value: Nicolae Goga
+              - column:
+                  name: text
+                  value: I am in the plane
+              - column:
+                  name: active
+                  valueBoolean: true
+        - insert:
+            tableName: quotes
+            columns:
+              - column:
+                  name: author
+                  value: Bujor Păvăloiu
+              - column:
+                  name: text
+                  value: Peaky-peaky, bebeluşii
+              - column:
+                  name: active
+                  valueBoolean: true
+        - insert:
+            tableName: quotes
+            columns:
+              - column:
+                  name: author
+                  value: Bujor Păvăloiu
+              - column:
+                  name: text
+                  value: In the morning I am a very dangerous person
+              - column:
+                  name: active
+                  valueBoolean: true
+        - insert:
+            tableName: quotes
+            columns:
+              - column:
+                  name: author
+                  value: Bujor Păvăloiu
+              - column:
+                  name: text
+                  value: How many kicks and punches does Walid need to make me down?
+              - column:
+                  name: active
+                  valueBoolean: true
+        - insert:
+            tableName: quotes
+            columns:
+              - column:
+                  name: author
+                  value: Bujor Păvăloiu
+              - column:
+                  name: text
+                  value: I am a small person here, I am just Darth Vader...
+              - column:
+                  name: active
+                  valueBoolean: true
+        - insert:
+            tableName: quotes
+            columns:
+              - column:
+                  name: author
+                  value: Iuliana Marin
+              - column:
+                  name: text
+                  value: And theeen...
+              - column:
+                  name: active
+                  valueBoolean: true
+        - insert:
+            tableName: quotes
+            columns:
+              - column:
+                  name: author
+                  value: Ariana Pitea
+              - column:
+                  name: text
+                  value: We have already started!
+              - column:
+                  name: active
+                  valueBoolean: true
+        - insert:
+            tableName: quotes
+            columns:
+              - column:
+                  name: author
+                  value: Monica Pîrvan
+              - column:
+                  name: text
+                  value: This is not my algorithm, you are inventing yours.
+              - column:
+                  name: active
+                  valueBoolean: true
+        - insert:
+            tableName: quotes
+            columns:
+              - column:
+                  name: author
+                  value: Constantin Viorel Marian
+              - column:
+                  name: text
+                  value: Write a script...
+              - column:
+                  name: active
+                  valueBoolean: true
+        - insert:
+            tableName: quotes
+            columns:
+              - column:
+                  name: author
+                  value: Marian Stanca
+              - column:
+                  name: text
+                  value: Howdie!
+              - column:
+                  name: active
+                  valueBoolean: true

@@ -15,8 +15,16 @@ interface UserForm {
   role: 'ADMIN' | 'CHIEF' | 'STUDENT' | 'VISITOR'
 }
 
+interface Quote {
+  id: number
+  text: string
+  author: string
+}
+
 const users = ref<User[]>([])
+const pendingQuotes = ref<Quote[]>([])
 const loading = ref(false)
+const quotesLoading = ref(false)
 const error = ref('')
 const showModal = ref(false)
 const editingUser = ref<User | null>(null)
@@ -146,7 +154,62 @@ const deleteUser = async (user: User) => {
   }
 }
 
-onMounted(fetchUsers)
+const fetchPendingQuotes = async () => {
+  quotesLoading.value = true
+  try {
+    const token = localStorage.getItem('token')
+    const response = await fetch('/api/quotes/pending', {
+      headers: {
+        Authorization: `Basic ${token}`,
+      },
+    })
+    if (!response.ok) throw new Error('Failed to fetch pending quotes')
+    pendingQuotes.value = await response.json()
+  } catch (e) {
+    console.error('Failed to fetch pending quotes:', e)
+  } finally {
+    quotesLoading.value = false
+  }
+}
+
+const approveQuote = async (quote: Quote) => {
+  if (!confirm(`Approve this quote by "${quote.author}"?`)) return
+  try {
+    const token = localStorage.getItem('token')
+    const response = await fetch(`/api/quotes/${quote.id}/approve`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Basic ${token}`,
+      },
+    })
+    if (!response.ok) throw new Error('Failed to approve quote')
+    await fetchPendingQuotes()
+  } catch {
+    error.value = 'Failed to approve quote'
+  }
+}
+
+const rejectQuote = async (quote: Quote) => {
+  if (!confirm(`Reject and delete this quote by "${quote.author}"?`)) return
+  try {
+    const token = localStorage.getItem('token')
+    const response = await fetch(`/api/quotes/${quote.id}/reject`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Basic ${token}`,
+      },
+    })
+    if (!response.ok) throw new Error('Failed to reject quote')
+    await fetchPendingQuotes()
+  } catch {
+    error.value = 'Failed to reject quote'
+  }
+}
+
+onMounted(() => {
+  fetchUsers()
+  fetchPendingQuotes()
+})
 </script>
 
 <template>
@@ -229,6 +292,30 @@ onMounted(fetchUsers)
             <i class="fas fa-user-shield stat-icon"></i>
             <div class="stat-value">{{ stats.admins }}</div>
             <div class="stat-label">Admins</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="admin-section">
+        <h3 class="section-title">Pending Quotes</h3>
+        <div v-if="quotesLoading" class="loading-state">
+          <i class="fas fa-spinner fa-spin"></i> Loading pending quotes...
+        </div>
+        <div v-else-if="pendingQuotes.length === 0" class="empty-state">
+          No pending quotes to review
+        </div>
+        <div v-else class="quotes-grid">
+          <div v-for="quote in pendingQuotes" :key="quote.id" class="quote-card">
+            <div class="quote-text">{{ quote.text }}</div>
+            <div class="quote-author">- {{ quote.author }}</div>
+            <div class="quote-actions">
+              <button class="btn btn-success btn-sm" @click="approveQuote(quote)">
+                <i class="fas fa-check"></i> Approve
+              </button>
+              <button class="btn btn-danger btn-sm" @click="rejectQuote(quote)">
+                <i class="fas fa-times"></i> Reject
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -515,6 +602,69 @@ onMounted(fetchUsers)
   color: var(--text-muted);
   font-size: 0.8rem;
   margin-top: 0.25rem;
+}
+
+.quotes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.quote-card {
+  background: var(--bg-secondary);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+  border: 1px solid var(--border-light);
+}
+
+.quote-text {
+  font-style: italic;
+  color: var(--text-color);
+  margin-bottom: 0.75rem;
+  line-height: 1.5;
+}
+
+.quote-author {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+}
+
+.quote-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.btn-sm {
+  padding: 0.4rem 0.75rem;
+  font-size: 0.8rem;
+}
+
+.btn-success {
+  background-color: var(--secondary-color);
+  color: white;
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.btn-success:hover {
+  background-color: #73a08d;
+}
+
+.btn-danger {
+  background-color: var(--accent-blush);
+  color: white;
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.btn-danger:hover {
+  background-color: #c08080;
 }
 
 </style>

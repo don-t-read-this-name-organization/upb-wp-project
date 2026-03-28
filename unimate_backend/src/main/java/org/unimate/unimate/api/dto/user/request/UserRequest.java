@@ -17,10 +17,8 @@ import static lombok.AccessLevel.PRIVATE;
 @Builder
 public class UserRequest {
 
-
   @Size(min = 2, max = 256)
   private String username;
-
 
   @Email
   @NotEmpty
