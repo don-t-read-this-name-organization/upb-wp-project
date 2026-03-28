@@ -33,6 +33,12 @@ public class User {
   @Column(nullable = false, length = 50)
   private String username;
 
+  @Column(name = "first_name", length = 100)
+  private String firstName;
+
+  @Column(name = "last_name", length = 100)
+  private String lastName;
+
   @Column(nullable = false)
   private String email;
 
@@ -42,6 +48,16 @@ public class User {
   @Enumerated(EnumType.STRING)
   @Column(name = "role")
   private RoleName role;
+
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "faculty_id")
+  @ToString.Exclude
+  private Faculty faculty;
+
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "group_id")
+  @ToString.Exclude
+  private Group studyGroup;
 
   @Column(name = "created_at")
   @CreationTimestamp
@@ -56,15 +72,21 @@ public class User {
     return User.builder()
         .email(request.getEmail())
         .username(request.getUsername())
+        .firstName(request.getFirstName())
+        .lastName(request.getLastName())
         .passwordHash(password)
         .role(request.getRole())
         .build();
   }
 
-  public void update(UserRequest request) {
+  public void update(UserRequest request, Faculty faculty, Group group) {
     username = request.getUsername();
+    firstName = request.getFirstName();
+    lastName = request.getLastName();
     role = request.getRole();
     email = request.getEmail();
+    this.faculty = faculty;
+    this.studyGroup = group;
   }
 
   public void delete() {

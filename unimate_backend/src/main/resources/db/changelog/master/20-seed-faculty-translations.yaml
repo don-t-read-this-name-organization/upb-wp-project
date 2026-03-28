@@ -1,0 +1,922 @@
+databaseChangeLog:
+  - changeSet:
+      id: "20-seed-faculty-translations"
+      author: "frihetselsker"
+      changes:
+        - insert:
+            tableName: faculty_translations
+            columns:
+              - column:
+                  name: faculty_id
+                  valueNumeric: 1
+              - column:
+                  name: language
+                  value: "en"
+              - column:
+                  name: name
+                  value: "Faculty of Electrical Engineering"
+              - column:
+                  name: short_name
+                  value: "ELTH"
+        - insert:
+            tableName: faculty_translations
+            columns:
+              - column:
+                  name: faculty_id
+                  valueNumeric: 1
+              - column:
+                  name: language
+                  value: "ro"
+              - column:
+                  name: name
+                  value: "Facultatea de Inginerie Electrică"
+              - column:
+                  name: short_name
+                  value: "ELTH"
+        - insert:
+            tableName: faculty_translations
+            columns:
+              - column:
+                  name: faculty_id
+                  valueNumeric: 1
+              - column:
+                  name: language
+                  value: "de"
+              - column:
+                  name: name
+                  value: "Fakultät für Elektrotechnik"
+              - column:
+                  name: short_name
+                  value: "ELTH"
+        - insert:
+            tableName: faculty_translations
+            columns:
+              - column:
+                  name: faculty_id
+                  valueNumeric: 1
+              - column:
+                  name: language
+                  value: "fr"
+              - column:
+                  name: name
+                  value: "Faculté de Génie Électrique"
+              - column:
+                  name: short_name
+                  value: "ELTH"
+
+        - insert:
+            tableName: faculty_translations
+            columns:
+              - column:
+                  name: faculty_id
+                  valueNumeric: 2
+              - column:
+                  name: language
+                  value: "en"
+              - column:
+                  name: name
+                  value: "Faculty of Power Engineering"
+              - column:
+                  name: short_name
+                  value: "ENERG"
+        - insert:
+            tableName: faculty_translations
+            columns:
+              - column:
+                  name: faculty_id
+                  valueNumeric: 2
+              - column:
+                  name: language
+                  value: "ro"
+              - column:
+                  name: name
+                  value: "Facultatea de Energetică"
+              - column:
+                  name: short_name
+                  value: "ENERG"
+        - insert:
+            tableName: faculty_translations
+            columns:
+              - column:
+                  name: faculty_id
+                  valueNumeric: 2
+              - column:
+                  name: language
+                  value: "de"
+              - column:
+                  name: name
+                  value: "Fakultät für Energietechnik"
+              - column:
+                  name: short_name
+                  value: "ENERG"
+        - insert:
+            tableName: faculty_translations
+            columns:
+              - column:
+                  name: faculty_id
+                  valueNumeric: 2
+              - column:
+                  name: language
+                  value: "fr"
+              - column:
+                  name: name
+                  value: "Faculté de Génie Énergétique"
+              - column:
+                  name: short_name
+                  value: "ENERG"
+
+
+        - insert:
+            tableName: faculty_translations
+            columns:
+              - column:
+                  name: faculty_id
+                  valueNumeric: 3
+              - column:
+                  name: language
+                  value: "en"
+              - column:
+                  name: name
+                  value: "Faculty of Automatic Control and Computer Science"
+              - column:
+                  name: short_name
+                  value: "ACS"
+        - insert:
+            tableName: faculty_translations
+            columns:
+              - column:
+                  name: faculty_id
+                  valueNumeric: 3
+              - column:
+                  name: language
+                  value: "ro"
+              - column:
+                  name: name
+                  value: "Facultatea de Automatică și Calculatoare"
+              - column:
+                  name: short_name
+                  value: "ACS"
+        - insert:
+            tableName: faculty_translations
+            columns:
+              - column:
+                  name: faculty_id
+                  valueNumeric: 3
+              - column:
+                  name: language
+                  value: "de"
+              - column:
+                  name: name
+                  value: "Fakultät für Automatisierung und Informatik"
+              - column:
+                  name: short_name
+                  value: "ACS"
+        - insert:
+            tableName: faculty_translations
+            columns:
+              - column:
+                  name: faculty_id
+                  valueNumeric: 3
+              - column:
+                  name: language
+                  value: "fr"
+              - column:
+                  name: name
+                  value: "Faculté d'Automatique et Informatique"
+              - column:
+                  name: short_name
+                  value: "ACS"
+
+        - insert:
+            tableName: faculty_translations
+            columns:
+              - column:
+                  name: faculty_id
+                  valueNumeric: 4
+              - column:
+                  name: language
+                  value: "en"
+              - column:
+                  name: name
+                  value: "Faculty of Electronics, Telecommunications and Information Technology"
+              - column:
+                  name: short_name
+                  value: "ETTI"
+        - insert:
+            tableName: faculty_translations
+            columns:
+              - column:
+                  name: faculty_id
+                  valueNumeric: 4
+              - column:
+                  name: language
+                  value: "ro"
+              - column:
+                  name: name
+                  value: "Facultatea de Electronică, Telecomunicații și Tehnologia Informației"
+              - column:
+                  name: short_name
+                  value: "ETTI"
+        - insert:
+            tableName: faculty_translations
+            columns:
+              - column:
+                  name: faculty_id
+                  valueNumeric: 4
+              - column:
+                  name: language
+                  value: "de"
+              - column:
+                  name: name
+                  value: "Fakultät für Elektronik, Telekommunikation und Informationstechnologie"
+              - column:
+                  name: short_name
+                  value: "ETTI"
+        - insert:
+            tableName: faculty_translations
+            columns:
+              - column:
+                  name: faculty_id
+                  valueNumeric: 4
+              - column:
+                  name: language
+                  value: "fr"
+              - column:
+                  name: name
+                  value: "Faculté d'Électronique, Télécommunications et Technologie de l'Information"
+              - column:
+                  name: short_name
+                  value: "ETTI"
+
+        - insert:
+            tableName: faculty_translations
+            columns:
+              - column:
+                  name: faculty_id
+                  valueNumeric: 5
+              - column:
+                  name: language
+                  value: "en"
+              - column:
+                  name: name
+                  value: "Faculty of Mechanical Engineering and Mechatronics"
+              - column:
+                  name: short_name
+                  value: "FIMM"
+        - insert:
+            tableName: faculty_translations
+            columns:
+              - column:
+                  name: faculty_id
+                  valueNumeric: 5
+              - column:
+                  name: language
+                  value: "ro"
+              - column:
+                  name: name
+                  value: "Facultatea de Inginerie Mecanică și Mecatronică"
+              - column:
+                  name: short_name
+                  value: "FIMM"
+        - insert:
+            tableName: faculty_translations
+            columns:
+              - column:
+                  name: faculty_id
+                  valueNumeric: 5
+              - column:
+                  name: language
+                  value: "de"
+              - column:
+                  name: name
+                  value: "Fakultät für Maschinenbau und Mechatronik"
+              - column:
+                  name: short_name
+                  value: "FIMM"
+        - insert:
+            tableName: faculty_translations
+            columns:
+              - column:
+                  name: faculty_id
+                  valueNumeric: 5
+              - column:
+                  name: language
+                  value: "fr"
+              - column:
+                  name: name
+                  value: "Faculté de Génie Mécanique et Méchatronique"
+              - column:
+                  name: short_name
+                  value: "FIMM"
+
+
+        - insert:
+            tableName: faculty_translations
+            columns:
+              - column:
+                  name: faculty_id
+                  valueNumeric: 6
+              - column:
+                  name: language
+                  value: "en"
+              - column:
+                  name: name
+                  value: "Faculty of Industrial Engineering and Robotics"
+              - column:
+                  name: short_name
+                  value: "FIIR"
+        - insert:
+            tableName: faculty_translations
+            columns:
+              - column:
+                  name: faculty_id
+                  valueNumeric: 6
+              - column:
+                  name: language
+                  value: "ro"
+              - column:
+                  name: name
+                  value: "Facultatea de Inginerie Industrială și Robotică"
+              - column:
+                  name: short_name
+                  value: "FIIR"
+        - insert:
+            tableName: faculty_translations
+            columns:
+              - column:
+                  name: faculty_id
+                  valueNumeric: 6
+              - column:
+                  name: language
+                  value: "de"
+              - column:
+                  name: name
+                  value: "Fakultät für Industrietechnik und Robotik"
+              - column:
+                  name: short_name
+                  value: "FIIR"
+        - insert:
+            tableName: faculty_translations
+            columns:
+              - column:
+                  name: faculty_id
+                  valueNumeric: 6
+              - column:
+                  name: language
+                  value: "fr"
+              - column:
+                  name: name
+                  value: "Faculté de Génie Industriel et Robotique"
+              - column:
+                  name: short_name
+                  value: "FIIR"
+
+
+        - insert:
+            tableName: faculty_translations
+            columns:
+              - column:
+                  name: faculty_id
+                  valueNumeric: 7
+              - column:
+                  name: language
+                  value: "en"
+              - column:
+                  name: name
+                  value: "Faculty of Engineering of Biotechnical Systems"
+              - column:
+                  name: short_name
+                  value: "ISB"
+        - insert:
+            tableName: faculty_translations
+            columns:
+              - column:
+                  name: faculty_id
+                  valueNumeric: 7
+              - column:
+                  name: language
+                  value: "ro"
+              - column:
+                  name: name
+                  value: "Facultatea de Ingineria Sistemelor Biotehnice"
+              - column:
+                  name: short_name
+                  value: "ISB"
+        - insert:
+            tableName: faculty_translations
+            columns:
+              - column:
+                  name: faculty_id
+                  valueNumeric: 7
+              - column:
+                  name: language
+                  value: "de"
+              - column:
+                  name: name
+                  value: "Fakultät für Biotechnische Systemtechnik"
+              - column:
+                  name: short_name
+                  value: "ISB"
+        - insert:
+            tableName: faculty_translations
+            columns:
+              - column:
+                  name: faculty_id
+                  valueNumeric: 7
+              - column:
+                  name: language
+                  value: "fr"
+              - column:
+                  name: name
+                  value: "Faculté d'Ingénierie des Systèmes Biotechniques"
+              - column:
+                  name: short_name
+                  value: "ISB"
+
+
+        - insert:
+            tableName: faculty_translations
+            columns:
+              - column:
+                  name: faculty_id
+                  valueNumeric: 8
+              - column:
+                  name: language
+                  value: "en"
+              - column:
+                  name: name
+                  value: "Faculty of Transport"
+              - column:
+                  name: short_name
+                  value: "TRANS"
+        - insert:
+            tableName: faculty_translations
+            columns:
+              - column:
+                  name: faculty_id
+                  valueNumeric: 8
+              - column:
+                  name: language
+                  value: "ro"
+              - column:
+                  name: name
+                  value: "Facultatea de Transporturi"
+              - column:
+                  name: short_name
+                  value: "TRANS"
+        - insert:
+            tableName: faculty_translations
+            columns:
+              - column:
+                  name: faculty_id
+                  valueNumeric: 8
+              - column:
+                  name: language
+                  value: "de"
+              - column:
+                  name: name
+                  value: "Fakultät für Transportwesen"
+              - column:
+                  name: short_name
+                  value: "TRANS"
+        - insert:
+            tableName: faculty_translations
+            columns:
+              - column:
+                  name: faculty_id
+                  valueNumeric: 8
+              - column:
+                  name: language
+                  value: "fr"
+              - column:
+                  name: name
+                  value: "Faculté des Transports"
+              - column:
+                  name: short_name
+                  value: "TRANS"
+        - insert:
+            tableName: faculty_translations
+            columns:
+              - column:
+                  name: faculty_id
+                  valueNumeric: 9
+              - column:
+                  name: language
+                  value: "en"
+              - column:
+                  name: name
+                  value: "Faculty of Aerospace Engineering"
+              - column:
+                  name: short_name
+                  value: "AERO"
+        - insert:
+            tableName: faculty_translations
+            columns:
+              - column:
+                  name: faculty_id
+                  valueNumeric: 9
+              - column:
+                  name: language
+                  value: "ro"
+              - column:
+                  name: name
+                  value: "Facultatea de Inginerie Aerospațială"
+              - column:
+                  name: short_name
+                  value: "AERO"
+        - insert:
+            tableName: faculty_translations
+            columns:
+              - column:
+                  name: faculty_id
+                  valueNumeric: 9
+              - column:
+                  name: language
+                  value: "de"
+              - column:
+                  name: name
+                  value: "Fakultät für Luft- und Raumfahrttechnik"
+              - column:
+                  name: short_name
+                  value: "AERO"
+        - insert:
+            tableName: faculty_translations
+            columns:
+              - column:
+                  name: faculty_id
+                  valueNumeric: 9
+              - column:
+                  name: language
+                  value: "fr"
+              - column:
+                  name: name
+                  value: "Faculté d'Ingénierie Aérospatiale"
+              - column:
+                  name: short_name
+                  value: "AERO"
+
+        - insert:
+            tableName: faculty_translations
+            columns:
+              - column:
+                  name: faculty_id
+                  valueNumeric: 10
+              - column:
+                  name: language
+                  value: "en"
+              - column:
+                  name: name
+                  value: "Faculty of Materials Science and Engineering"
+              - column:
+                  name: short_name
+                  value: "SIM"
+        - insert:
+            tableName: faculty_translations
+            columns:
+              - column:
+                  name: faculty_id
+                  valueNumeric: 10
+              - column:
+                  name: language
+                  value: "ro"
+              - column:
+                  name: name
+                  value: "Facultatea de Știința și Ingineria Materialelor"
+              - column:
+                  name: short_name
+                  value: "SIM"
+        - insert:
+            tableName: faculty_translations
+            columns:
+              - column:
+                  name: faculty_id
+                  valueNumeric: 10
+              - column:
+                  name: language
+                  value: "de"
+              - column:
+                  name: name
+                  value: "Fakultät für Materialwissenschaft und -technik"
+              - column:
+                  name: short_name
+                  value: "SIM"
+        - insert:
+            tableName: faculty_translations
+            columns:
+              - column:
+                  name: faculty_id
+                  valueNumeric: 10
+              - column:
+                  name: language
+                  value: "fr"
+              - column:
+                  name: name
+                  value: "Faculté des Sciences et Ingénierie des Matériaux"
+              - column:
+                  name: short_name
+                  value: "SIM"
+
+        - insert:
+            tableName: faculty_translations
+            columns:
+              - column:
+                  name: faculty_id
+                  valueNumeric: 11
+              - column:
+                  name: language
+                  value: "en"
+              - column:
+                  name: name
+                  value: "Faculty of Chemical Engineering and Biotechnologies"
+              - column:
+                  name: short_name
+                  value: "CHIMIE"
+        - insert:
+            tableName: faculty_translations
+            columns:
+              - column:
+                  name: faculty_id
+                  valueNumeric: 11
+              - column:
+                  name: language
+                  value: "ro"
+              - column:
+                  name: name
+                  value: "Facultatea de Inginerie Chimică și Biotehnologii"
+              - column:
+                  name: short_name
+                  value: "CHIMIE"
+        - insert:
+            tableName: faculty_translations
+            columns:
+              - column:
+                  name: faculty_id
+                  valueNumeric: 11
+              - column:
+                  name: language
+                  value: "de"
+              - column:
+                  name: name
+                  value: "Fakultät für Chemieingenieurwesen und Biotechnologie"
+              - column:
+                  name: short_name
+                  value: "CHIMIE"
+        - insert:
+            tableName: faculty_translations
+            columns:
+              - column:
+                  name: faculty_id
+                  valueNumeric: 11
+              - column:
+                  name: language
+                  value: "fr"
+              - column:
+                  name: name
+                  value: "Faculté de Génie Chimique et Biotechnologies"
+              - column:
+                  name: short_name
+                  value: "CHIMIE"
+
+        - insert:
+            tableName: faculty_translations
+            columns:
+              - column:
+                  name: faculty_id
+                  valueNumeric: 12
+              - column:
+                  name: language
+                  value: "en"
+              - column:
+                  name: name
+                  value: "Faculty of Engineering in Foreign Languages"
+              - column:
+                  name: short_name
+                  value: "FILS"
+        - insert:
+            tableName: faculty_translations
+            columns:
+              - column:
+                  name: faculty_id
+                  valueNumeric: 12
+              - column:
+                  name: language
+                  value: "ro"
+              - column:
+                  name: name
+                  value: "Facultatea de Inginerie în Limbi Străine"
+              - column:
+                  name: short_name
+                  value: "FILS"
+        - insert:
+            tableName: faculty_translations
+            columns:
+              - column:
+                  name: faculty_id
+                  valueNumeric: 12
+              - column:
+                  name: language
+                  value: "de"
+              - column:
+                  name: name
+                  value: "Fakultät für Ingenieurwesen in Fremdsprachen"
+              - column:
+                  name: short_name
+                  value: "FILS"
+        - insert:
+            tableName: faculty_translations
+            columns:
+              - column:
+                  name: faculty_id
+                  valueNumeric: 12
+              - column:
+                  name: language
+                  value: "fr"
+              - column:
+                  name: name
+                  value: "Faculté d'Ingénierie en Langues Étrangères"
+              - column:
+                  name: short_name
+                  value: "FILS"
+
+        - insert:
+            tableName: faculty_translations
+            columns:
+              - column:
+                  name: faculty_id
+                  valueNumeric: 13
+              - column:
+                  name: language
+                  value: "en"
+              - column:
+                  name: name
+                  value: "Faculty of Applied Sciences"
+              - column:
+                  name: short_name
+                  value: "FSA"
+        - insert:
+            tableName: faculty_translations
+            columns:
+              - column:
+                  name: faculty_id
+                  valueNumeric: 13
+              - column:
+                  name: language
+                  value: "ro"
+              - column:
+                  name: name
+                  value: "Facultatea de Științe Aplicate"
+              - column:
+                  name: short_name
+                  value: "FSA"
+        - insert:
+            tableName: faculty_translations
+            columns:
+              - column:
+                  name: faculty_id
+                  valueNumeric: 13
+              - column:
+                  name: language
+                  value: "de"
+              - column:
+                  name: name
+                  value: "Fakultät für Angewandte Wissenschaften"
+              - column:
+                  name: short_name
+                  value: "FSA"
+        - insert:
+            tableName: faculty_translations
+            columns:
+              - column:
+                  name: faculty_id
+                  valueNumeric: 13
+              - column:
+                  name: language
+                  value: "fr"
+              - column:
+                  name: name
+                  value: "Faculté des Sciences Appliquées"
+              - column:
+                  name: short_name
+                  value: "FSA"
+
+        - insert:
+            tableName: faculty_translations
+            columns:
+              - column:
+                  name: faculty_id
+                  valueNumeric: 14
+              - column:
+                  name: language
+                  value: "en"
+              - column:
+                  name: name
+                  value: "Faculty of Medical Engineering"
+              - column:
+                  name: short_name
+                  value: "FIM"
+        - insert:
+            tableName: faculty_translations
+            columns:
+              - column:
+                  name: faculty_id
+                  valueNumeric: 14
+              - column:
+                  name: language
+                  value: "ro"
+              - column:
+                  name: name
+                  value: "Facultatea de Inginerie Medicală"
+              - column:
+                  name: short_name
+                  value: "FIM"
+        - insert:
+            tableName: faculty_translations
+            columns:
+              - column:
+                  name: faculty_id
+                  valueNumeric: 14
+              - column:
+                  name: language
+                  value: "de"
+              - column:
+                  name: name
+                  value: "Fakultät für Medizintechnik"
+              - column:
+                  name: short_name
+                  value: "FIM"
+        - insert:
+            tableName: faculty_translations
+            columns:
+              - column:
+                  name: faculty_id
+                  valueNumeric: 14
+              - column:
+                  name: language
+                  value: "fr"
+              - column:
+                  name: name
+                  value: "Faculté d'Ingénierie Médicale"
+              - column:
+                  name: short_name
+                  value: "FIM"
+
+        - insert:
+            tableName: faculty_translations
+            columns:
+              - column:
+                  name: faculty_id
+                  valueNumeric: 15
+              - column:
+                  name: language
+                  value: "en"
+              - column:
+                  name: name
+                  value: "Faculty of Entrepreneurship, Engineering and Business Management"
+              - column:
+                  name: short_name
+                  value: "FAIMA"
+        - insert:
+            tableName: faculty_translations
+            columns:
+              - column:
+                  name: faculty_id
+                  valueNumeric: 15
+              - column:
+                  name: language
+                  value: "ro"
+              - column:
+                  name: name
+                  value: "Facultatea de Antreprenoriat, Ingineria și Managementul Afacerilor"
+              - column:
+                  name: short_name
+                  value: "FAIMA"
+        - insert:
+            tableName: faculty_translations
+            columns:
+              - column:
+                  name: faculty_id
+                  valueNumeric: 15
+              - column:
+                  name: language
+                  value: "de"
+              - column:
+                  name: name
+                  value: "Fakultät für Entrepreneurship, Ingenieurwesen und Betriebswirtschaft"
+              - column:
+                  name: short_name
+                  value: "FAIMA"
+        - insert:
+            tableName: faculty_translations
+            columns:
+              - column:
+                  name: faculty_id
+                  valueNumeric: 15
+              - column:
+                  name: language
+                  value: "fr"
+              - column:
+                  name: name
+                  value: "Faculté d'Entrepreneuriat, Ingénierie et Management des Affaires"
+              - column:
+                  name: short_name
+                  value: "FAIMA"

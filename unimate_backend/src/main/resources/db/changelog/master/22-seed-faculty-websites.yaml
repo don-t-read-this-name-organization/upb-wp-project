@@ -1,0 +1,110 @@
+databaseChangeLog:
+  - changeSet:
+      id: "22-seed-faculty-websites"
+      author: "frihetselsker"
+      changes:
+        - update:
+            tableName: faculties
+            columns:
+              - column:
+                  name: website
+                  value: "http://www.electro.upb.ro/"
+            where: "short_name = 'ELTH'"
+        - update:
+            tableName: faculties
+            columns:
+              - column:
+                  name: website
+                  value: "http://energ.upb.ro/"
+            where: "short_name = 'ENERG'"
+        - update:
+            tableName: faculties
+            columns:
+              - column:
+                  name: website
+                  value: "http://acs.pub.ro/"
+            where: "short_name = 'ACS'"
+        - update:
+            tableName: faculties
+            columns:
+              - column:
+                  name: website
+                  value: "http://www.electronica.pub.ro/"
+            where: "short_name = 'ETTI'"
+        - update:
+            tableName: faculties
+            columns:
+              - column:
+                  name: website
+                  value: "https://mecanica.upb.ro/"
+            where: "short_name = 'FIMM'"
+        - update:
+            tableName: faculties
+            columns:
+              - column:
+                  name: website
+                  value: "https://fiir.upb.ro/"
+            where: "short_name = 'FIIR'"
+        - update:
+            tableName: faculties
+            columns:
+              - column:
+                  name: website
+                  value: "https://isb.pub.ro/"
+            where: "short_name = 'ISB'"
+        - update:
+            tableName: faculties
+            columns:
+              - column:
+                  name: website
+                  value: "https://transport.pub.ro/"
+            where: "short_name = 'TRANS'"
+        - update:
+            tableName: faculties
+            columns:
+              - column:
+                  name: website
+                  value: "http://www.aero.pub.ro/"
+            where: "short_name = 'AERO'"
+        - update:
+            tableName: faculties
+            columns:
+              - column:
+                  name: website
+                  value: "http://www.sim.pub.ro/"
+            where: "short_name = 'SIM'"
+        - update:
+            tableName: faculties
+            columns:
+              - column:
+                  name: website
+                  value: "http://www.chimie.upb.ro/"
+            where: "short_name = 'CHIMIE'"
+        - update:
+            tableName: faculties
+            columns:
+              - column:
+                  name: website
+                  value: "http://fils.upb.ro/"
+            where: "short_name = 'FILS'"
+        - update:
+            tableName: faculties
+            columns:
+              - column:
+                  name: website
+                  value: "http://fsa.pub.ro/"
+            where: "short_name = 'FSA'"
+        - update:
+            tableName: faculties
+            columns:
+              - column:
+                  name: website
+                  value: "http://fim.pub.ro/"
+            where: "short_name = 'FIM'"
+        - update:
+            tableName: faculties
+            columns:
+              - column:
+                  name: website
+                  value: "https://faima.upb.ro/"
+            where: "short_name = 'FAIMA'"

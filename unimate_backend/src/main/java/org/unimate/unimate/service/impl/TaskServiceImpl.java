@@ -33,7 +33,7 @@ public class TaskServiceImpl implements TaskService {
 
   @Override
   public List<Task> findAll() {
-    return (List<Task>) taskRepository.findAll();
+    return taskRepository.findByActiveTrueWithSubtasks();
   }
 
   @Override
@@ -43,7 +43,7 @@ public class TaskServiceImpl implements TaskService {
 
   @Override
   public List<Task> findByUserId(Integer userId) {
-    return taskRepository.findByUserIdAndActiveTrue(userId);
+    return taskRepository.findByUserIdAndActiveTrueWithSubtasks(userId);
   }
 
   @Override

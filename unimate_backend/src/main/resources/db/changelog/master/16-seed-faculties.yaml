@@ -1,0 +1,140 @@
+databaseChangeLog:
+  - changeSet:
+      id: "16-seed-faculties"
+      author: "frihetselsker"
+      changes:
+        - insert:
+            tableName: faculties
+            columns:
+              - column:
+                  name: name
+                  value: "Facultatea de Inginerie Electrică"
+              - column:
+                  name: short_name
+                  value: "ELTH"
+        - insert:
+            tableName: faculties
+            columns:
+              - column:
+                  name: name
+                  value: "Facultatea de Energetică"
+              - column:
+                  name: short_name
+                  value: "ENERG"
+        - insert:
+            tableName: faculties
+            columns:
+              - column:
+                  name: name
+                  value: "Facultatea de Automatică și Calculatoare"
+              - column:
+                  name: short_name
+                  value: "ACS"
+        - insert:
+            tableName: faculties
+            columns:
+              - column:
+                  name: name
+                  value: "Facultatea de Electronică, Telecomunicații și Tehnologia Informației"
+              - column:
+                  name: short_name
+                  value: "ETTI"
+        - insert:
+            tableName: faculties
+            columns:
+              - column:
+                  name: name
+                  value: "Facultatea de Inginerie Mecanică și Mecatronică"
+              - column:
+                  name: short_name
+                  value: "FIMM"
+        - insert:
+            tableName: faculties
+            columns:
+              - column:
+                  name: name
+                  value: "Facultatea de Inginerie Industrială și Robotică"
+              - column:
+                  name: short_name
+                  value: "FIIR"
+        - insert:
+            tableName: faculties
+            columns:
+              - column:
+                  name: name
+                  value: "Facultatea de Ingineria Sistemelor Biotehnice"
+              - column:
+                  name: short_name
+                  value: "ISB"
+        - insert:
+            tableName: faculties
+            columns:
+              - column:
+                  name: name
+                  value: "Facultatea de Transporturi"
+              - column:
+                  name: short_name
+                  value: "TRANS"
+        - insert:
+            tableName: faculties
+            columns:
+              - column:
+                  name: name
+                  value: "Facultatea de Inginerie Aerospațială"
+              - column:
+                  name: short_name
+                  value: "AERO"
+        - insert:
+            tableName: faculties
+            columns:
+              - column:
+                  name: name
+                  value: "Facultatea de Știința și Ingineria Materialelor"
+              - column:
+                  name: short_name
+                  value: "SIM"
+        - insert:
+            tableName: faculties
+            columns:
+              - column:
+                  name: name
+                  value: "Facultatea de Inginerie Chimică și Biotehnologii"
+              - column:
+                  name: short_name
+                  value: "CHIMIE"
+        - insert:
+            tableName: faculties
+            columns:
+              - column:
+                  name: name
+                  value: "Facultatea de Inginerie în Limbi Străine"
+              - column:
+                  name: short_name
+                  value: "FILS"
+        - insert:
+            tableName: faculties
+            columns:
+              - column:
+                  name: name
+                  value: "Facultatea de Științe Aplicate"
+              - column:
+                  name: short_name
+                  value: "FSA"
+        - insert:
+            tableName: faculties
+            columns:
+              - column:
+                  name: name
+                  value: "Facultatea de Inginerie Medicală"
+              - column:
+                  name: short_name
+                  value: "FIM"
+        - insert:
+            tableName: faculties
+            columns:
+              - column:
+                  name: name
+                  value: "Facultatea de Antreprenoriat, Ingineria și Managementul Afacerilor"
+              - column:
+                  name: short_name
+                  value: "FAIMA"

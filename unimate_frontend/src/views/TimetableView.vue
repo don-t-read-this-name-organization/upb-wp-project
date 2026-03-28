@@ -66,8 +66,8 @@ const timetable: Record<string, DaySchedule> = {
 }
 
 const timeSlots = Object.keys(timetable)
-const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday']
-const dayKeys = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday']
+const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday']
+const dayKeys = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday']
 </script>
 
 <template>
@@ -92,9 +92,9 @@ const dayKeys = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturd
             <tr v-for="slot in timeSlots" :key="slot">
               <td class="time-cell">{{ slot }}</td>
               <td v-for="day in days" :key="day">
-                <div v-if="timetable[slot][day]" class="course-cell">
-                  <strong>{{ timetable[slot][day]?.name }}</strong>
-                  <small>{{ timetable[slot][day]?.type }} - {{ timetable[slot][day]?.room }}</small>
+                <div v-if="timetable[slot]?.[day]" class="course-cell">
+                  <strong>{{ timetable[slot]?.[day]?.name }}</strong>
+                  <small>{{ timetable[slot]?.[day]?.type }} - {{ timetable[slot]?.[day]?.room }}</small>
                 </div>
                 <span v-else class="empty-cell">—</span>
               </td>

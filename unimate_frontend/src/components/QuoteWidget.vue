@@ -43,7 +43,9 @@ function rotateQuote() {
   if (quotes.value.length === 0) return
   const randomIndex = Math.floor(Math.random() * quotes.value.length)
   const quote = quotes.value[randomIndex]
-  currentQuote.value = `${quote.text} - ${quote.author}`
+  if (quote) {
+    currentQuote.value = `${quote.text} - ${quote.author}`
+  }
   isLoading.value = false
 }
 

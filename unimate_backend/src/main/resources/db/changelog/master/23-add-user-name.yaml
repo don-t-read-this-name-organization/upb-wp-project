@@ -1,0 +1,17 @@
+databaseChangeLog:
+  - changeSet:
+      id: "23-add-user-name"
+      author: "frihetselsker"
+      changes:
+        - addColumn:
+            tableName: users
+            columns:
+              - column:
+                  name: first_name
+                  type: VARCHAR(100)
+        - addColumn:
+            tableName: users
+            columns:
+              - column:
+                  name: last_name
+                  type: VARCHAR(100)

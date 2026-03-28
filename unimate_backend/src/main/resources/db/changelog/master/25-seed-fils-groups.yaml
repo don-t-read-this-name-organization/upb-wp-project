@@ -1,0 +1,65 @@
+databaseChangeLog:
+  - changeSet:
+      id: "25-seed-fils-groups"
+      author: "frihetselsker"
+      changes:
+        - insert:
+            tableName: groups
+            columns:
+              - column:
+                  name: name
+                  value: "1211EA"
+              - column:
+                  name: year
+                  valueNumeric: 1
+              - column:
+                  name: faculty_id
+                  valueNumeric: 12
+        - insert:
+            tableName: groups
+            columns:
+              - column:
+                  name: name
+                  value: "1211EB"
+              - column:
+                  name: year
+                  valueNumeric: 1
+              - column:
+                  name: faculty_id
+                  valueNumeric: 12
+        - insert:
+            tableName: groups
+            columns:
+              - column:
+                  name: name
+                  value: "1221EA"
+              - column:
+                  name: year
+                  valueNumeric: 2
+              - column:
+                  name: faculty_id
+                  valueNumeric: 12
+        - insert:
+            tableName: groups
+            columns:
+              - column:
+                  name: name
+                  value: "1231EA"
+              - column:
+                  name: year
+                  valueNumeric: 3
+              - column:
+                  name: faculty_id
+                  valueNumeric: 12
+        - insert:
+            tableName: groups
+            columns:
+              - column:
+                  name: name
+                  value: "1241EA"
+              - column:
+                  name: year
+                  valueNumeric: 4
+              - column:
+                  name: faculty_id
+                  valueNumeric: 12

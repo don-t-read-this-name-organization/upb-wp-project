@@ -1,0 +1,11 @@
+databaseChangeLog:
+  - changeSet:
+      id: "21-add-faculty-website"
+      author: "frihetselsker"
+      changes:
+        - addColumn:
+            tableName: faculties
+            columns:
+              - column:
+                  name: website
+                  type: VARCHAR(2000)

@@ -53,12 +53,13 @@ const filteredNotes = computed(() => {
   return notes.value.filter((n) => n.collection === activeFilter.value)
 })
 
-const filterNotes = (collection: string, btn: EventTarget) => {
+const filterNotes = (collection: string, btn: Event) => {
   activeFilter.value = collection
-  ;(btn as HTMLElement).parentElement
+  const target = btn.target as HTMLElement
+  target.parentElement
     ?.querySelectorAll('.collection-btn')
     .forEach((b) => b.classList.remove('active'))
-  ;(btn as HTMLElement).classList.add('active')
+  target.classList.add('active')
 }
 
 const openModal = (note?: Note) => {
@@ -87,11 +88,15 @@ const saveNote = () => {
   if (editingNote.value) {
     const idx = notes.value.findIndex((n) => n.id === editingNote.value?.id)
     if (idx !== -1) {
-      notes.value[idx] = {
-        ...notes.value[idx],
-        title: formTitle.value,
-        content: formContent.value,
-        collection: formCollection.value,
+      const existingNote = notes.value[idx]
+      if (existingNote) {
+        notes.value[idx] = {
+          id: existingNote.id,
+          title: formTitle.value,
+          content: formContent.value,
+          collection: formCollection.value,
+          date: existingNote.date,
+        }
       }
     }
   } else {

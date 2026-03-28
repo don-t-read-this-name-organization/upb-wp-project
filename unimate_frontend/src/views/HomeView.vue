@@ -2,11 +2,13 @@
 import { ref, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
+import { useAppStore } from '@/stores/appStore'
 import WeatherWidget from '@/components/WeatherWidget.vue'
 import QuoteWidget from '@/components/QuoteWidget.vue'
 
 const router = useRouter()
 const { locale, t } = useI18n()
+const store = useAppStore()
 
 const isPanelCollapsed = ref(true)
 const newsData = ref([])
@@ -20,6 +22,11 @@ const languageMap = {
 }
 
 const currentLang = computed(() => languageMap[locale.value] || 'en')
+
+const showMap = computed(() => !store.isAdmin)
+const showNews = computed(() => !store.isAdmin)
+const showQuotes = computed(() => !store.isAdmin)
+const showWelcome = computed(() => store.isAdmin)
 
 const news = computed(() => {
   return newsData.value.map((item) => {
@@ -90,12 +97,17 @@ const nextMap = () => {
 
 <template>
   <div class="home-container">
-    <section class="card fade-in">
+    <section v-if="showWelcome" class="card fade-in">
       <h1 class="card-title">{{ $t('welcome') }}</h1>
       <p class="welcome-text">{{ $t('description') }}</p>
+      <p class="welcome-text" style="margin-top: 1rem;">
+        <RouterLink to="/admin" class="btn btn-primary">
+          <i class="fas fa-user-shield"></i> {{ t('menu.admin') }}
+        </RouterLink>
+      </p>
     </section>
 
-    <section class="card map-container fade-in">
+    <section v-if="showMap" class="card map-container fade-in">
       <h2 class="card-title">{{ $t('map') }}</h2>
       <div class="map-carousel">
         <button class="map-arrow map-arrow-left" @click="prevMap" aria-label="Previous map">
@@ -123,7 +135,7 @@ const nextMap = () => {
       </div>
     </section>
 
-    <section class="news-section">
+    <section v-if="showNews" class="news-section">
       <h2 class="section-heading">{{ t('latestNews') }}</h2>
       <div class="news-grid">
         <div v-for="item in latestNews" :key="item.id" class="news-card">
@@ -139,7 +151,7 @@ const nextMap = () => {
       </div>
     </section>
 
-    <div class="bottom-panel" :class="{ collapsed: isPanelCollapsed }">
+    <div v-if="showQuotes" class="bottom-panel" :class="{ collapsed: isPanelCollapsed }">
       <button class="panel-toggle" @click="togglePanel" aria-label="Toggle panel">
         <span class="arrow">{{ isPanelCollapsed ? '▼' : '▲' }}</span>
         <span>{{ t('weatherQuote') }}</span>

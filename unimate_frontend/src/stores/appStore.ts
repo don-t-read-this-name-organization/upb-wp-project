@@ -12,9 +12,26 @@ export const useAppStore = defineStore('app', {
     user: (() => {
       const stored = localStorage.getItem('user')
       return stored ? JSON.parse(stored) : null
-    })() as { name: string; role: string; id?: number } | null,
+    })() as { name: string; role: string; id?: number; email?: string; firstName?: string; lastName?: string; faculty?: { name: string; shortName?: string; website?: string }; group?: { name: string } } | null,
     language: getInitialLanguage(),
   }),
+  getters: {
+    isLoggedIn: (state) => !!state.user,
+    isVisitor: (state) => !state.user || state.user.role === 'VISITOR',
+    isStudent: (state) => state.user?.role === 'STUDENT',
+    isChief: (state) => state.user?.role === 'CHIEF',
+    isAdmin: (state) => state.user?.role === 'ADMIN',
+    isStudentOrChief: (state) => state.user?.role === 'STUDENT' || state.user?.role === 'CHIEF',
+    userRole: (state) => state.user?.role || 'VISITOR',
+    userName: (state) => state.user?.name || '',
+    userFirstName: (state) => state.user?.firstName || '',
+    userLastName: (state) => state.user?.lastName || '',
+    userEmail: (state) => state.user?.email || '',
+    userFaculty: (state) => state.user?.faculty?.name || '',
+    userFacultyShortName: (state) => state.user?.faculty?.shortName || '',
+    userFacultyWebsite: (state) => state.user?.faculty?.website || '',
+    userGroup: (state) => state.user?.group?.name || '',
+  },
   actions: {
     toggleTheme() {
       this.isDark = !this.isDark

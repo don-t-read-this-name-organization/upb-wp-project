@@ -3,9 +3,6 @@ package org.unimate.unimate.domain.entities;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import org.hibernate.annotations.CreationTimestamp;
-
-import java.time.LocalDateTime;
 
 import static lombok.AccessLevel.PRIVATE;
 
@@ -16,29 +13,25 @@ import static lombok.AccessLevel.PRIVATE;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name = "faculty_links")
+@Table(name = "`groups`",
+    uniqueConstraints = {
+        @UniqueConstraint(name = "uq_groups_name_faculty", columnNames = {"name", "faculty_id"}),
+    })
 @FieldDefaults(level = PRIVATE)
-public class FacultyLink {
+public class Group {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   Integer id;
 
+  @Column(nullable = false, length = 50)
+  String name;
+
+  @Column(nullable = false)
+  Integer year;
+
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "faculty_id")
+  @JoinColumn(name = "faculty_id", nullable = false)
   @ToString.Exclude
   Faculty faculty;
-
-  @Column
-  String title;
-
-  @Column(length = 2000)
-  String url;
-
-  @Column
-  String category;
-
-  @Column(name = "created_at")
-  @CreationTimestamp
-  LocalDateTime createdAt;
 }

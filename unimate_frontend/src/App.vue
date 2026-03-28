@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { RouterLink, RouterView } from 'vue-router'
 import { useAppStore } from '@/stores/appStore'
 import { useI18n } from 'vue-i18n'
@@ -11,12 +11,16 @@ const isSidebarOpen = ref(false)
 const toggleSidebar = () => {
   isSidebarOpen.value = !isSidebarOpen.value
 }
+
+const showMenu = computed(() => !store.isVisitor)
+const showFacultyLink = computed(() => store.isLoggedIn && store.userFaculty)
+const showUserProfile = computed(() => store.isLoggedIn)
 </script>
 
 <template>
   <header class="header">
     <div class="header-content">
-      <button class="menu-toggle" type="button" @click="toggleSidebar">
+      <button v-if="showMenu" class="menu-toggle" type="button" @click="toggleSidebar">
         <i class="fas fa-bars"></i>
         <span class="menu-text">Menu</span>
       </button>
@@ -24,9 +28,13 @@ const toggleSidebar = () => {
       <RouterLink to="/" class="logo"> <i class="fas fa-graduation-cap"></i> UniMate </RouterLink>
 
       <div class="header-controls">
-        <a href="https://fils.upb.ro/ro/home/" target="_blank" class="faculty-link">FILS</a>
+        <a v-if="showFacultyLink && store.userFacultyWebsite" :href="store.userFacultyWebsite" target="_blank" class="faculty-link">
+          {{ store.userFacultyShortName || store.userFaculty }}
+        </a>
 
-        <span v-if="store.user" class="user-display">{{ store.user.name }}</span>
+        <RouterLink v-if="showUserProfile" to="/profile" class="user-profile-link">
+          <i class="fas fa-user-circle"></i> {{ t('menu.myProfile') }}
+        </RouterLink>
 
         <button class="theme-toggle" @click="store.toggleTheme">
           <i :class="store.isDark ? 'fas fa-sun' : 'fas fa-moon'"></i>
@@ -43,15 +51,15 @@ const toggleSidebar = () => {
           <option value="fr">FR</option>
         </select>
 
-        <RouterLink v-if="!store.user" to="/login" class="btn btn-primary">
+        <RouterLink v-if="!store.isLoggedIn" to="/login" class="btn btn-primary">
           <i class="fas fa-sign-in-alt"></i> {{ t('menu.login') }}
         </RouterLink>
       </div>
     </div>
   </header>
 
-  <div :class="['sidebar-overlay', { active: isSidebarOpen }]" @click="toggleSidebar"></div>
-  <nav :class="['sidebar', { active: isSidebarOpen }]">
+  <div v-if="showMenu" :class="['sidebar-overlay', { active: isSidebarOpen }]" @click="toggleSidebar"></div>
+  <nav v-if="showMenu" :class="['sidebar', { active: isSidebarOpen }]">
     <div class="sidebar-header">
       <h3>Menu</h3>
       <button type="button" class="sidebar-close" @click="toggleSidebar">
@@ -62,26 +70,26 @@ const toggleSidebar = () => {
       <li>
         <RouterLink to="/" @click="toggleSidebar"><i class="fas fa-home"></i> {{ t('menu.home') }}</RouterLink>
       </li>
-      <li>
-        <RouterLink to="/links" @click="toggleSidebar"
-          ><i class="fas fa-link"></i> {{ t('menu.links') }}</RouterLink
-        >
-      </li>
-      <li>
-        <RouterLink to="/professors" @click="toggleSidebar"
-          ><i class="fas fa-chalkboard-teacher"></i> {{ t('menu.professors') }}</RouterLink
-        >
-      </li>
-      <li>
-        <RouterLink to="/kanban" @click="toggleSidebar"
-          ><i class="fas fa-columns"></i> {{ t('menu.kanban') }}</RouterLink
-        >
-      </li>
 
-      <template v-if="!store.user">
+      <template v-if="store.isStudentOrChief">
+        <li>
+          <RouterLink to="/links" @click="toggleSidebar"
+            ><i class="fas fa-link"></i> {{ t('menu.links') }}</RouterLink
+          >
+        </li>
+        <li>
+          <RouterLink to="/professors" @click="toggleSidebar"
+            ><i class="fas fa-chalkboard-teacher"></i> {{ t('menu.professors') }}</RouterLink
+          >
+        </li>
         <li>
           <RouterLink to="/timetable" @click="toggleSidebar"
             ><i class="fas fa-calendar-alt"></i> {{ t('menu.timetable') }}</RouterLink
+          >
+        </li>
+        <li>
+          <RouterLink to="/kanban" @click="toggleSidebar"
+            ><i class="fas fa-columns"></i> {{ t('menu.kanban') }}</RouterLink
           >
         </li>
         <li>
@@ -91,13 +99,19 @@ const toggleSidebar = () => {
         </li>
       </template>
 
-      <li v-if="store.user?.role === 'ADMIN'">
+      <li>
+        <RouterLink to="/news" @click="toggleSidebar"
+          ><i class="fas fa-newspaper"></i> {{ t('menu.news') }}</RouterLink
+        >
+      </li>
+
+      <li v-if="store.isAdmin">
         <RouterLink to="/admin" @click="toggleSidebar"
           ><i class="fas fa-user-shield"></i> {{ t('menu.admin') }}</RouterLink
         >
       </li>
 
-      <li v-if="store.user" class="auth-only">
+      <li v-if="store.isLoggedIn" class="auth-only">
         <a href="#" @click.prevent="store.logout"><i class="fas fa-sign-out-alt"></i> {{ t('menu.logout') }}</a>
       </li>
     </ul>

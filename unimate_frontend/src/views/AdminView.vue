@@ -34,14 +34,12 @@ const showConfirmModal = ref(false)
 const confirmAction = ref<'approve' | 'reject' | null>(null)
 const confirmQuote = ref<Quote | null>(null)
 const editingUser = ref<User | null>(null)
-const form: UserForm = ref({
+const form = ref<UserForm>({
   username: '',
   email: '',
   password: '',
   role: 'STUDENT',
 })
-
-const hasAdmin = computed(() => users.value.some(u => u.role === 'ADMIN'))
 
 const stats = computed(() => ({
   total: users.value.length,
@@ -78,7 +76,6 @@ const fetchUsers = async () => {
   loading.value = true
   error.value = ''
   try {
-    const token = localStorage.getItem('token')
     // const response = await fetch('/api/users', {
     //   headers: {
     //     Authorization: `Basic ${token}`,
@@ -164,7 +161,6 @@ const deleteUser = async (user: User) => {
 const fetchPendingQuotes = async () => {
   quotesLoading.value = true
   try {
-    const token = localStorage.getItem('token')
     // const response = await fetch('/api/quotes/pending', {
     //   headers: {
     //     Authorization: `Basic ${token}`,

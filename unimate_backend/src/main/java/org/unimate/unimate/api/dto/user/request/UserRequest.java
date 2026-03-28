@@ -30,4 +30,12 @@ public class UserRequest {
 
   @Builder.Default
   private RoleName role = RoleName.STUDENT;
+
+  private Integer facultyId;
+
+  private Integer groupId;
+
+  private String firstName;
+
+  private String lastName;
 }

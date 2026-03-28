@@ -13,15 +13,18 @@ import java.util.Optional;
 public interface UserRepository extends CrudRepository<User, Integer> {
   Optional<User> findOneByEmailAndActiveTrue(String email);
 
-  @Query(value = "select * from users where active=true order by id desc", nativeQuery = true)
+  @Query("SELECT u FROM User u LEFT JOIN FETCH u.faculty LEFT JOIN FETCH u.studyGroup WHERE u.active = true")
   List<User> findAll();
 
-  @Query(value = "select * from users where id= :id and active=true", nativeQuery = true)
+  @Query("SELECT u FROM User u LEFT JOIN FETCH u.faculty LEFT JOIN FETCH u.studyGroup WHERE u.id = :id AND u.active = true")
   Optional<User> findById(@Param("id") Integer id);
+
+  @Query("SELECT u FROM User u LEFT JOIN FETCH u.faculty LEFT JOIN FETCH u.studyGroup WHERE u.email = :email AND u.active = true")
+  Optional<User> findOneByEmailAndActiveTrueWithFetch(@Param("email") String email);
 
   @Query(value = "select id from users where email= :email and active=true", nativeQuery = true)
   Optional<Integer> findIdByEmail(@Param("email") String email);
 
-  @Query(value = "select * from users where email = :email", nativeQuery = true)
+  @Query("SELECT u FROM User u LEFT JOIN FETCH u.faculty LEFT JOIN FETCH u.studyGroup WHERE u.email = :email")
   Optional<User> findByEmail(@Param("email") String email);
 }

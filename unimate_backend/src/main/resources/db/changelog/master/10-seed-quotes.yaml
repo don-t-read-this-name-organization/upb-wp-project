@@ -95,7 +95,7 @@ databaseChangeLog:
                   value: Bujor Păvăloiu
               - column:
                   name: text
-                  value: How many kicks and punches does Walid need to make me down?
+                  value: How many kicks and punches does Walid need to take me down?
               - column:
                   name: active
                   valueBoolean: true

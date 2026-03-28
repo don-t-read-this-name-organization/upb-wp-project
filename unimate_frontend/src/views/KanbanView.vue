@@ -31,6 +31,8 @@ const store = useAppStore()
 const tasks = ref<Task[]>([])
 const showModal = ref(false)
 const editingTask = ref<Task | null>(null)
+const showDeleteModal = ref(false)
+const taskToDelete = ref<number | null>(null)
 
 const formTitle = ref('')
 const formDescription = ref('')
@@ -166,20 +168,32 @@ const toggleSubtask = async (subtask: Subtask) => {
   }
 }
 
-const deleteTask = async (id: number) => {
-  if (!confirm(t('kanban.deleteTask'))) return
+const confirmDelete = (id: number) => {
+  taskToDelete.value = id
+  showDeleteModal.value = true
+}
+
+const cancelDelete = () => {
+  taskToDelete.value = null
+  showDeleteModal.value = false
+}
+
+const deleteTask = async () => {
+  if (!taskToDelete.value) return
 
   try {
-    const response = await fetch(`/api/tasks/${id}`, {
+    const response = await fetch(`/api/tasks/${taskToDelete.value}`, {
       method: 'DELETE',
       headers: getAuthHeaders(),
     })
 
     if (response.ok) {
-      tasks.value = tasks.value.filter((t) => t.id !== id)
+      tasks.value = tasks.value.filter((t) => t.id !== taskToDelete.value)
     }
   } catch (error) {
     console.error('Failed to delete task:', error)
+  } finally {
+    cancelDelete()
   }
 }
 
@@ -256,7 +270,7 @@ const openModal = (task?: Task) => {
     formKanbanColumn.value = task.kanbanColumn || 'TODO'
     formStatus.value = (task.status as 'TODO' | 'IN_PROGRESS' | 'DONE') || 'TODO'
     formDeadline.value = task.deadline || ''
-    formSubtasks.value = task.subasks?.map(s => s.title) || []
+    formSubtasks.value = task.subtasks?.map((s: { title: string }) => s.title) || []
   } else {
     editingTask.value = null
     formTitle.value = ''
@@ -328,7 +342,7 @@ onMounted(() => {
                 @click="openModal(element)"
               >
                 <div class="task-actions">
-                  <button @click.stop="deleteTask(element.id)" class="delete" title="Delete task">
+                  <button @click.stop="confirmDelete(element.id)" class="delete" title="Delete task">
                     <i class="fas fa-trash"></i>
                   </button>
                 </div>
@@ -372,7 +386,7 @@ onMounted(() => {
                 @click="openModal(element)"
               >
                 <div class="task-actions">
-                  <button @click.stop="deleteTask(element.id)" class="delete">
+                  <button @click.stop="confirmDelete(element.id)" class="delete">
                     <i class="fas fa-trash"></i>
                   </button>
                 </div>
@@ -416,7 +430,7 @@ onMounted(() => {
                 @click="openModal(element)"
               >
                 <div class="task-actions">
-                  <button @click.stop="deleteTask(element.id)" class="delete">
+                  <button @click.stop="confirmDelete(element.id)" class="delete">
                     <i class="fas fa-trash"></i>
                   </button>
                 </div>
@@ -543,6 +557,26 @@ onMounted(() => {
         <button class="btn btn-secondary" @click="closeModal">{{ t('kanban.cancel') }}</button>
         <button class="btn btn-primary" @click="saveTask">
           {{ editingTask ? t('kanban.update') : t('kanban.create') }} {{ t('kanban.title').toLowerCase() }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div v-if="showDeleteModal" class="modal-overlay" @click.self="cancelDelete">
+    <div class="modal-content modal-small">
+      <div class="modal-header">
+        <h3>{{ t('kanban.deleteTask') }}</h3>
+        <button class="modal-close" @click="cancelDelete">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>{{ t('kanban.deleteConfirm') }}</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" @click="cancelDelete">{{ t('kanban.cancel') }}</button>
+        <button class="btn btn-danger" @click="deleteTask">
+          <i class="fas fa-trash"></i> {{ t('common.delete') }}
         </button>
       </div>
     </div>
@@ -795,5 +829,23 @@ onMounted(() => {
   color: var(--text-muted);
   font-size: 0.85rem;
   font-style: italic;
+}
+.modal-small {
+  max-width: 400px;
+}
+.btn-danger {
+  background: #dc3545;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: var(--transition);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.btn-danger:hover {
+  background: #c82333;
 }
 </style>

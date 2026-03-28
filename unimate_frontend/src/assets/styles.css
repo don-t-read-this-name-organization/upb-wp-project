@@ -529,6 +529,31 @@ body {
   color: var(--text-muted);
 }
 
+.user-group-info {
+  font-weight: 400;
+  font-size: 0.8rem;
+  color: var(--primary-color);
+  margin-left: 0.25rem;
+}
+
+.user-profile-link {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+  padding: 0.4rem 0.75rem;
+  border-radius: var(--radius-sm);
+  transition: var(--transition);
+}
+
+.user-profile-link:hover {
+  color: var(--primary-color);
+  background: var(--bg-secondary);
+}
+
 .welcome-subtitle {
   font-size: 1rem;
   color: var(--text-muted);

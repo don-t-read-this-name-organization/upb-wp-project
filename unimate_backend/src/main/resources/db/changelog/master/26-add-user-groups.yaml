@@ -1,0 +1,19 @@
+databaseChangeLog:
+  - changeSet:
+      id: "26-add-user-groups"
+      author: "frihetselsker"
+      changes:
+        - update:
+            tableName: users
+            columns:
+              - column:
+                  name: group_id
+                  valueNumeric: 1
+            where: "username = 'student'"
+        - update:
+            tableName: users
+            columns:
+              - column:
+                  name: group_id
+                  valueNumeric: 2
+            where: "username = 'sef'"

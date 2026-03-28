@@ -1,0 +1,43 @@
+databaseChangeLog:
+  - changeSet:
+      id: "19-create-faculty-translations"
+      author: "frihetselsker"
+      changes:
+        - createTable:
+            tableName: faculty_translations
+            columns:
+              - column:
+                  name: id
+                  type: INT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: faculty_id
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: language
+                  type: VARCHAR(2)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: name
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: short_name
+                  type: VARCHAR(50)
+        - addUniqueConstraint:
+            columnNames: faculty_id, language
+            tableName: faculty_translations
+            constraintName: uq_faculty_translations_faculty_lang
+        - addForeignKeyConstraint:
+            baseTableName: faculty_translations
+            baseColumnNames: faculty_id
+            referencedTableName: faculties
+            referencedColumnNames: id
+            constraintName: fk_faculty_translations_faculty

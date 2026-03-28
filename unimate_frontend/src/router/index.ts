@@ -17,16 +17,19 @@ const router = createRouter({
       path: '/links',
       name: 'links',
       component: () => import('../views/LinksView.vue'),
+      meta: { requiresAuth: true },
     },
     {
       path: '/professors',
       name: 'professors',
       component: () => import('../views/ProfessorsView.vue'),
+      meta: { requiresAuth: true },
     },
     {
       path: '/kanban',
       name: 'kanban',
       component: () => import('../views/KanbanView.vue'),
+      meta: { requiresAuth: true },
     },
     {
       path: '/login',
@@ -55,11 +58,19 @@ const router = createRouter({
       path: '/timetable',
       name: 'timetable',
       component: () => import('../views/TimetableView.vue'),
+      meta: { requiresAuth: true },
     },
     {
       path: '/notes',
       name: 'notes',
       component: () => import('../views/NotesView.vue'),
+      meta: { requiresAuth: true },
+    },
+    {
+      path: '/profile',
+      name: 'profile',
+      component: () => import('../views/ProfileView.vue'),
+      meta: { requiresAuth: true },
     },
   ],
 })
@@ -67,11 +78,20 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   const userStr = localStorage.getItem('user')
   const user = userStr ? JSON.parse(userStr) : null
-  if (to.meta.requiresAdmin && user?.role !== 'ADMIN') {
-    if (user) {
+  const isLoggedIn = !!user
+  const isAdmin = user?.role === 'ADMIN'
+
+  if (to.meta.requiresAdmin) {
+    if (!isAdmin) {
       next('/')
     } else {
-      next('/login')
+      next()
+    }
+  } else if (to.meta.requiresAuth) {
+    if (!isLoggedIn || isAdmin) {
+      next('/')
+    } else {
+      next()
     }
   } else {
     next()

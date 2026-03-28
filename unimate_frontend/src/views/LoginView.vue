@@ -30,8 +30,13 @@ const handleLogin = async () => {
       localStorage.setItem('token', token)
       store.user = {
         name: data.user.username,
+        email: data.user.email,
         role: data.user.role,
         id: data.user.id,
+        firstName: data.user.firstName,
+        lastName: data.user.lastName,
+        faculty: data.user.faculty,
+        group: data.user.group,
       }
       localStorage.setItem('user', JSON.stringify(store.user))
       router.push('/')
