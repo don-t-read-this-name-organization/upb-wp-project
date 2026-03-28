@@ -35,6 +35,12 @@ const router = createRouter({
       meta: { requiresAdmin: true },
     },
     {
+      path: '/admin/quotes',
+      name: 'quotes',
+      component: () => import('../views/QuotesView.vue'),
+      meta: { requiresAdmin: true },
+    },
+    {
       path: '/timetable',
       name: 'timetable',
       component: () => import('../views/TimetableView.vue'),

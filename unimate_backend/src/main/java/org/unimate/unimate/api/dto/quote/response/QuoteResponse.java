@@ -16,12 +16,14 @@ public class QuoteResponse {
     Integer id;
     String text;
     String author;
+    Boolean active;
 
     public static QuoteResponse fromEntity(Quote quote) {
         return QuoteResponse.builder()
                 .id(quote.getId())
                 .author(quote.getAuthor())
                 .text(quote.getText())
+                .active(quote.getActive())
                 .build();
     }
 }

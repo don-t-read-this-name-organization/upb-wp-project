@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
 
 interface User {
   id: number
@@ -227,9 +230,14 @@ onMounted(() => {
           <h2 class="card-title"><i class="fas fa-user-shield"></i> Admin Panel</h2>
           <p class="admin-subtitle">Manage users and system settings</p>
         </div>
-        <button class="btn btn-primary" @click="openAddModal">
-          <i class="fas fa-plus"></i> Add User
-        </button>
+        <div class="header-actions">
+          <button class="btn btn-secondary" @click="router.push('/admin/quotes')">
+            <i class="fas fa-quote-left"></i> Manage Quotes
+          </button>
+          <button class="btn btn-primary" @click="openAddModal">
+            <i class="fas fa-plus"></i> Add User
+          </button>
+        </div>
       </div>
 
       <div v-if="error" class="error-alert">
@@ -418,6 +426,11 @@ onMounted(() => {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
+}
+
+.header-actions {
+  display: flex;
+  gap: 0.75rem;
 }
 
 .admin-subtitle {
