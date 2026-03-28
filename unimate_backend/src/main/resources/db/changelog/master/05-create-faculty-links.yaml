@@ -14,20 +14,8 @@ databaseChangeLog:
                     primaryKey: true
                     nullable: false
               - column:
-                  name: title
-                  type: VARCHAR(255)
-              - column:
                   name: url
                   type: VARCHAR(2000)
               - column:
-                  name: category
-                  type: VARCHAR(255)
-              - column:
                   name: created_at
                   type: TIMESTAMP
-              - column:
-                  name: active
-                  type: BOOLEAN
-                  defaultValueBoolean: true
-                  constraints:
-                    nullable: false

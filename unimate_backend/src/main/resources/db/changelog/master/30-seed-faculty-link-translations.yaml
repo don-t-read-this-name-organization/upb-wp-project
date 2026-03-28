@@ -1,0 +1,201 @@
+databaseChangeLog:
+  - changeSet:
+      id: "30-seed-faculty-link-translations"
+      author: "frihetselsker"
+      changes:
+        - insert:
+            tableName: faculty_link_translations
+            columns:
+              - column: { name: faculty_link_id, value: 1 }
+              - column: { name: language, value: "en" }
+              - column: { name: title, value: "International Students" }
+              - column: { name: description, value: "Information for international students at FILS" }
+        - insert:
+            tableName: faculty_link_translations
+            columns:
+              - column: { name: faculty_link_id, value: 1 }
+              - column: { name: language, value: "ro" }
+              - column: { name: title, value: "Studenţi Internaţionali" }
+              - column: { name: description, value: "Informaţii pentru studenţii internaţionali la FILS" }
+        - insert:
+            tableName: faculty_link_translations
+            columns:
+              - column: { name: faculty_link_id, value: 1 }
+              - column: { name: language, value: "de" }
+              - column: { name: title, value: "Internationale Studierende" }
+              - column: { name: description, value: "Informationen für internationale Studierende an der FILS" }
+        - insert:
+            tableName: faculty_link_translations
+            columns:
+              - column: { name: faculty_link_id, value: 1 }
+              - column: { name: language, value: "fr" }
+              - column: { name: title, value: "Étudiants Internationaux" }
+              - column: { name: description, value: "Informations pour les étudiants internationaux à la FILS" }
+        - insert:
+            tableName: faculty_link_translations
+            columns:
+              - column: { name: faculty_link_id, value: 2 }
+              - column: { name: language, value: "en" }
+              - column: { name: title, value: "Student Portal" }
+              - column: { name: description, value: "General information and student services" }
+        - insert:
+            tableName: faculty_link_translations
+            columns:
+              - column: { name: faculty_link_id, value: 2 }
+              - column: { name: language, value: "ro" }
+              - column: { name: title, value: "Portalul Studenţesc" }
+              - column: { name: description, value: "Informaţii generale şi servicii pentru studenţi" }
+        - insert:
+            tableName: faculty_link_translations
+            columns:
+              - column: { name: faculty_link_id, value: 2 }
+              - column: { name: language, value: "de" }
+              - column: { name: title, value: "Studierendenportal" }
+              - column: { name: description, value: "Allgemeine Informationen und Dienste für Studierende" }
+        - insert:
+            tableName: faculty_link_translations
+            columns:
+              - column: { name: faculty_link_id, value: 2 }
+              - column: { name: language, value: "fr" }
+              - column: { name: title, value: "Portail Étudiant" }
+              - column: { name: description, value: "Informations générales et services aux étudiants" }
+        - insert:
+            tableName: faculty_link_translations
+            columns:
+              - column: { name: faculty_link_id, value: 3 }
+              - column: { name: language, value: "en" }
+              - column: { name: title, value: "Student Activities" }
+              - column: { name: description, value: "Activities and events for students" }
+        - insert:
+            tableName: faculty_link_translations
+            columns:
+              - column: { name: faculty_link_id, value: 3 }
+              - column: { name: language, value: "ro" }
+              - column: { name: title, value: "Activităţi Studenţeşti" }
+              - column: { name: description, value: "Activităţi şi evenimente pentru studenţi" }
+        - insert:
+            tableName: faculty_link_translations
+            columns:
+              - column: { name: faculty_link_id, value: 3 }
+              - column: { name: language, value: "de" }
+              - column: { name: title, value: "Studentische Aktivitäten" }
+              - column: { name: description, value: "Aktivitäten und Veranstaltungen für Studierende" }
+        - insert:
+            tableName: faculty_link_translations
+            columns:
+              - column: { name: faculty_link_id, value: 3 }
+              - column: { name: language, value: "fr" }
+              - column: { name: title, value: "Activités Étudiantes" }
+              - column: { name: description, value: "Activités et événements pour les étudiants" }
+        - insert:
+            tableName: faculty_link_translations
+            columns:
+              - column: { name: faculty_link_id, value: 4 }
+              - column: { name: language, value: "en" }
+              - column: { name: title, value: "Student Associations" }
+              - column: { name: description, value: "Join student organizations and clubs" }
+        - insert:
+            tableName: faculty_link_translations
+            columns:
+              - column: { name: faculty_link_id, value: 4 }
+              - column: { name: language, value: "ro" }
+              - column: { name: title, value: "Asociaţii Studenţeşti" }
+              - column: { name: description, value: "Alătură-te organizaţiilor şi cluburilor studenţeşti" }
+        - insert:
+            tableName: faculty_link_translations
+            columns:
+              - column: { name: faculty_link_id, value: 4 }
+              - column: { name: language, value: "de" }
+              - column: { name: title, value: "Studierendenvereinigungen" }
+              - column: { name: description, value: "Treten Sie studentischen Organisationen und Clubs bei" }
+        - insert:
+            tableName: faculty_link_translations
+            columns:
+              - column: { name: faculty_link_id, value: 4 }
+              - column: { name: language, value: "fr" }
+              - column: { name: title, value: "Associations Étudiantes" }
+              - column: { name: description, value: "Rejoignez des organisations et clubs étudiants" }
+        - insert:
+            tableName: faculty_link_translations
+            columns:
+              - column: { name: faculty_link_id, value: 5 }
+              - column: { name: language, value: "en" }
+              - column: { name: title, value: "Facilities" }
+              - column: { name: description, value: "Campus facilities and resources" }
+        - insert:
+            tableName: faculty_link_translations
+            columns:
+              - column: { name: faculty_link_id, value: 5 }
+              - column: { name: language, value: "ro" }
+              - column: { name: title, value: "Facilităţi" }
+              - column: { name: description, value: "Facilităţi şi resurse ale campusului" }
+        - insert:
+            tableName: faculty_link_translations
+            columns:
+              - column: { name: faculty_link_id, value: 5 }
+              - column: { name: language, value: "de" }
+              - column: { name: title, value: "Einrichtungen" }
+              - column: { name: description, value: "Campuseinrichtungen und Ressourcen" }
+        - insert:
+            tableName: faculty_link_translations
+            columns:
+              - column: { name: faculty_link_id, value: 5 }
+              - column: { name: language, value: "fr" }
+              - column: { name: title, value: "Installations" }
+              - column: { name: description, value: "Installations et ressources du campus" }
+        - insert:
+            tableName: faculty_link_translations
+            columns:
+              - column: { name: faculty_link_id, value: 6 }
+              - column: { name: language, value: "en" }
+              - column: { name: title, value: "Academic Calendar" }
+              - column: { name: description, value: "Important dates and deadlines" }
+        - insert:
+            tableName: faculty_link_translations
+            columns:
+              - column: { name: faculty_link_id, value: 6 }
+              - column: { name: language, value: "ro" }
+              - column: { name: title, value: "Calendar Academic" }
+              - column: { name: description, value: "Date importante şi termene limită" }
+        - insert:
+            tableName: faculty_link_translations
+            columns:
+              - column: { name: faculty_link_id, value: 6 }
+              - column: { name: language, value: "de" }
+              - column: { name: title, value: "Akademischer Kalender" }
+              - column: { name: description, value: "Wichtige Termine und Fristen" }
+        - insert:
+            tableName: faculty_link_translations
+            columns:
+              - column: { name: faculty_link_id, value: 6 }
+              - column: { name: language, value: "fr" }
+              - column: { name: title, value: "Calendrier Académique" }
+              - column: { name: description, value: "Dates importantes et échéances" }
+        - insert:
+            tableName: faculty_link_translations
+            columns:
+              - column: { name: faculty_link_id, value: 7 }
+              - column: { name: language, value: "en" }
+              - column: { name: title, value: "Exam Session" }
+              - column: { name: description, value: "Exam schedules and information" }
+        - insert:
+            tableName: faculty_link_translations
+            columns:
+              - column: { name: faculty_link_id, value: 7 }
+              - column: { name: language, value: "ro" }
+              - column: { name: title, value: "Sesiune Examene" }
+              - column: { name: description, value: "Programări şi informaţii despre examene" }
+        - insert:
+            tableName: faculty_link_translations
+            columns:
+              - column: { name: faculty_link_id, value: 7 }
+              - column: { name: language, value: "de" }
+              - column: { name: title, value: "Prüfungsperiode" }
+              - column: { name: description, value: "Prüfungspläne und Informationen" }
+        - insert:
+            tableName: faculty_link_translations
+            columns:
+              - column: { name: faculty_link_id, value: 7 }
+              - column: { name: language, value: "fr" }
+              - column: { name: title, value: "Session d'Examens" }
+              - column: { name: description, value: "Horaires d'examens et informations" }

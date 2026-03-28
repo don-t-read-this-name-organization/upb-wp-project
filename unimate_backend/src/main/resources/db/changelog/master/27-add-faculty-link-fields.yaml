@@ -1,0 +1,16 @@
+databaseChangeLog:
+  - changeSet:
+      id: "27-add-faculty-link-fields"
+      author: "frihetselsker"
+      changes:
+        - addColumn:
+            tableName: faculty_links
+            columns:
+              - column:
+                  name: icon
+                  type: varchar(100)
+                  defaultValue: "fas fa-link"
+              - column:
+                  name: color_class
+                  type: varchar(50)
+                  defaultValue: "link-icon-default"

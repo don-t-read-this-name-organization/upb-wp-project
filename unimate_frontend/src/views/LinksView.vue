@@ -1,66 +1,79 @@
 <script setup lang="ts">
-const usefulLinks = [
-  {
-    key: 'intl',
-    url: 'https://fils.upb.ro/ro/international-students/',
-    icon: 'fas fa-globe',
-    colorClass: 'link-icon-globe',
-  },
-  {
-    key: 'portal',
-    url: 'https://studenti.pub.ro/index.php?page=Informatii&ActiveViewID=tab_infogen',
-    icon: 'fas fa-university',
-    colorClass: 'link-icon-university',
-  },
-  {
-    key: 'activities',
-    url: 'https://fils.upb.ro/ro/activitati-pentru-studenti/',
-    icon: 'fas fa-tasks',
-    colorClass: 'link-icon-tasks',
-  },
-  {
-    key: 'associations',
-    url: 'https://fils.upb.ro/ro/asociatii-studentesti/',
-    icon: 'fas fa-users',
-    colorClass: 'link-icon-users',
-  },
-  {
-    key: 'facilities',
-    url: 'https://fils.upb.ro/ro/facilitati/',
-    icon: 'fas fa-concierge-bell',
-    colorClass: 'link-icon-concierge',
-  },
-  {
-    key: 'calendar',
-    url: 'https://fils.upb.ro/ro/calendar-universitar/',
-    icon: 'fas fa-calendar-alt',
-    colorClass: 'link-icon-calendar',
-  },
-  {
-    key: 'exams',
-    url: 'https://fils.upb.ro/ro/sesiune-examene/',
-    icon: 'fas fa-clipboard-list',
-    colorClass: 'link-icon-clipboard',
-  },
+import { ref, onMounted, computed, watch } from 'vue'
+import { useAppStore } from '@/stores/appStore'
+import { useI18n } from 'vue-i18n'
+
+interface Link {
+  key: string
+  title: string
+  description: string
+  url: string
+  icon: string
+  colorClass: string
+}
+
+const store = useAppStore()
+const { locale } = useI18n()
+const facultyLinks = ref<Link[]>([])
+
+const defaultLinks: Link[] = [
   {
     key: 'myupb',
+    title: '',
+    description: '',
     url: 'https://my.upb.ro/login',
     icon: 'fas fa-id-card',
     colorClass: 'link-icon-idcard',
   },
   {
     key: 'courses',
+    title: '',
+    description: '',
     url: 'https://curs.upb.ro/2025/',
     icon: 'fas fa-laptop-code',
     colorClass: 'link-icon-laptop',
   },
   {
     key: 'ticketing',
+    title: '',
+    description: '',
     url: 'https://ticketing.upb.ro/',
     icon: 'fas fa-ticket-alt',
     colorClass: 'link-icon-ticket',
   },
 ]
+
+const usefulLinks = computed(() => [...facultyLinks.value, ...defaultLinks])
+
+async function fetchFacultyLinks() {
+  const facultyId = store.user?.faculty?.id
+  if (!facultyId) return
+  
+  try {
+    const response = await fetch(`/api/faculty-links/${facultyId}?lang=${locale.value}`)
+    if (response.ok) {
+      const data = await response.json()
+      facultyLinks.value = data.map((link: any) => ({
+        key: link.key,
+        title: link.title,
+        description: link.description || '',
+        url: link.url,
+        icon: link.icon || 'fas fa-link',
+        colorClass: link.colorClass || 'link-icon-default',
+      }))
+    }
+  } catch (error) {
+    console.error('Failed to fetch faculty links:', error)
+  }
+}
+
+onMounted(() => {
+  fetchFacultyLinks()
+})
+
+watch(locale, () => {
+  fetchFacultyLinks()
+})
 </script>
 
 <template>
@@ -81,8 +94,8 @@ const usefulLinks = [
       >
         <i :class="[link.icon, 'link-icon', link.colorClass]"></i>
         <div class="link-content">
-          <h3>{{ $t(`linksPage.${link.key}.title`) }}</h3>
-          <p>{{ $t(`linksPage.${link.key}.desc`) }}</p>
+          <h3>{{ link.title || $t(`linksPage.${link.key}.title`) }}</h3>
+          <p>{{ link.description || $t(`linksPage.${link.key}.desc`) }}</p>
         </div>
       </a>
     </div>

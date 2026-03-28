@@ -1,0 +1,42 @@
+databaseChangeLog:
+  - changeSet:
+      id: "29-create-faculty-link-translations"
+      author: "frihetselsker"
+      changes:
+        - createTable:
+            tableName: faculty_link_translations
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: faculty_link_id
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: language
+                  type: varchar(10)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: title
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: description
+                  type: varchar(500)
+        - addUniqueConstraint:
+            tableName: faculty_link_translations
+            columnNames: faculty_link_id, language
+        - addForeignKeyConstraint:
+            baseTableName: faculty_link_translations
+            baseColumnNames: faculty_link_id
+            referencedTableName: faculty_links
+            referencedColumnNames: id
+            constraintName: fk_faculty_link_translations

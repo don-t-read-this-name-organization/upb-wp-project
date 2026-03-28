@@ -5,6 +5,12 @@ spring:
     password: ${DB_PASSWORD:admin123}
     driver-class-name: com.mysql.cj.jdbc.Driver
 
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 50MB
+      max-request-size: 50MB
+
   jpa:
     show-sql: true
     hibernate:
@@ -25,6 +31,10 @@ spring:
 
 server:
   port: 8888
+
+app:
+  upload:
+    path: ${UPLOAD_PATH:./uploads/notes/}
 
 logging:
   level:

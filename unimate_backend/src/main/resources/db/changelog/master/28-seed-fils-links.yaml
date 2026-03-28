@@ -1,0 +1,54 @@
+databaseChangeLog:
+  - changeSet:
+      id: "28-seed-fils-links"
+      author: "frihetselsker"
+      changes:
+        - insert:
+            tableName: faculty_links
+            columns:
+              - column: { name: faculty_id, value: 12 }
+              - column: { name: url, value: "https://fils.upb.ro/ro/international-students/" }
+              - column: { name: icon, value: "fas fa-globe" }
+              - column: { name: color_class, value: "link-icon-globe" }
+        - insert:
+            tableName: faculty_links
+            columns:
+              - column: { name: faculty_id, value: 12 }
+              - column: { name: url, value: "https://studenti.pub.ro/index.php?page=Informatii&ActiveViewID=tab_infogen" }
+              - column: { name: icon, value: "fas fa-university" }
+              - column: { name: color_class, value: "link-icon-university" }
+        - insert:
+            tableName: faculty_links
+            columns:
+              - column: { name: faculty_id, value: 12 }
+              - column: { name: url, value: "https://fils.upb.ro/ro/activitati-pentru-studenti/" }
+              - column: { name: icon, value: "fas fa-tasks" }
+              - column: { name: color_class, value: "link-icon-tasks" }
+        - insert:
+            tableName: faculty_links
+            columns:
+              - column: { name: faculty_id, value: 12 }
+              - column: { name: url, value: "https://fils.upb.ro/ro/asociatii-studentesti/" }
+              - column: { name: icon, value: "fas fa-users" }
+              - column: { name: color_class, value: "link-icon-users" }
+        - insert:
+            tableName: faculty_links
+            columns:
+              - column: { name: faculty_id, value: 12 }
+              - column: { name: url, value: "https://fils.upb.ro/ro/facilitati/" }
+              - column: { name: icon, value: "fas fa-concierge-bell" }
+              - column: { name: color_class, value: "link-icon-concierge" }
+        - insert:
+            tableName: faculty_links
+            columns:
+              - column: { name: faculty_id, value: 12 }
+              - column: { name: url, value: "https://fils.upb.ro/ro/calendar-universitar/" }
+              - column: { name: icon, value: "fas fa-calendar-alt" }
+              - column: { name: color_class, value: "link-icon-calendar" }
+        - insert:
+            tableName: faculty_links
+            columns:
+              - column: { name: faculty_id, value: 12 }
+              - column: { name: url, value: "https://fils.upb.ro/ro/sesiune-examene/" }
+              - column: { name: icon, value: "fas fa-clipboard-list" }
+              - column: { name: color_class, value: "link-icon-clipboard" }

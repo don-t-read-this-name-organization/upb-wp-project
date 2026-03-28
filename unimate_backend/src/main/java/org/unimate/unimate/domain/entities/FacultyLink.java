@@ -29,14 +29,14 @@ public class FacultyLink {
   @ToString.Exclude
   Faculty faculty;
 
-  @Column
-  String title;
-
   @Column(length = 2000)
   String url;
 
-  @Column
-  String category;
+  @Column(length = 100)
+  String icon;
+
+  @Column(length = 50)
+  String colorClass;
 
   @Column(name = "created_at")
   @CreationTimestamp
