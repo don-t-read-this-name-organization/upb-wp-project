@@ -1,5 +1,21 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
+import WeatherWidget from '@/components/WeatherWidget.vue'
+import QuoteWidget from '@/components/QuoteWidget.vue'
+
+const isPanelCollapsed = ref(true)
+
+onMounted(() => {
+  const collapsed = localStorage.getItem('bottomPanelCollapsed')
+  if (collapsed !== null) {
+    isPanelCollapsed.value = collapsed === 'true'
+  }
+})
+
+const togglePanel = () => {
+  isPanelCollapsed.value = !isPanelCollapsed.value
+  localStorage.setItem('bottomPanelCollapsed', String(isPanelCollapsed.value))
+}
 
 const news = [
   {
@@ -93,6 +109,17 @@ const nextMap = () => {
         </div>
       </div>
     </section>
+
+    <div class="bottom-panel" :class="{ collapsed: isPanelCollapsed }">
+      <button class="panel-toggle" @click="togglePanel" aria-label="Toggle panel">
+        <span class="arrow">{{ isPanelCollapsed ? '▼' : '▲' }}</span>
+        <span>Weather & Daily Quote</span>
+      </button>
+      <div class="panel-content">
+        <WeatherWidget />
+        <QuoteWidget />
+      </div>
+    </div>
   </div>
 </template>
 
@@ -234,5 +261,70 @@ const nextMap = () => {
   color: var(--text-muted);
   font-size: 0.9rem;
   line-height: 1.6;
+}
+
+.bottom-panel {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: var(--card-bg);
+  border-top: 1px solid var(--border-color);
+  box-shadow: 0 -4px 20px rgba(46, 44, 40, 0.06);
+  transition: transform 0.3s ease;
+  z-index: 999;
+}
+
+.bottom-panel.collapsed {
+  transform: translateY(calc(100% - 48px));
+}
+
+.panel-toggle {
+  width: 100%;
+  padding: 0.9rem;
+  background-color: transparent;
+  border: none;
+  border-bottom: 1px solid var(--border-light);
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--text-muted);
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 0.8rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.panel-toggle:hover {
+  color: var(--text-color);
+  background-color: var(--bg-secondary);
+}
+
+.panel-content {
+  padding: 1.5rem 2rem;
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.arrow {
+  font-size: 0.7rem;
+}
+
+@media (max-width: 768px) {
+  .panel-content {
+    flex-direction: column;
+    padding: 1.25rem;
+    gap: 1rem;
+  }
+
+  .bottom-panel.collapsed {
+    transform: translateY(calc(100% - 48px));
+  }
 }
 </style>
