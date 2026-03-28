@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 const group = '1231EB'
 
 interface Course {
@@ -64,14 +67,7 @@ const timetable: Record<string, DaySchedule> = {
 
 const timeSlots = Object.keys(timetable)
 const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday']
-const dayLabels: Record<string, string> = {
-  monday: 'Monday',
-  tuesday: 'Tuesday',
-  wednesday: 'Wednesday',
-  thursday: 'Thursday',
-  friday: 'Friday',
-  saturday: 'Saturday',
-}
+const dayKeys = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday']
 </script>
 
 <template>
@@ -79,17 +75,17 @@ const dayLabels: Record<string, string> = {
     <div class="card fade-in">
       <div class="timetable-header">
         <h2 class="card-title card-title-no-margin">
-          <i class="fas fa-calendar-week"></i> Weekly Timetable
+          <i class="fas fa-calendar-week"></i> {{ t('timetable.weeklyTimetable') }}
         </h2>
-        <span class="group-badge">Group: {{ group }}</span>
+        <span class="group-badge">{{ t('timetable.group') }}: {{ group }}</span>
       </div>
 
       <div class="timetable-wrapper">
         <table class="timetable-table">
           <thead>
             <tr>
-              <th>Time</th>
-              <th v-for="day in days" :key="day">{{ dayLabels[day] }}</th>
+              <th>{{ t('timetable.time') }}</th>
+              <th v-for="day in dayKeys" :key="day">{{ t(`timetable.days.${day}`) }}</th>
             </tr>
           </thead>
           <tbody>
@@ -107,23 +103,23 @@ const dayLabels: Record<string, string> = {
         </table>
       </div>
 
-      <div class="sef-info">
+        <div class="sef-info">
         <div class="sef-avatar">S</div>
         <div class="sef-details">
-          <h4>Your Sef de Grupă</h4>
+          <h4>{{ t('timetable.yourSef') }}</h4>
           <p><strong>Maria Sef</strong> - Group {{ group }}</p>
           <p>
             <a href="mailto:sef@unimate.ro"><i class="fas fa-envelope"></i> sef@unimate.ro</a>
           </p>
           <p class="sef-office-hours">
-            Contact your Sef for timetable updates, group announcements, or academic questions.
+            {{ t('timetable.contactSef') }}
           </p>
         </div>
       </div>
 
       <a href="https://fils.upb.ro/ro/orar/" target="_blank" class="pdf-link">
         <i class="fas fa-file-pdf"></i>
-        View Full Faculty Timetable (All Groups & Years)
+        {{ t('timetable.viewFullTimetable') }}
       </a>
     </div>
   </main>

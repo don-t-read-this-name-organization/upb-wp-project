@@ -1,5 +1,6 @@
 package org.unimate.unimate.repository;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
@@ -11,12 +12,12 @@ import java.util.Optional;
 
 @Repository
 public interface NewsPieceRepository extends CrudRepository<NewsPiece, Integer> {
-    @Query("SELECT n FROM NewsPiece n ORDER BY n.publishDate DESC")
+    @Query("SELECT n FROM NewsPiece n LEFT JOIN FETCH n.translations ORDER BY n.publishDate DESC")
     List<NewsPiece> findAll();
 
-    @Query("SELECT n FROM NewsPiece n ORDER BY n.publishDate DESC")
-    List<NewsPiece> findLatest(@Param("limit") int limit);
+    @Query("SELECT n FROM NewsPiece n LEFT JOIN FETCH n.translations ORDER BY n.publishDate DESC")
+    List<NewsPiece> findLatest(Pageable pageable);
 
-    @Query("SELECT n FROM NewsPiece n WHERE n.id = :id")
+    @Query("SELECT n FROM NewsPiece n LEFT JOIN FETCH n.translations WHERE n.id = :id")
     Optional<NewsPiece> findById(@Param("id") Integer id);
 }

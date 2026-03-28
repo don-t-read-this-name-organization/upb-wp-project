@@ -2,8 +2,10 @@
 import { ref } from 'vue'
 import { RouterLink, RouterView } from 'vue-router'
 import { useAppStore } from '@/stores/appStore'
+import { useI18n } from 'vue-i18n'
 
 const store = useAppStore()
+const { t } = useI18n()
 const isSidebarOpen = ref(false)
 
 const toggleSidebar = () => {
@@ -35,13 +37,14 @@ const toggleSidebar = () => {
           :value="store.language"
           @change="store.setLanguage(($event.target as HTMLSelectElement).value)"
         >
-          <option value="en">ENG</option>
+          <option value="en">EN</option>
+          <option value="ro">RO</option>
           <option value="de">DE</option>
           <option value="fr">FR</option>
         </select>
 
         <RouterLink v-if="!store.user" to="/login" class="btn btn-primary">
-          <i class="fas fa-sign-in-alt"></i> Login
+          <i class="fas fa-sign-in-alt"></i> {{ t('menu.login') }}
         </RouterLink>
       </div>
     </div>
@@ -57,45 +60,45 @@ const toggleSidebar = () => {
     </div>
     <ul class="sidebar-menu">
       <li>
-        <RouterLink to="/" @click="toggleSidebar"><i class="fas fa-home"></i> Home</RouterLink>
+        <RouterLink to="/" @click="toggleSidebar"><i class="fas fa-home"></i> {{ t('menu.home') }}</RouterLink>
       </li>
       <li>
         <RouterLink to="/links" @click="toggleSidebar"
-          ><i class="fas fa-link"></i> Links</RouterLink
+          ><i class="fas fa-link"></i> {{ t('menu.links') }}</RouterLink
         >
       </li>
       <li>
         <RouterLink to="/professors" @click="toggleSidebar"
-          ><i class="fas fa-chalkboard-teacher"></i> Professors</RouterLink
+          ><i class="fas fa-chalkboard-teacher"></i> {{ t('menu.professors') }}</RouterLink
         >
       </li>
       <li>
         <RouterLink to="/kanban" @click="toggleSidebar"
-          ><i class="fas fa-columns"></i> Kanban</RouterLink
+          ><i class="fas fa-columns"></i> {{ t('menu.kanban') }}</RouterLink
         >
       </li>
 
       <template v-if="!store.user">
         <li>
           <RouterLink to="/timetable" @click="toggleSidebar"
-            ><i class="fas fa-calendar-alt"></i> Timetable</RouterLink
+            ><i class="fas fa-calendar-alt"></i> {{ t('menu.timetable') }}</RouterLink
           >
         </li>
         <li>
           <RouterLink to="/notes" @click="toggleSidebar"
-            ><i class="fas fa-sticky-note"></i> Notes</RouterLink
+            ><i class="fas fa-sticky-note"></i> {{ t('menu.notes') }}</RouterLink
           >
         </li>
       </template>
 
       <li v-if="store.user?.role === 'ADMIN'">
         <RouterLink to="/admin" @click="toggleSidebar"
-          ><i class="fas fa-user-shield"></i> Admin Panel</RouterLink
+          ><i class="fas fa-user-shield"></i> {{ t('menu.admin') }}</RouterLink
         >
       </li>
 
       <li v-if="store.user" class="auth-only">
-        <a href="#" @click.prevent="store.logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        <a href="#" @click.prevent="store.logout"><i class="fas fa-sign-out-alt"></i> {{ t('menu.logout') }}</a>
       </li>
     </ul>
   </nav>

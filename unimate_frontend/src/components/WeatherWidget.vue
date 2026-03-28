@@ -1,34 +1,37 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
+import { useI18n } from 'vue-i18n'
 
-const weatherData = ref({ temp: null, description: 'Loading...', icon: 'fa-cloud' })
-const updatedTime = ref('Updated: Just now')
+const { t } = useI18n()
 
-const weatherIcons = {
-  0: { icon: 'fa-sun', desc: 'Clear sky' },
-  1: { icon: 'fa-sun', desc: 'Mainly clear' },
-  2: { icon: 'fa-cloud-sun', desc: 'Partly cloudy' },
-  3: { icon: 'fa-cloud', desc: 'Overcast' },
-  45: { icon: 'fa-smog', desc: 'Foggy' },
-  48: { icon: 'fa-smog', desc: 'Depositing rime fog' },
-  51: { icon: 'fa-cloud-rain', desc: 'Drizzle' },
-  53: { icon: 'fa-cloud-rain', desc: 'Drizzle' },
-  55: { icon: 'fa-cloud-rain', desc: 'Drizzle' },
-  61: { icon: 'fa-cloud-showers-heavy', desc: 'Rain' },
-  63: { icon: 'fa-cloud-showers-heavy', desc: 'Rain' },
-  65: { icon: 'fa-cloud-showers-heavy', desc: 'Rain' },
-  71: { icon: 'fa-snowflake', desc: 'Snow' },
-  73: { icon: 'fa-snowflake', desc: 'Snow' },
-  75: { icon: 'fa-snowflake', desc: 'Snow' },
-  77: { icon: 'fa-snowflake', desc: 'Snow grains' },
-  80: { icon: 'fa-cloud-rain', desc: 'Rain showers' },
-  81: { icon: 'fa-cloud-rain', desc: 'Rain showers' },
-  82: { icon: 'fa-cloud-rain', desc: 'Rain showers' },
-  85: { icon: 'fa-snowflake', desc: 'Snow showers' },
-  86: { icon: 'fa-snowflake', desc: 'Snow showers' },
-  95: { icon: 'fa-bolt', desc: 'Thunderstorm' },
-  96: { icon: 'fa-bolt', desc: 'Thunderstorm' },
-  99: { icon: 'fa-bolt', desc: 'Thunderstorm' },
+const weatherData = ref({ temp: null, description: t('common.loading'), icon: 'fa-cloud' })
+const updatedTime = ref(`${t('weather.updated')}: --`)
+
+const weatherIcons: Record<number, { icon: string; descKey: string }> = {
+  0: { icon: 'fa-sun', descKey: 'weather.clearSky' },
+  1: { icon: 'fa-sun', descKey: 'weather.mainlyClear' },
+  2: { icon: 'fa-cloud-sun', descKey: 'weather.partlyCloudy' },
+  3: { icon: 'fa-cloud', descKey: 'weather.overcast' },
+  45: { icon: 'fa-smog', descKey: 'weather.foggy' },
+  48: { icon: 'fa-smog', descKey: 'weather.depositingRimeFog' },
+  51: { icon: 'fa-cloud-rain', descKey: 'weather.drizzle' },
+  53: { icon: 'fa-cloud-rain', descKey: 'weather.drizzle' },
+  55: { icon: 'fa-cloud-rain', descKey: 'weather.drizzle' },
+  61: { icon: 'fa-cloud-showers-heavy', descKey: 'weather.rain' },
+  63: { icon: 'fa-cloud-showers-heavy', descKey: 'weather.rain' },
+  65: { icon: 'fa-cloud-showers-heavy', descKey: 'weather.rain' },
+  71: { icon: 'fa-snowflake', descKey: 'weather.snow' },
+  73: { icon: 'fa-snowflake', descKey: 'weather.snow' },
+  75: { icon: 'fa-snowflake', descKey: 'weather.snow' },
+  77: { icon: 'fa-snowflake', descKey: 'weather.snowGrains' },
+  80: { icon: 'fa-cloud-rain', descKey: 'weather.rainShowers' },
+  81: { icon: 'fa-cloud-rain', descKey: 'weather.rainShowers' },
+  82: { icon: 'fa-cloud-rain', descKey: 'weather.rainShowers' },
+  85: { icon: 'fa-snowflake', descKey: 'weather.snowShowers' },
+  86: { icon: 'fa-snowflake', descKey: 'weather.snowShowers' },
+  95: { icon: 'fa-bolt', descKey: 'weather.thunderstorm' },
+  96: { icon: 'fa-bolt', descKey: 'weather.thunderstorm' },
+  99: { icon: 'fa-bolt', descKey: 'weather.thunderstorm' },
 }
 
 async function fetchWeather() {
@@ -39,18 +42,18 @@ async function fetchWeather() {
     const data = await response.json()
     if (data.current_weather) {
       const code = data.current_weather.weathercode ?? data.current_weather.weatherCode
-      const weatherInfo = weatherIcons[code] || { icon: 'fa-cloud', desc: 'Unknown' }
+      const weatherInfo = weatherIcons[code] || { icon: 'fa-cloud', descKey: 'weather.unavailable' }
       weatherData.value = {
         temp: data.current_weather.temperature,
-        description: weatherInfo.desc,
+        description: t(weatherInfo.descKey),
         icon: weatherInfo.icon,
       }
       const now = new Date()
-      updatedTime.value = `Updated: ${now.toLocaleTimeString()}`
+      updatedTime.value = `${t('weather.updated')}: ${now.toLocaleTimeString()}`
     }
   } catch (error) {
     console.error('Weather fetch failed', error)
-    weatherData.value.description = 'Unavailable'
+    weatherData.value.description = t('weather.unavailable')
   }
 }
 
@@ -63,8 +66,8 @@ onMounted(() => {
 <template>
   <div class="weather-widget">
     <i :class="['fas', weatherData.icon, 'widget-icon']"></i>
-    <h3>Weather</h3>
-    <p>Bucharest: {{ weatherData.temp !== null ? weatherData.temp : '--' }}°C - {{ weatherData.description }}</p>
+    <h3>{{ t('weather.title') }}</h3>
+    <p>{{ t('weather.bucharest') }}: {{ weatherData.temp !== null ? weatherData.temp : '--' }}°C - {{ weatherData.description }}</p>
     <small>{{ updatedTime }}</small>
   </div>
 </template>

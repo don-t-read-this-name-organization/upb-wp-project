@@ -44,6 +44,11 @@ public class SecurityConfig {
                     .requestMatchers(HttpMethod.PUT, "/api/quotes/**").permitAll()
                     .requestMatchers(HttpMethod.DELETE, "/api/quotes/**").permitAll()
                     .requestMatchers(HttpMethod.POST, "/api/quotes/**").permitAll()
+                    // It should be maintained only by an admin
+                    .requestMatchers(HttpMethod.GET, "/api/news/**").permitAll()
+                    .requestMatchers(HttpMethod.PUT, "/api/news/**").permitAll()
+                    .requestMatchers(HttpMethod.DELETE, "/api/news/**").permitAll()
+                    .requestMatchers(HttpMethod.POST, "/api/news/**").permitAll()
                 .anyRequest().authenticated()
             )
             .httpBasic(Customizer.withDefaults());

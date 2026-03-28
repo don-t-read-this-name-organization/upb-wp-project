@@ -2,6 +2,9 @@
 import { ref, computed, onMounted } from 'vue'
 import draggable from 'vuedraggable'
 import { useAppStore } from '@/stores/appStore'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 interface Subtask {
   id: number
@@ -57,11 +60,11 @@ const fetchTasks = async () => {
 
 const createTask = async () => {
   if (!formTitle.value.trim()) {
-    alert('Please enter a title')
+    alert(t('kanban.pleaseEnterTitle'))
     return
   }
   if (!store.user?.id) {
-    alert('You must be logged in to create a task')
+    alert(t('kanban.youMustBeLoggedIn'))
     return
   }
 
@@ -106,7 +109,7 @@ const createTask = async () => {
 const updateTask = async () => {
   if (!editingTask.value) return
   if (!formTitle.value.trim()) {
-    alert('Please enter a title')
+    alert(t('kanban.pleaseEnterTitle'))
     return
   }
 
@@ -164,7 +167,7 @@ const toggleSubtask = async (subtask: Subtask) => {
 }
 
 const deleteTask = async (id: number) => {
-  if (!confirm('Delete this task?')) return
+  if (!confirm(t('kanban.deleteTask'))) return
 
   try {
     const response = await fetch(`/api/tasks/${id}`, {
@@ -300,16 +303,16 @@ onMounted(() => {
   <main class="main-content">
     <div class="card fade-in">
       <div class="kanban-header">
-        <h2 class="card-title"><i class="fas fa-columns"></i> Task Board</h2>
+        <h2 class="card-title"><i class="fas fa-columns"></i> {{ t('kanban.title') }}</h2>
         <button class="btn btn-primary" @click="openModal()">
-          <i class="fas fa-plus"></i> Add Task
+          <i class="fas fa-plus"></i> {{ t('kanban.addTask') }}
         </button>
       </div>
 
       <div class="kanban-board">
         <div class="kanban-column">
           <div class="column-header">
-            <span class="column-title todo"><i class="fas fa-list"></i> To Do</span>
+            <span class="column-title todo"><i class="fas fa-list"></i> {{ t('kanban.todo') }}</span>
             <span class="task-count">{{ todoTasks.length }}</span>
           </div>
           <draggable
@@ -349,7 +352,7 @@ onMounted(() => {
                           ? '🟡'
                           : '🟢'
                     }}
-                    {{ priorityToLabel(element.priority).charAt(0).toUpperCase() + priorityToLabel(element.priority).slice(1) }}</span
+                    {{ t(`kanban.${priorityToLabel(element.priority)}`) }}</span
                   >
                 </div>
               </div>
@@ -359,7 +362,7 @@ onMounted(() => {
 
         <div class="kanban-column">
           <div class="column-header">
-            <span class="column-title inprogress"><i class="fas fa-spinner"></i> In Progress</span>
+            <span class="column-title inprogress"><i class="fas fa-spinner"></i> {{ t('kanban.inProgress') }}</span>
             <span class="task-count">{{ inProgressTasks.length }}</span>
           </div>
           <draggable v-model="inProgressTasks" group="tasks" item-key="id" class="tasks-container">
@@ -393,7 +396,7 @@ onMounted(() => {
                           ? '🟡'
                           : '🟢'
                     }}
-                    {{ priorityToLabel(element.priority).charAt(0).toUpperCase() + priorityToLabel(element.priority).slice(1) }}</span
+                    {{ t(`kanban.${priorityToLabel(element.priority)}`) }}</span
                   >
                 </div>
               </div>
@@ -403,7 +406,7 @@ onMounted(() => {
 
         <div class="kanban-column">
           <div class="column-header">
-            <span class="column-title done"><i class="fas fa-check-circle"></i> Done</span>
+            <span class="column-title done"><i class="fas fa-check-circle"></i> {{ t('kanban.done') }}</span>
             <span class="task-count">{{ doneTasks.length }}</span>
           </div>
           <draggable v-model="doneTasks" group="tasks" item-key="id" class="tasks-container">
@@ -437,7 +440,7 @@ onMounted(() => {
                           ? '🟡'
                           : '🟢'
                     }}
-                    {{ priorityToLabel(element.priority).charAt(0).toUpperCase() + priorityToLabel(element.priority).slice(1) }}</span
+                    {{ t(`kanban.${priorityToLabel(element.priority)}`) }}</span
                   >
                 </div>
               </div>
@@ -451,49 +454,49 @@ onMounted(() => {
   <div v-if="showModal" class="modal-overlay" @click="closeModal">
     <div class="modal-content modal-large" @click.stop>
       <div class="modal-header">
-        <h3>{{ editingTask ? 'Edit Task' : 'New Task' }}</h3>
+        <h3>{{ editingTask ? t('kanban.editTask') : t('kanban.addTask') }}</h3>
         <button class="modal-close" @click="closeModal">&times;</button>
       </div>
       <div class="modal-body">
         <div class="form-group">
-          <label for="taskTitle">Title</label>
+          <label for="taskTitle">{{ t('kanban.taskTitle') }}</label>
           <input
             v-model="formTitle"
             type="text"
             id="taskTitle"
             class="form-control"
-            placeholder="Task title..."
+            :placeholder="t('kanban.taskTitle') + '...'"
           />
         </div>
         <div class="form-group">
-          <label for="taskDescription">Description</label>
+          <label for="taskDescription">{{ t('kanban.taskDescription') }}</label>
           <textarea
             v-model="formDescription"
             id="taskDescription"
             class="form-control"
-            placeholder="Task description..."
+            :placeholder="t('kanban.taskDescription') + '...'"
             rows="3"
           ></textarea>
         </div>
         <div class="form-row">
           <div class="form-group">
-            <label for="taskStatus">Status</label>
+            <label for="taskStatus">{{ t('kanban.status') }}</label>
             <select v-model="formStatus" id="taskStatus" class="form-control">
-              <option value="TODO">To Do</option>
-              <option value="IN_PROGRESS">In Progress</option>
-              <option value="DONE">Done</option>
+              <option value="TODO">{{ t('kanban.todo') }}</option>
+              <option value="IN_PROGRESS">{{ t('kanban.inProgress') }}</option>
+              <option value="DONE">{{ t('kanban.done') }}</option>
             </select>
           </div>
           <div class="form-group">
-            <label for="taskPriority">Priority</label>
+            <label for="taskPriority">{{ t('kanban.priority') }}</label>
             <select v-model="formPriority" id="taskPriority" class="form-control">
-              <option value="high">High</option>
-              <option value="medium">Medium</option>
-              <option value="low">Low</option>
+              <option value="high">{{ t('kanban.high') }}</option>
+              <option value="medium">{{ t('kanban.medium') }}</option>
+              <option value="low">{{ t('kanban.low') }}</option>
             </select>
           </div>
           <div class="form-group">
-            <label for="taskDeadline">Deadline</label>
+            <label for="taskDeadline">{{ t('kanban.dueDate') }}</label>
             <input
               v-model="formDeadline"
               type="date"
@@ -505,9 +508,9 @@ onMounted(() => {
 
         <div class="form-group">
           <div class="subtasks-header">
-            <label>Subtasks</label>
+            <label>{{ t('kanban.subtasks') }}</label>
             <button type="button" class="btn btn-sm btn-secondary" @click="addSubtaskInput">
-              <i class="fas fa-plus"></i> Add
+              <i class="fas fa-plus"></i> {{ t('kanban.addSubtask') }}
             </button>
           </div>
           <div v-if="editingTask && editingTask.subtasks && editingTask.subtasks.length > 0" class="existing-subtasks">
@@ -533,13 +536,13 @@ onMounted(() => {
               </button>
             </div>
           </div>
-          <p v-else class="no-subtasks">No subtasks added</p>
+          <p v-else class="no-subtasks">{{ t('kanban.noSubtasks') }}</p>
         </div>
       </div>
       <div class="modal-footer">
-        <button class="btn btn-secondary" @click="closeModal">Cancel</button>
+        <button class="btn btn-secondary" @click="closeModal">{{ t('kanban.cancel') }}</button>
         <button class="btn btn-primary" @click="saveTask">
-          {{ editingTask ? 'Update' : 'Create' }} Task
+          {{ editingTask ? t('kanban.update') : t('kanban.create') }} {{ t('kanban.title').toLowerCase() }}
         </button>
       </div>
     </div>

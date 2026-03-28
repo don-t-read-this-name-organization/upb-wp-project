@@ -3,6 +3,7 @@ package org.unimate.unimate.service.impl;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.unimate.unimate.api.dto.news.request.NewsPieceRequest;
@@ -35,7 +36,7 @@ public class NewsServiceImpl implements NewsService {
 
     @Override
     public List<NewsPieceResponse> findLatest(int limit) {
-        return newsPieceRepository.findLatest(limit).stream()
+        return newsPieceRepository.findLatest(PageRequest.of(0, limit)).stream()
                 .map(NewsPieceResponse::fromEntity)
                 .toList();
     }

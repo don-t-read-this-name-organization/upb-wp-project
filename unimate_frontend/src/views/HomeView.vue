@@ -1,48 +1,72 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
+import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import WeatherWidget from '@/components/WeatherWidget.vue'
 import QuoteWidget from '@/components/QuoteWidget.vue'
 
+const router = useRouter()
+const { locale, t } = useI18n()
+
 const isPanelCollapsed = ref(true)
+const newsData = ref([])
+const loading = ref(true)
+
+const languageMap = {
+  en: 'en',
+  de: 'de',
+  fr: 'fr',
+  ro: 'ro',
+}
+
+const currentLang = computed(() => languageMap[locale.value] || 'en')
+
+const news = computed(() => {
+  return newsData.value.map((item) => {
+    const translation = item.translations?.find(
+      (t) => t.language === currentLang.value
+    ) || item.translations?.[0]
+    
+    return {
+      id: item.id,
+      date: new Date(item.publishDate).toLocaleDateString('en-US', {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric',
+      }),
+      title: translation?.title || 'Untitled',
+      body: translation?.body || '',
+    }
+  })
+})
+
+const latestNews = computed(() => news.value.slice(0, 4))
+
+async function fetchNews() {
+  try {
+    const response = await fetch('/api/news/latest?limit=10')
+    if (response.ok) {
+      newsData.value = await response.json()
+    }
+  } catch (error) {
+    console.error('Failed to fetch news:', error)
+  } finally {
+    loading.value = false
+  }
+}
 
 onMounted(() => {
   const collapsed = localStorage.getItem('bottomPanelCollapsed')
   if (collapsed !== null) {
     isPanelCollapsed.value = collapsed === 'true'
   }
+  fetchNews()
 })
 
 const togglePanel = () => {
   isPanelCollapsed.value = !isPanelCollapsed.value
   localStorage.setItem('bottomPanelCollapsed', String(isPanelCollapsed.value))
 }
-
-const news = [
-  {
-    id: 1,
-    date: 'Mar 14, 2026',
-    title: 'Exam Schedule',
-    body: 'The summer session exam schedule has been published. Check your dates and rooms!',
-  },
-  {
-    id: 2,
-    date: 'Mar 10, 2026',
-    title: 'Erasmus+',
-    body: "Applications for Erasmus+ program are open until March 31st. Don't miss this opportunity!",
-  },
-  {
-    id: 3,
-    date: 'Mar 8, 2026',
-    title: 'Library Hours',
-    body: 'During exam period, FILS library extends opening hours until 10 PM.',
-  },
-  {
-    id: 4,
-    date: 'Mar 5, 2026',
-    title: 'Career Fair',
-    body: 'Annual tech career fair happening next month. Register now for company interviews.',
-  },
-]
 
 const maps = [
   { name: 'Campus Central', src: '/src/assets/images/campus-map.png' },
@@ -100,20 +124,25 @@ const nextMap = () => {
     </section>
 
     <section class="news-section">
-      <h2 class="section-heading">Latest News</h2>
+      <h2 class="section-heading">{{ t('latestNews') }}</h2>
       <div class="news-grid">
-        <div v-for="item in news" :key="item.id" class="news-card">
+        <div v-for="item in latestNews" :key="item.id" class="news-card">
           <div class="news-date">{{ item.date }}</div>
           <h3>{{ item.title }}</h3>
           <p>{{ item.body }}</p>
         </div>
+      </div>
+      <div class="view-more-container">
+        <button class="btn btn-secondary" @click="router.push('/news')">
+          <i class="fas fa-search"></i> {{ t('viewMore') }}
+        </button>
       </div>
     </section>
 
     <div class="bottom-panel" :class="{ collapsed: isPanelCollapsed }">
       <button class="panel-toggle" @click="togglePanel" aria-label="Toggle panel">
         <span class="arrow">{{ isPanelCollapsed ? '▼' : '▲' }}</span>
-        <span>Weather & Daily Quote</span>
+        <span>{{ t('weatherQuote') }}</span>
       </button>
       <div class="panel-content">
         <WeatherWidget />
@@ -226,6 +255,12 @@ const nextMap = () => {
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 1.5rem;
   margin-top: 1rem;
+}
+
+.view-more-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
 }
 
 .news-card {

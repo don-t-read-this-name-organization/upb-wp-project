@@ -9,6 +9,11 @@ const router = createRouter({
       component: () => import('../views/HomeView.vue'),
     },
     {
+      path: '/news',
+      name: 'news-public',
+      component: () => import('../views/NewsPageView.vue'),
+    },
+    {
       path: '/links',
       name: 'links',
       component: () => import('../views/LinksView.vue'),
@@ -38,6 +43,12 @@ const router = createRouter({
       path: '/admin/quotes',
       name: 'quotes',
       component: () => import('../views/QuotesView.vue'),
+      meta: { requiresAdmin: true },
+    },
+    {
+      path: '/admin/news',
+      name: 'news',
+      component: () => import('../views/NewsView.vue'),
       meta: { requiresAdmin: true },
     },
     {

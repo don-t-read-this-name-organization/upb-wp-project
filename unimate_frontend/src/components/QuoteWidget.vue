@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue'
 import { useAppStore } from '@/stores/appStore'
+import { useI18n } from 'vue-i18n'
 
 interface Quote {
   id: number
@@ -9,6 +10,7 @@ interface Quote {
 }
 
 const store = useAppStore()
+const { t } = useI18n()
 const quotes = ref<Quote[]>([])
 const currentQuote = ref('')
 const isLoading = ref(true)
@@ -32,7 +34,7 @@ async function fetchQuotes() {
     }
   } catch (error) {
     console.error('Failed to fetch quotes:', error)
-    currentQuote.value = 'Quote unavailable'
+    currentQuote.value = t('quotes.unavailable')
     isLoading.value = false
   }
 }
@@ -78,7 +80,7 @@ async function submitQuote() {
       closeSubmitModal()
     }, 1500)
   } catch (error) {
-    submitError.value = error instanceof Error ? error.message : 'Failed to submit quote'
+    submitError.value = error instanceof Error ? error.message : t('quotes.failedToSubmit')
   } finally {
     submitLoading.value = false
   }
@@ -93,27 +95,27 @@ onMounted(() => {
 <template>
   <div class="quote-widget">
     <i class="fas fa-quote-left widget-icon-quote"></i>
-    <h3>Quote of the Day</h3>
+    <h3>{{ t('quotes.quoteOfTheDay') }}</h3>
     <p class="quote-text">{{ currentQuote }}</p>
     <button v-if="isLoggedIn" class="btn-submit-quote" @click="openSubmitModal">
-      <i class="fas fa-plus"></i> Submit Quote
+      <i class="fas fa-plus"></i> {{ t('quotes.submitQuote') }}
     </button>
   </div>
 
   <div v-if="showModal" class="modal-overlay" @click.self="closeSubmitModal">
     <div class="modal-content">
       <div class="modal-header">
-        <h3>Submit Quote</h3>
+        <h3>{{ t('quotes.submitQuoteTitle') }}</h3>
         <button class="modal-close" @click="closeSubmitModal">
           <i class="fas fa-times"></i>
         </button>
       </div>
       <div v-if="submitSuccess" class="success-message">
-        <i class="fas fa-check-circle"></i> Quote submitted for approval!
+        <i class="fas fa-check-circle"></i> {{ t('quotes.submitted') }}
       </div>
       <form v-else @submit.prevent="submitQuote">
         <div class="form-group">
-          <label for="quote-text">Quote Text</label>
+          <label for="quote-text">{{ t('quotes.quoteText') }}</label>
           <textarea
             v-model="submitText"
             id="quote-text"
@@ -122,11 +124,11 @@ onMounted(() => {
             required
             minlength="6"
             maxlength="256"
-            placeholder="Enter your quote"
+            :placeholder="t('quotes.enterQuote')"
           ></textarea>
         </div>
         <div class="form-group">
-          <label for="quote-author">Author</label>
+          <label for="quote-author">{{ t('quotes.author') }}</label>
           <input
             v-model="submitAuthor"
             type="text"
@@ -135,14 +137,14 @@ onMounted(() => {
             required
             minlength="6"
             maxlength="256"
-            placeholder="Enter author name"
+            :placeholder="t('quotes.enterAuthor')"
           />
         </div>
         <p v-if="submitError" class="error-message">{{ submitError }}</p>
         <div class="modal-actions">
-          <button type="button" class="btn btn-secondary" @click="closeSubmitModal">Cancel</button>
+          <button type="button" class="btn btn-secondary" @click="closeSubmitModal">{{ t('quotes.cancel') }}</button>
           <button type="submit" class="btn btn-primary" :disabled="submitLoading">
-            {{ submitLoading ? 'Submitting...' : 'Submit' }}
+            {{ submitLoading ? t('quotes.submitting') : t('quotes.submit') }}
           </button>
         </div>
       </form>

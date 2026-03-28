@@ -28,6 +28,7 @@ const store = useAppStore()
           class="lang-select"
         >
           <option value="en">EN</option>
+          <option value="ro">RO</option>
           <option value="de">DE</option>
           <option value="fr">FR</option>
         </select>

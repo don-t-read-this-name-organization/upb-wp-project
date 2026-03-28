@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 interface Note {
   id: number
@@ -122,10 +125,10 @@ const viewNote = (note: Note) => {
   <main class="main-content">
     <div class="card fade-in">
       <div class="notes-header">
-        <h2 class="card-title card-title-no-margin"><i class="fas fa-sticky-note"></i> My Notes</h2>
+        <h2 class="card-title card-title-no-margin"><i class="fas fa-sticky-note"></i> {{ t('notes.title') }}</h2>
         <div class="notes-actions">
           <button class="btn btn-secondary" @click="openModal()">
-            <i class="fas fa-plus"></i> New Note
+            <i class="fas fa-plus"></i> {{ t('notes.newNote') }}
           </button>
         </div>
       </div>
@@ -165,8 +168,8 @@ const viewNote = (note: Note) => {
 
       <div v-else class="empty-state">
         <i class="fas fa-clipboard-list"></i>
-        <h3>No notes yet</h3>
-        <p>Create your first note to get started!</p>
+        <h3>{{ t('notes.noNotes') }}</h3>
+        <p>{{ t('notes.createFirst') }}</p>
         <button class="btn btn-primary add-button-margin" @click="openModal()">
           <i class="fas fa-plus"></i> Create Note
         </button>
@@ -177,7 +180,7 @@ const viewNote = (note: Note) => {
   <div v-if="showModal" class="modal-overlay" @click="closeModal">
     <div class="modal-content" @click.stop>
       <div class="modal-header">
-        <h3>{{ editingNote ? 'Edit Note' : 'New Note' }}</h3>
+        <h3>{{ editingNote ? t('notes.editNote') : t('notes.newNote') }}</h3>
         <button class="modal-close" @click="closeModal">&times;</button>
       </div>
       <div class="modal-body">

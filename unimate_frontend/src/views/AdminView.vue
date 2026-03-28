@@ -231,6 +231,9 @@ onMounted(() => {
           <p class="admin-subtitle">Manage users and system settings</p>
         </div>
         <div class="header-actions">
+          <button class="btn btn-secondary" @click="router.push('/admin/news')">
+            <i class="fas fa-newspaper"></i> Manage News
+          </button>
           <button class="btn btn-secondary" @click="router.push('/admin/quotes')">
             <i class="fas fa-quote-left"></i> Manage Quotes
           </button>

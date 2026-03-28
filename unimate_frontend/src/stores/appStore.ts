@@ -1,6 +1,11 @@
 import { defineStore } from 'pinia'
 import { i18n } from '@/i18n'
 
+const getInitialLanguage = () => {
+  const stored = localStorage.getItem('language')
+  return stored || 'en'
+}
+
 export const useAppStore = defineStore('app', {
   state: () => ({
     isDark: false,
@@ -8,7 +13,7 @@ export const useAppStore = defineStore('app', {
       const stored = localStorage.getItem('user')
       return stored ? JSON.parse(stored) : null
     })() as { name: string; role: string; id?: number } | null,
-    language: 'en',
+    language: getInitialLanguage(),
   }),
   actions: {
     toggleTheme() {
@@ -17,7 +22,8 @@ export const useAppStore = defineStore('app', {
     },
     setLanguage(lang: string) {
       this.language = lang
-      i18n.global.locale.value = lang as any
+      localStorage.setItem('language', lang)
+      i18n.global.locale.value = lang as 'en' | 'de' | 'fr' | 'ro'
       document.documentElement.setAttribute('lang', lang)
     },
     logout() {
@@ -27,3 +33,5 @@ export const useAppStore = defineStore('app', {
     },
   },
 })
+
+i18n.global.locale.value = getInitialLanguage() as 'en' | 'de' | 'fr' | 'ro'

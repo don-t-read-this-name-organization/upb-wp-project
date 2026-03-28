@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 import ProfessorCard from '@/components/ProfessorCard.vue'
+
+const { t } = useI18n()
 
 const decanatStaff = ref([
   {
@@ -56,7 +59,7 @@ const scrollCarousel = (id: string, distance: number) => {
   <main class="main-content">
     <div class="prof-layout">
       <div class="carousels-container">
-        <h3 class="section-title">🎓 Decanat (Dean's Office)</h3>
+        <h3 class="section-title">🎓 {{ t('professors.deansOffice') }}</h3>
         <div class="carousel-wrapper">
           <button class="carousel-nav prev" @click="scrollCarousel('decanat-carousel', -300)">
             <i class="fas fa-chevron-left"></i>
@@ -69,7 +72,7 @@ const scrollCarousel = (id: string, distance: number) => {
           </button>
         </div>
 
-        <h3 class="section-title">Professors & Teaching Staff</h3>
+        <h3 class="section-title">{{ t('professors.professorsStaff') }}</h3>
         <div class="carousel-wrapper">
           <button class="carousel-nav prev" @click="scrollCarousel('prof-carousel', -300)">
             <i class="fas fa-chevron-left"></i>
@@ -86,15 +89,15 @@ const scrollCarousel = (id: string, distance: number) => {
       <aside class="prof-sidebar">
         <div class="card">
           <!-- The Dean's Office vs. Deanery? -->
-          <h3 class="card-title">Secretariat & Deanery</h3>
+          <h3 class="card-title">{{ t('professors.secretariat') }}</h3>
 
           <div class="info-box">
-            <h4><i class="fas fa-map-marker-alt"></i> Location</h4>
+            <h4><i class="fas fa-map-marker-alt"></i> {{ t('professors.location') }}</h4>
             <p>FILS Building, Politehnica University<br />313 Splaiul Independenței, Bucharest</p>
           </div>
 
           <div class="info-box">
-            <h4><i class="fas fa-clock"></i> Working Hours</h4>
+            <h4><i class="fas fa-clock"></i> {{ t('professors.workingHours') }}</h4>
             <div class="office-hours-list">
               <strong>Secretariat:</strong> Mon-Thu 9:00-16:00<br />
               <strong>Deanery:</strong> Mon-Fri 10:00-15:00
@@ -102,7 +105,7 @@ const scrollCarousel = (id: string, distance: number) => {
           </div>
 
           <div class="info-box">
-            <h4><i class="fas fa-headset"></i> Contact</h4>
+            <h4><i class="fas fa-headset"></i> {{ t('professors.contact') }}</h4>
             <div class="info-item"><i class="fas fa-phone"></i> +40 21 345 1000</div>
             <div class="info-item">
               <i class="fas fa-envelope"></i>

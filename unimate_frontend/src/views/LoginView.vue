@@ -2,9 +2,11 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAppStore } from '@/stores/appStore'
+import { useI18n } from 'vue-i18n'
 
 const router = useRouter()
 const store = useAppStore()
+const { t } = useI18n()
 const email = ref('')
 const password = ref('')
 const error = ref('')
@@ -34,10 +36,10 @@ const handleLogin = async () => {
       localStorage.setItem('user', JSON.stringify(store.user))
       router.push('/')
     } else {
-      error.value = data.error || 'Login failed'
+      error.value = data.error || t('login.failed')
     }
   } catch {
-    error.value = 'Connection error. Is the backend running?'
+    error.value = t('login.connectionError')
   } finally {
     loading.value = false
   }
@@ -49,12 +51,12 @@ const handleLogin = async () => {
     <div class="card login-container fade-in">
       <h2 class="card-title text-center">
         <i class="fas fa-sign-in-alt"></i>
-        <span>Login</span>
+        <span>{{ t('login.title') }}</span>
       </h2>
 
       <form id="loginForm" @submit.prevent="handleLogin">
         <div class="form-group">
-          <label for="email">Email</label>
+          <label for="email">{{ t('login.email') }}</label>
           <input
             v-model="email"
             type="email"
@@ -66,7 +68,7 @@ const handleLogin = async () => {
         </div>
 
         <div class="form-group">
-          <label for="password">Password</label>
+          <label for="password">{{ t('login.password') }}</label>
           <input
             v-model="password"
             type="password"
@@ -79,7 +81,7 @@ const handleLogin = async () => {
 
         <button type="submit" class="btn btn-primary btn-full-width" :disabled="loading">
           <i class="fas fa-sign-in-alt"></i>
-          <span>{{ loading ? 'Logging in...' : 'Login' }}</span>
+          <span>{{ loading ? t('login.loggingIn') : t('login.submit') }}</span>
         </button>
 
         <p v-if="error" class="error-message">{{ error }}</p>
@@ -87,12 +89,12 @@ const handleLogin = async () => {
 
       <div class="demo-accounts-divider">
         <p class="demo-accounts-title">
-          <strong>Demo Accounts:</strong>
+          <strong>{{ t('login.demoAccounts') }}</strong>
         </p>
         <div class="demo-accounts-box">
-          <p><strong>Admin:</strong> admin@unimate.ro / admin123</p>
-          <p><strong>Student:</strong> student@unimate.ro / student123</p>
-          <p><strong>Sef de Grupa:</strong> sef@unimate.ro / sef123</p>
+          <p><strong>{{ t('login.admin') }}:</strong> admin@unimate.ro / admin123</p>
+          <p><strong>{{ t('login.student') }}:</strong> student@unimate.ro / student123</p>
+          <p><strong>{{ t('login.chief') }}:</strong> sef@unimate.ro / sef123</p>
         </div>
       </div>
     </div>
