@@ -14,7 +14,7 @@ const toggleSidebar = () => {
 
 const showMenu = computed(() => !store.isVisitor)
 const showFacultyLink = computed(() => store.isLoggedIn && store.userFaculty)
-const showUserProfile = computed(() => store.isLoggedIn)
+const showUserProfile = computed(() => store.isLoggedIn && !store.isAdmin)
 </script>
 
 <template>
@@ -25,7 +25,7 @@ const showUserProfile = computed(() => store.isLoggedIn)
         <span class="menu-text">Menu</span>
       </button>
 
-      <RouterLink to="/" class="logo"> <i class="fas fa-graduation-cap"></i> UniMate </RouterLink>
+      <RouterLink :to="store.isAdmin ? '/admin' : '/'" class="logo"> <i class="fas fa-graduation-cap"></i> UniMate </RouterLink>
 
       <div class="header-controls">
         <a v-if="showFacultyLink && store.userFacultyWebsite" :href="store.userFacultyWebsite" target="_blank" class="faculty-link">
@@ -67,7 +67,7 @@ const showUserProfile = computed(() => store.isLoggedIn)
       </button>
     </div>
     <ul class="sidebar-menu">
-      <li>
+      <li v-if="!store.isAdmin">
         <RouterLink to="/" @click="toggleSidebar"><i class="fas fa-home"></i> {{ t('menu.home') }}</RouterLink>
       </li>
 

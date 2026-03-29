@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 
 const router = useRouter()
+const { t } = useI18n()
 
 interface User {
   id: number
@@ -62,11 +64,11 @@ const getRoleBadgeClass = (role: string) => {
 const getRoleLabel = (role: string) => {
   switch (role) {
     case 'ADMIN':
-      return 'Admin'
+      return t('admin.roles.admin')
     case 'CHIEF':
-      return 'Sef de Grupa'
+      return t('admin.roles.chief')
     case 'STUDENT':
-      return 'Student'
+      return t('admin.roles.student')
     default:
       return role
   }
@@ -85,7 +87,7 @@ const fetchUsers = async () => {
     if (!response.ok) throw new Error('Failed to fetch users')
     users.value = await response.json()
   } catch {
-    error.value = 'Failed to load users. Is the backend running?'
+    error.value = t('common.error')
   } finally {
     loading.value = false
   }
@@ -136,12 +138,12 @@ const handleSubmit = async () => {
     closeModal()
     await fetchUsers()
   } catch (err: unknown) {
-    error.value = err instanceof Error ? err.message : 'Operation failed'
+    error.value = err instanceof Error ? err.message : t('common.error')
   }
 }
 
 const deleteUser = async (user: User) => {
-  if (!confirm(`Are you sure you want to delete user "${user.username}"?`)) return
+  if (!confirm(t('common.confirm') + ` "${user.username}"?`)) return
   error.value = ''
   const token = localStorage.getItem('token')
   try {
@@ -154,7 +156,7 @@ const deleteUser = async (user: User) => {
     if (!response.ok) throw new Error('Delete failed')
     await fetchUsers()
   } catch {
-    error.value = 'Failed to delete user'
+    error.value = t('common.error')
   }
 }
 
@@ -208,7 +210,7 @@ const handleConfirmAction = async () => {
     }
     await fetchPendingQuotes()
   } catch {
-    error.value = `Failed to ${confirmAction.value} quote`
+    error.value = `${t('common.error')}`
   }
 }
 
@@ -223,18 +225,18 @@ onMounted(() => {
     <div class="card fade-in">
       <div class="card-header">
         <div>
-          <h2 class="card-title"><i class="fas fa-user-shield"></i> Admin Panel</h2>
-          <p class="admin-subtitle">Manage users and system settings</p>
+          <h2 class="card-title"><i class="fas fa-user-shield"></i> {{ t('admin.title') }}</h2>
+          <p class="admin-subtitle">{{ t('admin.subtitle') }}</p>
         </div>
         <div class="header-actions">
           <button class="btn btn-secondary" @click="router.push('/admin/news')">
-            <i class="fas fa-newspaper"></i> Manage News
+            <i class="fas fa-newspaper"></i> {{ t('admin.manageNews') }}
           </button>
           <button class="btn btn-secondary" @click="router.push('/admin/quotes')">
-            <i class="fas fa-quote-left"></i> Manage Quotes
+            <i class="fas fa-quote-left"></i> {{ t('admin.manageQuotes') }}
           </button>
           <button class="btn btn-primary" @click="openAddModal">
-            <i class="fas fa-plus"></i> Add User
+            <i class="fas fa-plus"></i> {{ t('admin.addUser') }}
           </button>
         </div>
       </div>
@@ -244,18 +246,18 @@ onMounted(() => {
       </div>
 
       <div class="admin-section">
-        <h3 class="section-title">User Management</h3>
+        <h3 class="section-title">{{ t('admin.userManagement') }}</h3>
         <div v-if="loading" class="loading-state">
-          <i class="fas fa-spinner fa-spin"></i> Loading users...
+          <i class="fas fa-spinner fa-spin"></i> {{ t('admin.loadingUsers') }}
         </div>
         <table v-else class="admin-table">
           <thead>
             <tr>
-              <th>ID</th>
-              <th>Username</th>
-              <th>Email</th>
-              <th>Role</th>
-              <th>Actions</th>
+              <th>{{ t('admin.id') }}</th>
+              <th>{{ t('admin.username') }}</th>
+              <th>{{ t('admin.email') }}</th>
+              <th>{{ t('admin.role') }}</th>
+              <th>{{ t('admin.actions') }}</th>
             </tr>
           </thead>
           <tbody>
@@ -269,54 +271,54 @@ onMounted(() => {
                 </span>
               </td>
               <td class="actions-cell">
-                <button class="btn-icon" title="Edit" @click="openEditModal(user)">
+                <button class="btn-icon" :title="t('common.edit')" @click="openEditModal(user)">
                   <i class="fas fa-edit"></i>
                 </button>
-                <button class="btn-icon delete" title="Delete" @click="deleteUser(user)">
+                <button class="btn-icon delete" :title="t('common.delete')" @click="deleteUser(user)">
                   <i class="fas fa-trash"></i>
                 </button>
               </td>
             </tr>
             <tr v-if="users.length === 0">
-              <td colspan="5" class="empty-state">No users found</td>
+              <td colspan="5" class="empty-state">{{ t('admin.noUsersFound') }}</td>
             </tr>
           </tbody>
         </table>
       </div>
 
       <div class="admin-section">
-        <h3 class="section-title">System Statistics</h3>
+        <h3 class="section-title">{{ t('admin.systemStats') }}</h3>
         <div class="stats-grid">
           <div class="stat-card">
             <i class="fas fa-users stat-icon"></i>
             <div class="stat-value">{{ stats.total }}</div>
-            <div class="stat-label">Total Users</div>
+            <div class="stat-label">{{ t('admin.totalUsers') }}</div>
           </div>
           <div class="stat-card">
             <i class="fas fa-user-graduate stat-icon"></i>
             <div class="stat-value">{{ stats.students }}</div>
-            <div class="stat-label">Students</div>
+            <div class="stat-label">{{ t('admin.students') }}</div>
           </div>
           <div class="stat-card">
             <i class="fas fa-clipboard-list stat-icon"></i>
             <div class="stat-value">{{ stats.chiefs }}</div>
-            <div class="stat-label">Sefi de Grupa</div>
+            <div class="stat-label">{{ t('admin.chiefs') }}</div>
           </div>
           <div class="stat-card">
             <i class="fas fa-user-shield stat-icon"></i>
             <div class="stat-value">{{ stats.admins }}</div>
-            <div class="stat-label">Admins</div>
+            <div class="stat-label">{{ t('admin.admins') }}</div>
           </div>
         </div>
       </div>
 
       <div class="admin-section">
-        <h3 class="section-title">Pending Quotes</h3>
+        <h3 class="section-title">{{ t('admin.pendingQuotes') }}</h3>
         <div v-if="quotesLoading" class="loading-state">
-          <i class="fas fa-spinner fa-spin"></i> Loading pending quotes...
+          <i class="fas fa-spinner fa-spin"></i> {{ t('admin.loadingQuotes') }}
         </div>
         <div v-else-if="pendingQuotes.length === 0" class="empty-state">
-          No pending quotes to review
+          {{ t('admin.noPendingQuotes') }}
         </div>
         <div v-else class="quotes-grid">
           <div v-for="quote in pendingQuotes" :key="quote.id" class="quote-card">
@@ -324,10 +326,10 @@ onMounted(() => {
             <div class="quote-author">- {{ quote.author }}</div>
             <div class="quote-actions">
               <button class="btn btn-success btn-sm" @click="openConfirmModal('approve', quote)">
-                <i class="fas fa-check"></i> Approve
+                <i class="fas fa-check"></i> {{ t('admin.approve') }}
               </button>
               <button class="btn btn-danger btn-sm" @click="openConfirmModal('reject', quote)">
-                <i class="fas fa-times"></i> Reject
+                <i class="fas fa-times"></i> {{ t('admin.reject') }}
               </button>
             </div>
           </div>
@@ -338,14 +340,14 @@ onMounted(() => {
     <div v-if="showModal" class="modal-overlay" @click.self="closeModal">
       <div class="modal-content">
         <div class="modal-header">
-          <h3>{{ editingUser ? 'Edit User' : 'Add New User' }}</h3>
+          <h3>{{ editingUser ? t('admin.editUser') : t('admin.addNewUser') }}</h3>
           <button class="modal-close" @click="closeModal">
             <i class="fas fa-times"></i>
           </button>
         </div>
         <form @submit.prevent="handleSubmit">
           <div class="form-group">
-            <label for="username">Username</label>
+            <label for="username">{{ t('admin.username') }}</label>
             <input
               v-model="form.username"
               type="text"
@@ -355,7 +357,7 @@ onMounted(() => {
             />
           </div>
           <div class="form-group">
-            <label for="email">Email</label>
+            <label for="email">{{ t('admin.email') }}</label>
             <input
               v-model="form.email"
               type="email"
@@ -365,7 +367,7 @@ onMounted(() => {
             />
           </div>
           <div class="form-group">
-            <label for="password">{{ editingUser ? 'New Password (leave blank to keep)' : 'Password' }}</label>
+            <label for="password">{{ editingUser ? t('admin.newPassword') : t('admin.password') }}</label>
             <input
               v-model="form.password"
               type="password"
@@ -375,16 +377,16 @@ onMounted(() => {
             />
           </div>
           <div class="form-group">
-            <label for="role">Role</label>
+            <label for="role">{{ t('admin.role') }}</label>
             <select v-model="form.role" id="role" class="form-control">
-              <option value="STUDENT">Student</option>
-              <option value="CHIEF">Sef de Grupa</option>
+              <option value="STUDENT">{{ t('admin.roles.student') }}</option>
+              <option value="CHIEF">{{ t('admin.roles.chief') }}</option>
             </select>
           </div>
           <div class="modal-actions">
-            <button type="button" class="btn btn-secondary" @click="closeModal">Cancel</button>
+            <button type="button" class="btn btn-secondary" @click="closeModal">{{ t('common.cancel') }}</button>
             <button type="submit" class="btn btn-primary">
-              {{ editingUser ? 'Save Changes' : 'Add User' }}
+              {{ editingUser ? t('admin.saveChanges') : t('admin.addUser') }}
             </button>
           </div>
         </form>
@@ -396,23 +398,23 @@ onMounted(() => {
         <div class="modal-icon" :class="confirmAction">
           <i :class="confirmAction === 'approve' ? 'fas fa-check-circle' : 'fas fa-times-circle'"></i>
         </div>
-        <h3>{{ confirmAction === 'approve' ? 'Approve Quote' : 'Reject Quote' }}</h3>
+        <h3>{{ confirmAction === 'approve' ? t('admin.approveQuote') : t('admin.rejectQuote') }}</h3>
         <p v-if="confirmAction === 'approve'">
-          Are you sure you want to approve this quote by "{{ confirmQuote?.author }}"?
+          {{ t('admin.approveConfirm', { author: confirmQuote?.author }) }}
         </p>
         <p v-else>
-          Are you sure you want to reject and delete this quote by "{{ confirmQuote?.author }}"?
-          <br><small>This action cannot be undone.</small>
+          {{ t('admin.rejectConfirm', { author: confirmQuote?.author }) }}
+          <br><small>{{ t('admin.cannotBeUndone') }}</small>
         </p>
         <div class="modal-actions confirm-actions">
-          <button type="button" class="btn btn-secondary" @click="closeConfirmModal">Cancel</button>
+          <button type="button" class="btn btn-secondary" @click="closeConfirmModal">{{ t('common.cancel') }}</button>
           <button 
             type="button" 
             class="btn" 
             :class="confirmAction === 'approve' ? 'btn-success' : 'btn-danger'"
             @click="handleConfirmAction"
           >
-            {{ confirmAction === 'approve' ? 'Approve' : 'Reject' }}
+            {{ confirmAction === 'approve' ? t('admin.approve') : t('admin.reject') }}
           </button>
         </div>
       </div>

@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import { MdEditor } from 'md-editor-v3'
 import 'md-editor-v3/lib/style.css'
+
+const { t } = useI18n()
 
 interface Translation {
   language: string
@@ -64,7 +67,7 @@ async function fetchNews() {
     if (!response.ok) throw new Error('Failed to fetch news')
     news.value = await response.json()
   } catch {
-    error.value = 'Failed to load news. Is the backend running?'
+    error.value = t('newsAdmin.failedToLoad')
   } finally {
     loading.value = false
   }
@@ -173,7 +176,7 @@ async function handleSubmit() {
   error.value = ''
   const validTranslations = form.value.translations.filter((t) => t.title.trim())
   if (validTranslations.length === 0) {
-    error.value = 'At least one translation is required'
+    error.value = t('newsAdmin.translationRequired')
     return
   }
 
@@ -192,12 +195,12 @@ async function handleSubmit() {
     closeModal()
     await fetchNews()
   } catch (e) {
-    error.value = e instanceof Error ? e.message : 'Operation failed'
+    error.value = e instanceof Error ? e.message : t('newsAdmin.operationFailed')
   }
 }
 
 async function deleteNews(item: NewsPiece) {
-  if (!confirm(`Are you sure you want to delete this news piece?`)) return
+  if (!confirm(t('newsAdmin.deleteConfirm'))) return
   error.value = ''
   try {
     for (const trans of item.translations) {
@@ -222,7 +225,7 @@ async function deleteNews(item: NewsPiece) {
     if (!response.ok) throw new Error('Failed to delete news')
     await fetchNews()
   } catch {
-    error.value = 'Failed to delete news'
+    error.value = t('newsAdmin.failedToDelete')
   }
 }
 
@@ -247,15 +250,15 @@ onMounted(fetchNews)
     <div class="page-header">
       <div class="header-left">
         <button class="btn btn-secondary back-btn" @click="router.push('/admin')">
-          <i class="fas fa-arrow-left"></i> Back
+          <i class="fas fa-arrow-left"></i> {{ t('newsAdmin.back') }}
         </button>
         <div>
-          <h1 class="page-title"><i class="fas fa-newspaper"></i> Manage News</h1>
-          <p class="page-subtitle">View, edit, create and delete news</p>
+          <h1 class="page-title"><i class="fas fa-newspaper"></i> {{ t('newsAdmin.title') }}</h1>
+          <p class="page-subtitle">{{ t('newsAdmin.subtitle') }}</p>
         </div>
       </div>
       <button class="btn btn-primary" @click="openAddModal">
-        <i class="fas fa-plus"></i> Add News
+        <i class="fas fa-plus"></i> {{ t('newsAdmin.addNews') }}
       </button>
     </div>
 
@@ -269,7 +272,7 @@ onMounted(fetchNews)
         <input
           v-model="searchQuery"
           type="text"
-          placeholder="Search news..."
+          :placeholder="t('newsAdmin.search')"
           class="search-input"
         />
       </div>
@@ -306,7 +309,7 @@ onMounted(fetchNews)
     <div v-if="showModal" class="modal-overlay" @click.self="closeModal">
       <div class="modal-content modal-lg">
         <div class="modal-header">
-          <h3>{{ editingNews ? 'Edit News' : 'Add New News' }}</h3>
+          <h3>{{ editingNews ? t('newsAdmin.editNews') : t('newsAdmin.addNewNews') }}</h3>
           <button class="modal-close" @click="closeModal">
             <i class="fas fa-times"></i>
           </button>
@@ -339,7 +342,7 @@ onMounted(fetchNews)
             <div class="form-group">
               <label>Body</label>
               <div class="editor-hint">
-                <span>Drag & drop images to embed, or use markdown syntax</span>
+                <span>{{ t('newsAdmin.dragDropImages') }}</span>
                 <span class="hint-formats">Supports: images, markdown, formulas ($...$)</span>
               </div>
               <MdEditor
@@ -355,9 +358,9 @@ onMounted(fetchNews)
           </div>
           <p v-if="error" class="error-message">{{ error }}</p>
           <div class="modal-actions">
-            <button type="button" class="btn btn-secondary" @click="closeModal">Cancel</button>
+            <button type="button" class="btn btn-secondary" @click="closeModal">{{ t('common.cancel') }}</button>
             <button type="submit" class="btn btn-primary" :disabled="uploading">
-              {{ uploading ? 'Saving...' : (editingNews ? 'Save Changes' : 'Add News') }}
+              {{ uploading ? t('newsAdmin.saving') : (editingNews ? t('admin.saveChanges') : t('newsAdmin.addNews')) }}
             </button>
           </div>
         </form>

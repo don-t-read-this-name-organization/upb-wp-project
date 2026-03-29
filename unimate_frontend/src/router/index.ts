@@ -87,7 +87,9 @@ router.beforeEach((to, from, next) => {
   const isLoggedIn = !!user
   const isAdmin = user?.role === 'ADMIN'
 
-  if (to.meta.requiresAdmin) {
+  if (isAdmin && to.path === '/') {
+    next('/admin')
+  } else if (to.meta.requiresAdmin) {
     if (!isAdmin) {
       next('/')
     } else {

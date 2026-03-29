@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
+const router = useRouter()
 
 interface Quote {
   id: number
@@ -15,7 +19,6 @@ interface QuoteForm {
   active: boolean
 }
 
-const router = useRouter()
 const quotes = ref<Quote[]>([])
 const loading = ref(false)
 const error = ref('')
@@ -74,10 +77,10 @@ async function fetchQuotes() {
   error.value = ''
   try {
     const response = await fetch('/api/quotes')
-    if (!response.ok) throw new Error('Failed to fetch quotes')
+    if (!response.ok) throw new Error(t('quotes.failedToLoad'))
     quotes.value = await response.json()
   } catch {
-    error.value = 'Failed to load quotes. Is the backend running?'
+    error.value = t('quotes.failedToLoad')
   } finally {
     loading.value = false
   }
@@ -109,24 +112,24 @@ async function handleSubmit() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(form.value),
       })
-      if (!response.ok) throw new Error('Failed to update quote')
+      if (!response.ok) throw new Error(t('quotes.failedToUpdate'))
     } else {
       const response = await fetch('/api/quotes', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(form.value),
       })
-      if (!response.ok) throw new Error('Failed to create quote')
+      if (!response.ok) throw new Error(t('quotes.failedToCreate'))
     }
     closeModal()
     await fetchQuotes()
   } catch (e) {
-    error.value = e instanceof Error ? e.message : 'Operation failed'
+    error.value = e instanceof Error ? e.message : t('quotes.failedToCreate')
   }
 }
 
 async function deleteQuote(quote: Quote) {
-  if (!confirm(`Are you sure you want to delete the quote by "${quote.author}"?`)) return
+  if (!confirm(t('quotes.deleteConfirm', { author: quote.author }))) return
   error.value = ''
   try {
     const response = await fetch(`/api/quotes/${quote.id}`, {
@@ -135,7 +138,7 @@ async function deleteQuote(quote: Quote) {
     if (!response.ok) throw new Error('Failed to delete quote')
     await fetchQuotes()
   } catch {
-    error.value = 'Failed to delete quote'
+    error.value = t('quotes.failedToDelete')
   }
 }
 
@@ -151,15 +154,15 @@ onMounted(fetchQuotes)
     <div class="page-header">
       <div class="header-left">
         <button class="btn btn-secondary back-btn" @click="goBack">
-          <i class="fas fa-arrow-left"></i> Back
+          <i class="fas fa-arrow-left"></i> {{ t('quotes.back') }}
         </button>
         <div>
-          <h1 class="page-title"><i class="fas fa-quote-left"></i> Manage Quotes</h1>
-          <p class="page-subtitle">View, edit, create and delete quotes</p>
+          <h1 class="page-title"><i class="fas fa-quote-left"></i> {{ t('quotes.title') }}</h1>
+          <p class="page-subtitle">{{ t('quotes.subtitle') }}</p>
         </div>
       </div>
       <button class="btn btn-primary" @click="openAddModal">
-        <i class="fas fa-plus"></i> Add Quote
+        <i class="fas fa-plus"></i> {{ t('quotes.addQuote') }}
       </button>
     </div>
 
@@ -175,21 +178,21 @@ onMounted(fetchQuotes)
             :class="{ active: filter === 'all' }"
             @click="filter = 'all'"
           >
-            All ({{ stats.total }})
+            {{ t('quotes.all') }} ({{ stats.total }})
           </button>
           <button 
             class="filter-btn" 
             :class="{ active: filter === 'active' }"
             @click="filter = 'active'"
           >
-            Active ({{ stats.active }})
+            {{ t('quotes.active') }} ({{ stats.active }})
           </button>
           <button 
             class="filter-btn" 
             :class="{ active: filter === 'inactive' }"
             @click="filter = 'inactive'"
           >
-            Inactive ({{ stats.inactive }})
+            {{ t('quotes.inactive') }} ({{ stats.inactive }})
           </button>
         </div>
         
@@ -199,15 +202,15 @@ onMounted(fetchQuotes)
             <input 
               v-model="searchQuery" 
               type="text" 
-              placeholder="Search quotes..." 
+              :placeholder="t('quotes.search')" 
               class="search-input"
             />
           </div>
           
           <select v-model="sortBy" class="sort-select">
-            <option value="id">Sort by ID</option>
-            <option value="author">Sort by Author</option>
-            <option value="text">Sort by Text</option>
+            <option value="id">{{ t('quotes.sortById') }}</option>
+            <option value="author">{{ t('quotes.sortByAuthor') }}</option>
+            <option value="text">{{ t('quotes.sortByText') }}</option>
           </select>
           
           <button class="sort-order-btn" @click="sortOrder = sortOrder === 'asc' ? 'desc' : 'asc'">
@@ -223,11 +226,11 @@ onMounted(fetchQuotes)
       <table v-else class="quotes-table">
         <thead>
           <tr>
-            <th>ID</th>
-            <th>Quote</th>
-            <th>Author</th>
-            <th>Status</th>
-            <th>Actions</th>
+            <th>{{ t('admin.id') }}</th>
+            <th>{{ t('quotes.quoteText') }}</th>
+            <th>{{ t('quotes.author') }}</th>
+            <th>{{ t('quotes.status') }}</th>
+            <th>{{ t('admin.actions') }}</th>
           </tr>
         </thead>
         <tbody>
@@ -237,20 +240,20 @@ onMounted(fetchQuotes)
             <td>{{ quote.author }}</td>
             <td>
               <span :class="['status-badge', quote.active ? 'active' : 'inactive']">
-                {{ quote.active ? 'Active' : 'Inactive' }}
+                {{ quote.active ? t('quotes.active') : t('quotes.inactive') }}
               </span>
             </td>
             <td class="actions-cell">
-              <button class="btn-icon" title="Edit" @click="openEditModal(quote)">
+              <button class="btn-icon" :title="t('common.edit')" @click="openEditModal(quote)">
                 <i class="fas fa-edit"></i>
               </button>
-              <button class="btn-icon delete" title="Delete" @click="deleteQuote(quote)">
+              <button class="btn-icon delete" :title="t('common.delete')" @click="deleteQuote(quote)">
                 <i class="fas fa-trash"></i>
               </button>
             </td>
           </tr>
           <tr v-if="filteredQuotes.length === 0">
-            <td colspan="5" class="empty-state">No quotes found</td>
+            <td colspan="5" class="empty-state">{{ t('quotes.noQuotes') }}</td>
           </tr>
         </tbody>
       </table>
@@ -259,14 +262,14 @@ onMounted(fetchQuotes)
     <div v-if="showModal" class="modal-overlay" @click.self="closeModal">
       <div class="modal-content">
         <div class="modal-header">
-          <h3>{{ editingQuote ? 'Edit Quote' : 'Add New Quote' }}</h3>
+          <h3>{{ editingQuote ? t('quotes.editQuote') : t('quotes.addNewQuote') }}</h3>
           <button class="modal-close" @click="closeModal">
             <i class="fas fa-times"></i>
           </button>
         </div>
         <form @submit.prevent="handleSubmit">
           <div class="form-group">
-            <label for="quote-text">Quote Text</label>
+            <label for="quote-text">{{ t('quotes.quoteText') }}</label>
             <textarea
               v-model="form.text"
               id="quote-text"
@@ -278,7 +281,7 @@ onMounted(fetchQuotes)
             ></textarea>
           </div>
           <div class="form-group">
-            <label for="quote-author">Author</label>
+            <label for="quote-author">{{ t('quotes.author') }}</label>
             <input
               v-model="form.author"
               type="text"
@@ -292,13 +295,13 @@ onMounted(fetchQuotes)
           <div class="form-group">
             <label class="checkbox-label">
               <input type="checkbox" v-model="form.active" />
-              <span>Active (visible to users)</span>
+              <span>{{ t('quotes.active') }}</span>
             </label>
           </div>
           <div class="modal-actions">
-            <button type="button" class="btn btn-secondary" @click="closeModal">Cancel</button>
+            <button type="button" class="btn btn-secondary" @click="closeModal">{{ t('common.cancel') }}</button>
             <button type="submit" class="btn btn-primary">
-              {{ editingQuote ? 'Save Changes' : 'Add Quote' }}
+              {{ editingQuote ? t('admin.saveChanges') : t('quotes.addQuote') }}
             </button>
           </div>
         </form>
