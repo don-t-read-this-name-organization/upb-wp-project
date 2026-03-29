@@ -3,23 +3,18 @@ import { ref, onMounted, computed, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useAppStore } from '@/stores/appStore'
 import { parseMarkdown } from '@/utils/markdown'
+import { MdEditor } from 'md-editor-v3'
+import 'md-editor-v3/lib/style.css'
 
 const { t } = useI18n()
 const store = useAppStore()
 
-interface NoteContent {
-  id?: number
-  contentType: 'MARKDOWN' | 'AUDIO' | 'PDF'
-  content: string
-  filePath: string
-  sortOrder: number
-}
-
 interface Note {
   id: number
   title: string
+  content: string
+  description: string
   collection: string
-  contents: NoteContent[]
   createdAt: string
 }
 
@@ -27,15 +22,44 @@ const notes = ref<Note[]>([])
 const loading = ref(true)
 const collections = ref<string[]>([])
 const activeFilter = ref('all')
-const showModal = ref(false)
+const searchQuery = ref('')
+
+const showEditModal = ref(false)
+const showFullModal = ref(false)
+
 const editingNote = ref<Note | null>(null)
+const viewingNote = ref<Note | null>(null)
 
 const formTitle = ref('')
 const formCollection = ref('Math')
-const formContents = ref<NoteContent[]>([])
+const formContent = ref('')
+const formDescription = ref('')
 const uploading = ref(false)
 
-const noteContents = ref<{ [key: number]: NoteContent[] }>({})
+const editorRef = ref<InstanceType<typeof MdEditor> | null>(null)
+
+const showConfirmModal = ref(false)
+const confirmMessage = ref('')
+const confirmCallback = ref<(() => void) | null>(null)
+
+function showConfirm(message: string, callback: () => void) {
+  confirmMessage.value = message
+  confirmCallback.value = callback
+  showConfirmModal.value = true
+}
+
+function handleConfirm() {
+  if (confirmCallback.value) {
+    confirmCallback.value()
+  }
+  showConfirmModal.value = false
+  confirmCallback.value = null
+}
+
+function handleConfirmCancel() {
+  showConfirmModal.value = false
+  confirmCallback.value = null
+}
 
 const filteredNotes = computed(() => {
   if (activeFilter.value === 'all') return notes.value
@@ -49,11 +73,18 @@ const allCollections = computed(() => {
 
 async function fetchNotes() {
   const userId = store.user?.id
-  if (!userId) return
+  if (!userId) {
+    loading.value = false
+    return
+  }
 
   loading.value = true
   try {
-    const response = await fetch(`/api/notes?userId=${userId}`)
+    let url = `/api/notes?userId=${userId}`
+    if (searchQuery.value.trim()) {
+      url += `&search=${encodeURIComponent(searchQuery.value.trim())}`
+    }
+    const response = await fetch(url)
     if (response.ok) {
       notes.value = await response.json()
       updateCollections()
@@ -79,53 +110,55 @@ function filterNotes(collection: string, btn: Event) {
   target.classList.add('active')
 }
 
-function openModal(note?: Note) {
+function openEditModal(note?: Note) {
   if (note) {
     editingNote.value = note
     formTitle.value = note.title
     formCollection.value = note.collection || 'Math'
-    formContents.value = note.contents.map((c) => ({ ...c }))
+    formContent.value = note.content || ''
+    formDescription.value = note.description || ''
   } else {
     editingNote.value = null
     formTitle.value = ''
     formCollection.value = 'Math'
-    formContents.value = [{ contentType: 'MARKDOWN', content: '', filePath: '', sortOrder: 0 }]
+    formContent.value = ''
+    formDescription.value = ''
   }
-  showModal.value = true
+  showEditModal.value = true
 }
 
-function closeModal() {
-  showModal.value = false
+function closeEditModal() {
+  showEditModal.value = false
   editingNote.value = null
 }
 
-function addContentBlock() {
-  formContents.value.push({
-    contentType: 'MARKDOWN',
-    content: '',
-    filePath: '',
-    sortOrder: formContents.value.length,
-  })
+function openFullModal(note: Note) {
+  viewingNote.value = note
+  showFullModal.value = true
 }
 
-function removeContentBlock(index: number) {
-  formContents.value.splice(index, 1)
-  formContents.value.forEach((c, i) => (c.sortOrder = i))
+function closeFullModal() {
+  showFullModal.value = false
+  viewingNote.value = null
 }
 
-async function uploadFile(file: File, index: number): Promise<string> {
+async function uploadFile(file: File): Promise<string> {
+  const userId = store.user?.id
+  if (!userId) throw new Error('Not logged in')
+
   const formData = new FormData()
   formData.append('file', file)
+  formData.append('userId', userId.toString())
 
   uploading.value = true
   try {
-    const response = await fetch('/api/uploads', {
+    const response = await fetch('/api/files', {
       method: 'POST',
       body: formData,
     })
     if (response.ok) {
       const data = await response.json()
-      return data.url
+      return data.filePath
     }
     throw new Error('Upload failed')
   } finally {
@@ -133,20 +166,43 @@ async function uploadFile(file: File, index: number): Promise<string> {
   }
 }
 
-async function handleFileSelect(event: Event, index: number) {
-  const input = event.target as HTMLInputElement
-  if (!input.files?.length) return
+const IMAGE_EXTENSIONS = ['.png', '.jpg', '.jpeg', '.gif', '.webp', '.svg']
 
-  const file = input.files[0]
-  if (!file) return
+function isImage(file: File): boolean {
+  const ext = '.' + file.name.split('.').pop()?.toLowerCase()
+  return IMAGE_EXTENSIONS.includes(ext)
+}
+
+async function handleDrop(dt: DataTransfer | null) {
+  if (!dt) return
   
-  const content = formContents.value[index]
-  if (!content) return
+  const files = dt.files
+  if (!files || !files.length) return
 
-  if (content.contentType === 'AUDIO') {
-    content.filePath = await uploadFile(file, index)
-  } else if (content.contentType === 'PDF') {
-    content.filePath = await uploadFile(file, index)
+  const file = files[0]
+  if (!file) return
+
+  if (!isImage(file)) {
+    console.warn('Only image files are supported')
+    return
+  }
+  
+  const url = await uploadFile(file)
+
+  const markdown = `![${file.name}](${url})`
+
+  const textarea = document.querySelector('.md-editor-textarea') as HTMLTextAreaElement
+  if (textarea) {
+    const start = textarea.selectionStart
+    const end = textarea.selectionEnd
+    formContent.value = formContent.value.slice(0, start) + markdown + formContent.value.slice(end)
+    
+    setTimeout(() => {
+      textarea.focus()
+      textarea.setSelectionRange(start + markdown.length, start + markdown.length)
+    }, 0)
+  } else {
+    formContent.value += '\n' + markdown
   }
 }
 
@@ -160,12 +216,8 @@ async function saveNote() {
     userId,
     title: formTitle.value,
     collection: formCollection.value,
-    contents: formContents.value.map((c, i) => ({
-      contentType: c.contentType,
-      content: c.content,
-      filePath: c.filePath,
-      sortOrder: i,
-    })),
+    content: formContent.value,
+    description: formDescription.value,
   }
 
   try {
@@ -183,28 +235,46 @@ async function saveNote() {
       })
     }
     await fetchNotes()
-    closeModal()
+    closeEditModal()
   } catch (error) {
     console.error('Failed to save note:', error)
   }
 }
 
 async function deleteNote(note: Note) {
-  if (!confirm(t('common.confirm'))) return
-
-  try {
-    await fetch(`/api/notes/${note.id}`, { method: 'DELETE' })
-    await fetchNotes()
-  } catch (error) {
-    console.error('Failed to delete note:', error)
-  }
+  showConfirm(t('common.confirm') + '?', async () => {
+    try {
+      const imageUrls = extractImageUrls(note.content)
+      const userId = store.user?.id
+      await fetch(`/api/notes/${note.id}`, { method: 'DELETE' })
+      for (const url of imageUrls) {
+        try {
+          const filename = url.split('/').pop()
+          if (filename && userId) {
+            await fetch(`/api/files/by-filename?userId=${userId}&filename=${encodeURIComponent(filename)}`, { method: 'DELETE' })
+          }
+        } catch {
+          console.warn('Failed to delete image:', url)
+        }
+      }
+      await fetchNotes()
+    } catch (error) {
+      console.error('Failed to delete note:', error)
+    }
+  })
 }
 
-function getRenderedContent(content: NoteContent): string {
-  if (content.contentType === 'MARKDOWN') {
-    return parseMarkdown(content.content || '')
+function extractImageUrls(content: string): string[] {
+  const regex = /!\[([^\]]*)\]\(([^)]+)\)/g
+  const urls: string[] = []
+  let match
+  while ((match = regex.exec(content)) !== null) {
+    const url = match[2]
+    if (url && (url.startsWith('/api/files/') || url.startsWith('/uploads/'))) {
+      urls.push(url)
+    }
   }
-  return ''
+  return urls
 }
 
 onMounted(() => {
@@ -227,7 +297,16 @@ watch(
           <i class="fas fa-sticky-note"></i> {{ t('notes.title') }}
         </h2>
         <div class="notes-actions">
-          <button class="btn btn-secondary" @click="openModal()">
+          <div class="search-box">
+            <i class="fas fa-search"></i>
+            <input
+              v-model="searchQuery"
+              type="text"
+              :placeholder="t('notes.search') || 'Search notes...'"
+              @keyup.enter="fetchNotes"
+            />
+          </div>
+          <button class="btn btn-secondary" @click="openEditModal()">
             <i class="fas fa-plus"></i> {{ t('notes.newNote') }}
           </button>
         </div>
@@ -257,9 +336,11 @@ watch(
       <div v-else class="notes-grid">
         <div v-for="note in filteredNotes" :key="note.id" class="note-card">
           <div class="note-header">
-            <h3>{{ note.title }}</h3>
+            <h3 @click="openFullModal(note)" class="note-title-link">
+              {{ note.title }}
+            </h3>
             <div class="note-actions">
-              <button class="btn-icon" @click="openModal(note)" :title="t('common.edit')">
+              <button class="btn-icon" @click="openEditModal(note)" :title="t('common.edit')">
                 <i class="fas fa-edit"></i>
               </button>
               <button class="btn-icon danger" @click="deleteNote(note)" :title="t('common.delete')">
@@ -268,27 +349,7 @@ watch(
             </div>
           </div>
           <div class="note-collection">{{ note.collection }}</div>
-          <div class="note-contents">
-            <div
-              v-for="content in note.contents"
-              :key="content.id"
-              class="note-content-block"
-            >
-              <div
-                v-if="content.contentType === 'MARKDOWN'"
-                class="markdown-content"
-                v-html="getRenderedContent(content)"
-              ></div>
-              <div v-else-if="content.contentType === 'AUDIO'" class="audio-content">
-                <audio controls :src="content.filePath"></audio>
-              </div>
-              <div v-else-if="content.contentType === 'PDF'" class="pdf-content">
-                <a :href="content.filePath" target="_blank" class="pdf-link">
-                  <i class="fas fa-file-pdf"></i> View PDF
-                </a>
-              </div>
-            </div>
-          </div>
+          <div class="note-description">{{ note.description }}</div>
           <div class="note-date">
             {{ new Date(note.createdAt).toLocaleDateString() }}
           </div>
@@ -296,11 +357,11 @@ watch(
       </div>
     </div>
 
-    <div v-if="showModal" class="modal-overlay" @click.self="closeModal">
-      <div class="modal">
+    <div v-if="showEditModal" class="modal-overlay" @click.self="closeEditModal">
+      <div class="modal edit-modal">
         <div class="modal-header">
           <h3>{{ editingNote ? t('notes.editNote') : t('notes.newNote') }}</h3>
-          <button class="modal-close" @click="closeModal">
+          <button class="modal-close" @click="closeEditModal">
             <i class="fas fa-times"></i>
           </button>
         </div>
@@ -316,67 +377,71 @@ watch(
               <option v-for="col in allCollections" :key="col" :value="col" />
             </datalist>
           </div>
-
-          <div class="contents-section">
-            <div v-for="(content, index) in formContents" :key="index" class="content-block">
-              <div class="content-block-header">
-                <select v-model="content.contentType" class="form-select">
-                  <option value="MARKDOWN">Markdown</option>
-                  <option value="AUDIO">Audio</option>
-                  <option value="PDF">PDF</option>
-                </select>
-                <button
-                  v-if="formContents.length > 1"
-                  class="btn-icon danger"
-                  @click="removeContentBlock(index)"
-                >
-                  <i class="fas fa-trash"></i>
-                </button>
-              </div>
-
-              <div v-if="content.contentType === 'MARKDOWN'" class="markdown-editor">
-                <textarea
-                  v-model="content.content"
-                  class="form-textarea"
-                  rows="6"
-                  placeholder="Write your note in Markdown... Use $...$ for inline math, $$...$$ for block math"
-                ></textarea>
-              </div>
-
-              <div v-else-if="content.contentType === 'AUDIO'" class="file-upload">
-                <input
-                  type="file"
-                  accept="audio/*"
-                  @change="(e) => handleFileSelect(e, index)"
-                />
-                <p v-if="content.filePath" class="file-uploaded">
-                  <i class="fas fa-check"></i> Audio uploaded
-                </p>
-              </div>
-
-              <div v-else-if="content.contentType === 'PDF'" class="file-upload">
-                <input
-                  type="file"
-                  accept="application/pdf"
-                  @change="(e) => handleFileSelect(e, index)"
-                />
-                <p v-if="content.filePath" class="file-uploaded">
-                  <i class="fas fa-check"></i> PDF uploaded
-                </p>
-              </div>
+          <div class="form-group">
+            <label>Description</label>
+            <textarea v-model="formDescription" class="form-input" rows="3" placeholder="Short description..."></textarea>
+          </div>
+          <div class="form-group">
+            <label>Content</label>
+            <div class="editor-hint">
+              <span>Drag & drop images to embed, or use markdown syntax</span>
+              <span class="hint-formats">Supports: images, markdown, formulas ($...$)</span>
             </div>
-
-            <button class="btn btn-secondary" @click="addContentBlock">
-              <i class="fas fa-plus"></i> Add Content Block
-            </button>
+            <MdEditor
+              ref="editorRef"
+              v-model="formContent"
+              editor-id="note-editor"
+              language="en-US"
+              preview
+              :toolbars-exclude="['github']"
+              class="markdown-editor"
+              @drop.prevent="handleDrop($event.dataTransfer!)"
+              @dragover.prevent
+            />
           </div>
         </div>
         <div class="modal-footer">
-          <button class="btn btn-secondary" @click="closeModal">
+          <button class="btn btn-secondary" @click="closeEditModal">
             {{ t('common.cancel') }}
           </button>
           <button class="btn btn-primary" @click="saveNote" :disabled="uploading">
             {{ uploading ? t('common.loading') : t('notes.saveNote') }}
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div v-if="showFullModal && viewingNote" class="modal-overlay" @click.self="closeFullModal">
+      <div class="modal full-modal">
+        <div class="modal-header">
+          <h3>{{ viewingNote.title }}</h3>
+          <button class="modal-close" @click="closeFullModal">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <div class="modal-body full-content">
+          <div class="markdown-rendered" v-html="parseMarkdown(viewingNote.content)"></div>
+        </div>
+      </div>
+    </div>
+
+    <div v-if="showConfirmModal" class="modal-overlay" @click.self="handleConfirmCancel">
+      <div class="modal">
+        <div class="modal-header">
+          <h3><i class="fas fa-question-circle"></i> {{ t('common.confirm') }}</h3>
+          <button class="modal-close" @click="handleConfirmCancel">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>{{ confirmMessage }}</p>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" @click="handleConfirmCancel">
+            {{ t('common.cancel') }}
+          </button>
+          <button class="btn btn-danger" @click="handleConfirm">
+            {{ t('common.confirm') }}
           </button>
         </div>
       </div>
@@ -395,6 +460,12 @@ watch(
   justify-content: space-between;
   align-items: center;
   margin-bottom: 1rem;
+}
+
+.notes-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
 }
 
 .collection-filter {
@@ -431,12 +502,6 @@ watch(
   border: 1px solid var(--border-light);
   border-radius: var(--radius);
   padding: 1.25rem;
-  transition: var(--transition);
-}
-
-.note-card:hover {
-  transform: translateY(-3px);
-  box-shadow: var(--shadow);
 }
 
 .note-header {
@@ -446,9 +511,14 @@ watch(
   margin-bottom: 0.5rem;
 }
 
-.note-header h3 {
+.note-title-link {
+  cursor: pointer;
   margin: 0;
   font-size: 1.1rem;
+}
+
+.note-title-link:hover {
+  color: var(--primary-color);
 }
 
 .note-actions {
@@ -478,33 +548,13 @@ watch(
   margin-bottom: 0.75rem;
 }
 
-.note-contents {
-  margin-bottom: 0.75rem;
-}
-
-.note-content-block {
-  margin-bottom: 0.5rem;
-}
-
-.markdown-content {
+.note-description {
   font-size: 0.9rem;
   line-height: 1.5;
-}
-
-.markdown-content :deep(.math-block) {
-  margin: 1rem 0;
-  overflow-x: auto;
-}
-
-.audio-content audio {
-  width: 100%;
-}
-
-.pdf-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  color: var(--primary-color);
+  margin-bottom: 0.75rem;
+  color: var(--text-color);
+  white-space: pre-wrap;
+  word-break: break-word;
 }
 
 .note-date {
@@ -540,9 +590,16 @@ watch(
   background: var(--card-bg);
   border-radius: var(--radius);
   width: 90%;
-  max-width: 700px;
   max-height: 90vh;
   overflow-y: auto;
+}
+
+.edit-modal {
+  max-width: 900px;
+}
+
+.full-modal {
+  max-width: 900px;
 }
 
 .modal-header {
@@ -582,9 +639,7 @@ watch(
   font-weight: 500;
 }
 
-.form-input,
-.form-select,
-.form-textarea {
+.form-input {
   width: 100%;
   padding: 0.75rem;
   border: 1px solid var(--border-color);
@@ -593,35 +648,74 @@ watch(
   color: var(--text-color);
 }
 
-.contents-section {
-  margin-top: 1.5rem;
-}
-
-.content-block {
-  border: 1px solid var(--border-light);
-  border-radius: var(--radius);
-  padding: 1rem;
-  margin-bottom: 1rem;
-}
-
-.content-block-header {
+.editor-hint {
   display: flex;
   justify-content: space-between;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-bottom: 0.5rem;
+}
+
+.hint-formats {
+  color: var(--primary-color);
+}
+
+.markdown-editor {
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+}
+
+.full-content {
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+.markdown-rendered {
+  line-height: 1.6;
+}
+
+.markdown-rendered :deep(.math-block) {
+  margin: 1rem 0;
+  overflow-x: auto;
+}
+
+.markdown-rendered :deep(.markdown-image) {
+  max-width: 100%;
+  border-radius: var(--radius);
+}
+
+.markdown-rendered :deep(.drive-link) {
+  display: inline-flex;
   align-items: center;
-  margin-bottom: 0.75rem;
+  gap: 0.5rem;
+  color: var(--primary-color);
 }
 
-.markdown-editor .form-textarea {
-  font-family: monospace;
+.search-box {
+  position: relative;
+  display: flex;
+  align-items: center;
 }
 
-.file-upload input {
-  width: 100%;
+.search-box i {
+  position: absolute;
+  left: 12px;
+  color: #888;
+  font-size: 14px;
 }
 
-.file-uploaded {
-  color: #28a745;
-  margin-top: 0.5rem;
-  font-size: 0.9rem;
+.search-box input {
+  padding: 8px 12px 8px 36px;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  font-size: 14px;
+  width: 200px;
+  transition: border-color 0.3s, width 0.3s;
+}
+
+.search-box input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  width: 250px;
 }
 </style>

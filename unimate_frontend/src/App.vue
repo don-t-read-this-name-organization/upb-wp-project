@@ -97,6 +97,11 @@ const showUserProfile = computed(() => store.isLoggedIn)
             ><i class="fas fa-sticky-note"></i> {{ t('menu.notes') }}</RouterLink
           >
         </li>
+        <li>
+          <RouterLink to="/files" @click="toggleSidebar"
+            ><i class="fas fa-hdd"></i> {{ t('menu.files') || 'Files' }}</RouterLink
+          >
+        </li>
       </template>
 
       <li>
