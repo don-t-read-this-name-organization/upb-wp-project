@@ -104,12 +104,6 @@ const showUserProfile = computed(() => store.isLoggedIn)
         </li>
       </template>
 
-      <li>
-        <RouterLink to="/news" @click="toggleSidebar"
-          ><i class="fas fa-newspaper"></i> {{ t('menu.news') }}</RouterLink
-        >
-      </li>
-
       <li v-if="store.isAdmin">
         <RouterLink to="/admin" @click="toggleSidebar"
           ><i class="fas fa-user-shield"></i> {{ t('menu.admin') }}</RouterLink

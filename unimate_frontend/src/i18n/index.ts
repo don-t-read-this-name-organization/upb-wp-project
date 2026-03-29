@@ -172,6 +172,7 @@ const messages = {
     },
     latestNews: 'Latest News',
     viewMore: 'View More News',
+    readMore: 'Read more',
     weatherQuote: 'Weather & Daily Quote',
     professors: {
       title: 'Professors & Staff',
@@ -442,6 +443,7 @@ const messages = {
     },
     latestNews: 'Ultimele Noutăți',
     viewMore: 'Vezi Mai Multe Noutăți',
+    readMore: 'Citește mai mult',
     weatherQuote: 'Vreme și Citat al Zilei',
     professors: {
       title: 'Profesori și Personal',
@@ -721,6 +723,7 @@ const messages = {
     },
     latestNews: 'Neueste Nachrichten',
     viewMore: 'Mehr Nachrichten anzeigen',
+    readMore: 'Mehr lesen',
     weatherQuote: 'Wetter & Tageszitat',
     professors: {
       title: 'Professoren & Mitarbeiter',
@@ -1002,6 +1005,7 @@ const messages = {
     },
     latestNews: 'Dernières Actualités',
     viewMore: 'Voir Plus d\'Actualités',
+    readMore: 'Lire la suite',
     weatherQuote: 'Météo & Citation du Jour',
     professors: {
       title: 'Professeurs & Personnel',

@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
+import { MdEditor } from 'md-editor-v3'
+import 'md-editor-v3/lib/style.css'
 
 interface Translation {
   language: string
@@ -25,6 +27,7 @@ const error = ref('')
 const showModal = ref(false)
 const editingNews = ref<NewsPiece | null>(null)
 const searchQuery = ref('')
+const uploading = ref(false)
 const form = ref<NewsForm>({
   translations: [
     { language: 'en', title: '', body: '' },
@@ -35,6 +38,11 @@ const form = ref<NewsForm>({
 })
 
 const languages = ['en', 'ro', 'de', 'fr']
+const selectedLanguage = ref('en')
+
+const languageIndex = computed(() => {
+  return languages.indexOf(selectedLanguage.value)
+})
 
 const filteredNews = computed(() => {
   if (!searchQuery.value) return news.value
@@ -62,8 +70,73 @@ async function fetchNews() {
   }
 }
 
+const IMAGE_EXTENSIONS = ['.png', '.jpg', '.jpeg', '.gif', '.webp', '.svg']
+
+function isImage(file: File): boolean {
+  const ext = '.' + file.name.split('.').pop()?.toLowerCase()
+  return IMAGE_EXTENSIONS.includes(ext)
+}
+
+async function uploadFile(file: File): Promise<string> {
+  const formData = new FormData()
+  formData.append('file', file)
+  formData.append('userId', '1')
+
+  uploading.value = true
+  try {
+    const response = await fetch('/api/files', {
+      method: 'POST',
+      body: formData,
+    })
+    if (response.ok) {
+      const data = await response.json()
+      return data.filePath
+    }
+    throw new Error('Upload failed')
+  } finally {
+    uploading.value = false
+  }
+}
+
+async function handleDrop(lang: string, dt: DataTransfer | null) {
+  if (!dt) return
+  const files = dt.files
+  if (!files?.length) return
+  const file = files[0]
+  if (!isImage(file)) return
+
+  const url = await uploadFile(file)
+  const markdown = `![${file.name}](${url})`
+
+  const trans = form.value.translations.find(t => t.language === lang)
+  if (trans) {
+    const textarea = document.querySelector(`#body-${lang}`) as HTMLTextAreaElement
+    if (textarea) {
+      const start = textarea.selectionStart
+      const end = textarea.selectionEnd
+      trans.body = trans.body.slice(0, start) + markdown + trans.body.slice(end)
+    } else {
+      trans.body += '\n' + markdown
+    }
+  }
+}
+
+function extractImageUrls(content: string): string[] {
+  const regex = /!\[([^\]]*)\]\(([^)]+)\)/g
+  const urls: string[] = []
+  let match
+  while ((match = regex.exec(content)) !== null) {
+    const url = match[2]
+    if (url && (url.startsWith('/api/files/') || url.startsWith('/uploads/'))) {
+      urls.push(url)
+    }
+  }
+  return urls
+}
+
 function openAddModal() {
   editingNews.value = null
+  selectedLanguage.value = 'en'
   form.value = {
     translations: [
       { language: 'en', title: '', body: '' },
@@ -77,6 +150,7 @@ function openAddModal() {
 
 function openEditModal(item: NewsPiece) {
   editingNews.value = item
+  selectedLanguage.value = 'en'
   form.value = {
     translations: languages.map((lang) => {
       const existing = item.translations.find((t) => t.language === lang)
@@ -126,6 +200,22 @@ async function deleteNews(item: NewsPiece) {
   if (!confirm(`Are you sure you want to delete this news piece?`)) return
   error.value = ''
   try {
+    for (const trans of item.translations) {
+      const imageUrls = extractImageUrls(trans.body)
+      for (const url of imageUrls) {
+        try {
+          const filename = url.split('/').pop()
+          if (filename) {
+            await fetch(`/api/files/by-filename?userId=1&filename=${encodeURIComponent(filename)}`, {
+              method: 'DELETE'
+            })
+          }
+        } catch (e) {
+          console.warn('Failed to delete image:', url)
+        }
+      }
+    }
+
     const response = await fetch(`/api/news/${item.id}`, {
       method: 'DELETE',
     })
@@ -222,36 +312,52 @@ onMounted(fetchNews)
           </button>
         </div>
         <form @submit.prevent="handleSubmit">
-          <div v-for="trans in form.translations" :key="trans.language" class="translation-form">
-            <div class="translation-header">
-              <span class="lang-badge-lg">{{ trans.language.toUpperCase() }}</span>
-              <span class="translation-label">Translation</span>
-            </div>
+          <div class="language-tabs">
+            <button
+              v-for="lang in languages"
+              :key="lang"
+              type="button"
+              class="lang-tab"
+              :class="{ active: selectedLanguage === lang }"
+              @click="selectedLanguage = lang"
+            >
+              {{ lang.toUpperCase() }}
+            </button>
+          </div>
+
+          <div class="translation-form">
             <div class="form-group">
-              <label :for="`title-${trans.language}`">Title</label>
+              <label :for="`title-${selectedLanguage}`">Title</label>
               <input
-                v-model="trans.title"
+                v-model="form.translations[languageIndex].title"
                 type="text"
-                :id="`title-${trans.language}`"
+                :id="`title-${selectedLanguage}`"
                 class="form-control"
                 required
               />
             </div>
             <div class="form-group">
-              <label :for="`body-${trans.language}`">Body</label>
-              <textarea
-                v-model="trans.body"
-                :id="`body-${trans.language}`"
-                class="form-control"
-                rows="3"
-              ></textarea>
+              <label>Body</label>
+              <div class="editor-hint">
+                <span>Drag & drop images to embed, or use markdown syntax</span>
+                <span class="hint-formats">Supports: images, markdown, formulas ($...$)</span>
+              </div>
+              <MdEditor
+                v-model="form.translations[languageIndex].body"
+                :editor-id="`body-${selectedLanguage}`"
+                language="en-US"
+                :toolbars-exclude="['github']"
+                class="markdown-editor"
+                @drop.prevent="handleDrop(selectedLanguage, $event.dataTransfer!)"
+                @dragover.prevent
+              />
             </div>
           </div>
           <p v-if="error" class="error-message">{{ error }}</p>
           <div class="modal-actions">
             <button type="button" class="btn btn-secondary" @click="closeModal">Cancel</button>
-            <button type="submit" class="btn btn-primary">
-              {{ editingNews ? 'Save Changes' : 'Add News' }}
+            <button type="submit" class="btn btn-primary" :disabled="uploading">
+              {{ uploading ? 'Saving...' : (editingNews ? 'Save Changes' : 'Add News') }}
             </button>
           </div>
         </form>
@@ -441,7 +547,8 @@ onMounted(fetchNews)
 }
 
 .modal-lg {
-  max-width: 700px;
+  max-width: 1000px;
+  max-height: 95vh;
 }
 
 .modal-header {
@@ -544,5 +651,58 @@ textarea.form-control {
   gap: 1rem;
   justify-content: flex-end;
   margin-top: 1.5rem;
+}
+
+.markdown-editor {
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  width: 100%;
+}
+
+.markdown-editor :deep(.md-editor) {
+  min-height: 300px;
+  width: 100%;
+}
+
+.markdown-editor :deep(.md-editor-preview-wrapper) {
+  min-height: 200px;
+}
+
+.editor-hint {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-bottom: 0.5rem;
+}
+
+.hint-formats {
+  color: var(--primary-color);
+}
+
+.language-tabs {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.lang-tab {
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--border-color);
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-weight: 500;
+  transition: var(--transition);
+}
+
+.lang-tab:hover {
+  border-color: var(--primary-color);
+}
+
+.lang-tab.active {
+  background: var(--primary-color);
+  color: white;
+  border-color: var(--primary-color);
 }
 </style>

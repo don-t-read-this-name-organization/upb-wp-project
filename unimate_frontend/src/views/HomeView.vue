@@ -3,6 +3,7 @@ import { ref, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useAppStore } from '@/stores/appStore'
+import { parseMarkdown } from '@/utils/markdown'
 import WeatherWidget from '@/components/WeatherWidget.vue'
 import QuoteWidget from '@/components/QuoteWidget.vue'
 
@@ -13,6 +14,7 @@ const store = useAppStore()
 const isPanelCollapsed = ref(true)
 const newsData = ref([])
 const loading = ref(true)
+const selectedNews = ref(null)
 
 const languageMap = {
   en: 'en',
@@ -34,6 +36,9 @@ const news = computed(() => {
       (t) => t.language === currentLang.value
     ) || item.translations?.[0]
     
+    const body = translation?.body || ''
+    const truncatedBody = body.length > 150 ? body.substring(0, 150) + '...' : body
+    
     return {
       id: item.id,
       date: new Date(item.publishDate).toLocaleDateString('en-US', {
@@ -42,12 +47,15 @@ const news = computed(() => {
         year: 'numeric',
       }),
       title: translation?.title || 'Untitled',
-      body: translation?.body || '',
+      body: body,
+      truncatedBody: truncatedBody,
     }
   })
 })
 
 const latestNews = computed(() => news.value.slice(0, 4))
+
+const showViewMore = computed(() => news.value.length >= 6)
 
 async function fetchNews() {
   try {
@@ -60,6 +68,14 @@ async function fetchNews() {
   } finally {
     loading.value = false
   }
+}
+
+function openNewsModal(item) {
+  selectedNews.value = item
+}
+
+function closeNewsModal() {
+  selectedNews.value = null
 }
 
 onMounted(() => {
@@ -138,13 +154,14 @@ const nextMap = () => {
     <section v-if="showNews" class="news-section">
       <h2 class="section-heading">{{ t('latestNews') }}</h2>
       <div class="news-grid">
-        <div v-for="item in latestNews" :key="item.id" class="news-card">
+        <div v-for="item in latestNews" :key="item.id" class="news-card" @click="openNewsModal(item)">
           <div class="news-date">{{ item.date }}</div>
           <h3>{{ item.title }}</h3>
-          <p>{{ item.body }}</p>
+          <p>{{ item.truncatedBody }}</p>
+          <span class="read-more">{{ t('readMore') || 'Read more' }} &rarr;</span>
         </div>
       </div>
-      <div class="view-more-container">
+      <div v-if="showViewMore" class="view-more-container">
         <button class="btn btn-secondary" @click="router.push('/news')">
           <i class="fas fa-search"></i> {{ t('viewMore') }}
         </button>
@@ -159,6 +176,17 @@ const nextMap = () => {
       <div class="panel-content">
         <WeatherWidget />
         <QuoteWidget />
+      </div>
+    </div>
+
+    <div v-if="selectedNews" class="modal-overlay" @click.self="closeNewsModal">
+      <div class="modal-content news-modal">
+        <button class="modal-close" @click="closeNewsModal">
+          <i class="fas fa-times"></i>
+        </button>
+        <div class="news-modal-date">{{ selectedNews.date }}</div>
+        <h2 class="news-modal-title">{{ selectedNews.title }}</h2>
+        <div class="news-modal-body" v-html="parseMarkdown(selectedNews.body)"></div>
       </div>
     </div>
   </div>
@@ -283,11 +311,29 @@ const nextMap = () => {
   box-shadow: var(--shadow-sm);
   transition: var(--transition);
   padding: 1.5rem;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
 }
 
 .news-card:hover {
   transform: translateY(-4px);
   box-shadow: var(--shadow-md);
+}
+
+.news-card p {
+  flex: 1;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.read-more {
+  color: var(--primary-color);
+  font-size: 0.85rem;
+  font-weight: 500;
+  margin-top: 0.5rem;
 }
 
 .news-date {
@@ -373,5 +419,97 @@ const nextMap = () => {
   .bottom-panel.collapsed {
     transform: translateY(calc(100% - 48px));
   }
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+}
+
+.modal-content {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  max-width: 600px;
+  width: 100%;
+  max-height: 80vh;
+  overflow-y: auto;
+  position: relative;
+  box-shadow: var(--shadow-lg);
+}
+
+.modal-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: none;
+  border: none;
+  font-size: 1.25rem;
+  color: var(--text-muted);
+  cursor: pointer;
+  z-index: 1;
+}
+
+.modal-close:hover {
+  color: var(--text-color);
+}
+
+.news-modal {
+  padding: 2rem;
+}
+
+.news-modal-date {
+  color: var(--primary-color);
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+
+.news-modal-title {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  color: var(--text-color);
+}
+
+.news-modal-body {
+  line-height: 1.7;
+  color: var(--text-color);
+}
+
+.news-modal-body :deep(img) {
+  max-width: 100%;
+  border-radius: var(--radius);
+}
+
+.news-modal-body :deep(h1),
+.news-modal-body :deep(h2),
+.news-modal-body :deep(h3) {
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.news-modal-body :deep(p) {
+  margin-bottom: 1rem;
+}
+
+.news-modal-body :deep(ul),
+.news-modal-body :deep(ol) {
+  margin-bottom: 1rem;
+  padding-left: 1.5rem;
+}
+
+.news-modal-body :deep(a) {
+  color: var(--primary-color);
 }
 </style>

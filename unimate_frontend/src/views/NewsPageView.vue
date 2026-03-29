@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted, computed, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { parseMarkdown } from '@/utils/markdown'
 
 interface Translation {
   language: string
@@ -22,6 +23,7 @@ const error = ref('')
 const searchQuery = ref('')
 const currentPage = ref(1)
 const itemsPerPage = 6
+const selectedNews = ref<NewsPiece | null>(null)
 
 const languageMap: Record<string, string> = {
   en: 'en',
@@ -60,6 +62,9 @@ const displayedNews = computed(() => {
       (t) => t.language === currentLang.value
     ) || item.translations?.[0]
 
+    const body = translation?.body || ''
+    const truncatedBody = body.length > 200 ? body.substring(0, 200) + '...' : body
+
     return {
       id: item.id,
       date: new Date(item.publishDate).toLocaleDateString('en-US', {
@@ -68,10 +73,22 @@ const displayedNews = computed(() => {
         year: 'numeric',
       }),
       title: translation?.title || 'Untitled',
-      body: translation?.body || '',
+      body: body,
+      truncatedBody: truncatedBody,
     }
   })
 })
+
+function openNewsModal(item: typeof displayedNews.value[0]) {
+  const fullItem = news.value.find(n => n.id === item.id)
+  if (fullItem) {
+    selectedNews.value = fullItem
+  }
+}
+
+function closeNewsModal() {
+  selectedNews.value = null
+}
 
 async function fetchNews() {
   loading.value = true
@@ -136,10 +153,11 @@ onMounted(fetchNews)
 
       <div v-else>
         <div class="news-list">
-          <article v-for="item in displayedNews" :key="item.id" class="news-item">
+          <article v-for="item in displayedNews" :key="item.id" class="news-item" @click="openNewsModal(item)">
             <div class="news-item-date">{{ item.date }}</div>
             <h2 class="news-item-title">{{ item.title }}</h2>
-            <p class="news-item-body">{{ item.body }}</p>
+            <div class="news-item-body" v-html="parseMarkdown(item.truncatedBody)"></div>
+            <span class="read-more">{{ t('readMore') || 'Read more' }} &rarr;</span>
           </article>
         </div>
 
@@ -184,6 +202,17 @@ onMounted(fetchNews)
           {{ Math.min(currentPage * itemsPerPage, filteredNews.length) }} 
           of {{ filteredNews.length }} news
         </div>
+      </div>
+    </div>
+
+    <div v-if="selectedNews" class="modal-overlay" @click.self="closeNewsModal">
+      <div class="modal-content news-modal">
+        <button class="modal-close" @click="closeNewsModal">
+          <i class="fas fa-times"></i>
+        </button>
+        <div class="news-modal-date">{{ new Date(selectedNews.publishDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) }}</div>
+        <h2 class="news-modal-title">{{ selectedNews.translations?.find(t => t.language === currentLang)?.title || 'Untitled' }}</h2>
+        <div class="news-modal-body" v-html="parseMarkdown(selectedNews.translations?.find(t => t.language === currentLang)?.body || '')"></div>
       </div>
     </div>
   </main>
@@ -315,6 +344,33 @@ onMounted(fetchNews)
   margin: 0;
 }
 
+.news-item-body :deep(img) {
+  max-width: 100%;
+  border-radius: var(--radius);
+}
+
+.news-item-body :deep(h1),
+.news-item-body :deep(h2),
+.news-item-body :deep(h3) {
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+  color: var(--text-color);
+}
+
+.news-item-body :deep(p) {
+  margin-bottom: 0.75rem;
+}
+
+.news-item-body :deep(ul),
+.news-item-body :deep(ol) {
+  margin-bottom: 0.75rem;
+  padding-left: 1.5rem;
+}
+
+.news-item-body :deep(a) {
+  color: var(--primary-color);
+}
+
 .pagination {
   display: flex;
   justify-content: center;
@@ -363,5 +419,116 @@ onMounted(fetchNews)
   color: var(--text-muted);
   font-size: 0.85rem;
   margin-top: 1.5rem;
+}
+
+.news-item {
+  cursor: pointer;
+}
+
+.news-item p {
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.read-more {
+  color: var(--primary-color);
+  font-size: 0.85rem;
+  font-weight: 500;
+  margin-top: 0.5rem;
+  display: inline-block;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+}
+
+.modal-content {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  max-width: 600px;
+  width: 100%;
+  max-height: 80vh;
+  overflow-y: auto;
+  position: relative;
+  box-shadow: var(--shadow-lg);
+}
+
+.modal-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: none;
+  border: none;
+  font-size: 1.25rem;
+  color: var(--text-muted);
+  cursor: pointer;
+  z-index: 1;
+}
+
+.modal-close:hover {
+  color: var(--text-color);
+}
+
+.news-modal {
+  padding: 2rem;
+}
+
+.news-modal-date {
+  color: var(--primary-color);
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+
+.news-modal-title {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  color: var(--text-color);
+}
+
+.news-modal-body {
+  line-height: 1.7;
+  color: var(--text-color);
+}
+
+.news-modal-body :deep(img) {
+  max-width: 100%;
+  border-radius: var(--radius);
+}
+
+.news-modal-body :deep(h1),
+.news-modal-body :deep(h2),
+.news-modal-body :deep(h3) {
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.news-modal-body :deep(p) {
+  margin-bottom: 1rem;
+}
+
+.news-modal-body :deep(ul),
+.news-modal-body :deep(ol) {
+  margin-bottom: 1rem;
+  padding-left: 1.5rem;
+}
+
+.news-modal-body :deep(a) {
+  color: var(--primary-color);
 }
 </style>
