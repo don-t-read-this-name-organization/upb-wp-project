@@ -1,10 +1,10 @@
 databaseChangeLog:
   - changeSet:
-      id: "35-create-folders-table"
-      author: "frihelselsker"
+      id: "14-create-files"
+      author: "frihetselsker"
       changes:
         - createTable:
-            tableName: folders
+            tableName: files
             columns:
               - column:
                   name: id
@@ -19,34 +19,46 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
-                  name: name
+                  name: filename
                   type: VARCHAR(255)
                   constraints:
                     nullable: false
               - column:
-                  name: parent_id
+                  name: display_name
+                  type: VARCHAR(255)
+              - column:
+                  name: folder_id
                   type: INT
+              - column:
+                  name: file_path
+                  type: VARCHAR(500)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: file_type
+                  type: VARCHAR(20)
+              - column:
+                  name: file_size
+                  type: BIGINT
               - column:
                   name: created_at
                   type: TIMESTAMP
               - column:
-                  name: updated_at
-                  type: TIMESTAMP
-              - column:
                   name: active
-                  type: TINYINT(1)
+                  type: BOOLEAN
                   defaultValueBoolean: true
                   constraints:
                     nullable: false
         - addForeignKeyConstraint:
-            baseTableName: folders
+            baseTableName: files
             baseColumnNames: user_id
             referencedTableName: users
             referencedColumnNames: id
-            constraintName: fk_folders_user
+            constraintName: fk_files_user
         - addForeignKeyConstraint:
-            baseTableName: folders
-            baseColumnNames: parent_id
+            baseTableName: files
+            baseColumnNames: folder_id
             referencedTableName: folders
             referencedColumnNames: id
-            constraintName: fk_folders_parent
+            constraintName: fk_files_folder
+

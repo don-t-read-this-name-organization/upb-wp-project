@@ -1,42 +1,43 @@
 databaseChangeLog:
   - changeSet:
-      id: "29-create-faculty-link-translations"
+      id: "12-create-faculty-translations"
       author: "frihetselsker"
       changes:
         - createTable:
-            tableName: faculty_link_translations
+            tableName: faculty_translations
             columns:
               - column:
                   name: id
-                  type: int
+                  type: INT
                   autoIncrement: true
                   constraints:
                     primaryKey: true
                     nullable: false
               - column:
-                  name: faculty_link_id
-                  type: int
+                  name: faculty_id
+                  type: INT
                   constraints:
                     nullable: false
               - column:
                   name: language
-                  type: varchar(10)
+                  type: VARCHAR(2)
                   constraints:
                     nullable: false
               - column:
-                  name: title
-                  type: varchar(255)
+                  name: name
+                  type: VARCHAR(255)
                   constraints:
                     nullable: false
               - column:
-                  name: description
-                  type: varchar(500)
+                  name: short_name
+                  type: VARCHAR(50)
         - addUniqueConstraint:
-            tableName: faculty_link_translations
-            columnNames: faculty_link_id, language
+            columnNames: faculty_id, language
+            tableName: faculty_translations
+            constraintName: uq_faculty_translations_faculty_lang
         - addForeignKeyConstraint:
-            baseTableName: faculty_link_translations
-            baseColumnNames: faculty_link_id
-            referencedTableName: faculty_links
+            baseTableName: faculty_translations
+            baseColumnNames: faculty_id
+            referencedTableName: faculties
             referencedColumnNames: id
-            constraintName: fk_faculty_link_translations
+            constraintName: fk_faculty_translations_faculty

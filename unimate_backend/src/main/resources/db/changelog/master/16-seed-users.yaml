@@ -1,11 +1,17 @@
 databaseChangeLog:
   - changeSet:
-      id: "07-seed-users"
+      id: "16-seed-users"
       author: "frihetselsker"
       changes:
         - insert:
             tableName: users
             columns:
+              - column:
+                  name: first_name
+                  value: "Admin"
+              - column:
+                  name: last_name
+                  value: "User"
               - column:
                   name: username
                   value: admin
@@ -25,6 +31,12 @@ databaseChangeLog:
             tableName: users
             columns:
               - column:
+                  name: first_name
+                  value: "John"
+              - column:
+                  name: last_name
+                  value: "Student"
+              - column:
                   name: username
                   value: student
               - column:
@@ -37,11 +49,23 @@ databaseChangeLog:
                   name: role
                   value: STUDENT
               - column:
+                  name: faculty_id
+                  valueNumeric: 12
+              - column:
+                  name: group_id
+                  valueNumeric: 1
+              - column:
                   name: active
                   valueBoolean: true
         - insert:
             tableName: users
             columns:
+              - column:
+                  name: first_name
+                  value: "Maria"
+              - column:
+                  name: last_name
+                  value: "Popescu"
               - column:
                   name: username
                   value: sef
@@ -51,6 +75,12 @@ databaseChangeLog:
               - column:
                   name: password_hash
                   value: sef123
+              - column:
+                  name: faculty_id
+                  valueNumeric: 12
+              - column:
+                  name: group_id
+                  valueNumeric: 2
               - column:
                   name: role
                   value: CHIEF

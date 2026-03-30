@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: "06-create-quotes-table"
+      id: "09-create-quotes-table"
       author: "demesup"
       changes:
         - createTable:

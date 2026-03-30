@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: "12-seed-news"
+      id: "18-seed-news"
       author: "frihetselsker"
       changes:
         - insert:

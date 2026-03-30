@@ -1,10 +1,10 @@
 databaseChangeLog:
   - changeSet:
-      id: "03-create-notes-table"
-      author: "demesup"
+      id: "01-create-faculties"
+      author: "frihetselsker"
       changes:
         - createTable:
-            tableName: notes
+            tableName: faculties
             columns:
               - column:
                   name: id
@@ -14,28 +14,25 @@ databaseChangeLog:
                     primaryKey: true
                     nullable: false
               - column:
-                  name: user_id
-                  type: INT
+                  name: name
+                  type: VARCHAR(255)
                   constraints:
                     nullable: false
               - column:
-                  name: title
-                  type: VARCHAR(255)
+                  name: short_name
+                  type: VARCHAR(50)
               - column:
-                  name: content
-                  type: CLOB
-              - column:
-                  name: created_at
-                  type: TIMESTAMP
+                  name: website
+                  type: VARCHAR(2000)
+                  constraints:
+                    nullable: false
               - column:
                   name: active
                   type: BOOLEAN
                   defaultValueBoolean: true
                   constraints:
                     nullable: false
-        - addForeignKeyConstraint:
-            baseTableName: notes
-            baseColumnNames: user_id
-            referencedTableName: users
-            referencedColumnNames: id
-            constraintName: fk_notes_user
+        - addUniqueConstraint:
+            columnNames: name
+            tableName: faculties
+            constraintName: uq_faculties_name

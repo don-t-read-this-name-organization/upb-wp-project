@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: "09-create-subtasks"
+      id: "08-create-subtasks"
       author: "frihetselsker"
       changes:
         - createTable:

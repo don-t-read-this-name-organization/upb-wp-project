@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: "01-create-users-table"
+      id: "03-create-users-table"
       author: "demesup"
       changes:
         - createTable:
@@ -19,6 +19,16 @@ databaseChangeLog:
                     constraints:
                       nullable: false
                 - column:
+                    name: first_name
+                    type: VARCHAR(100)
+                    constraints:
+                      nullable: false
+                - column:
+                    name: last_name
+                    type: VARCHAR(100)
+                    constraints:
+                      nullable: false
+                - column:
                     name: email
                     type: VARCHAR(255)
                     constraints:
@@ -31,6 +41,12 @@ databaseChangeLog:
                 - column:
                     name: role
                     type: VARCHAR(50)
+                - column:
+                    name: faculty_id
+                    type: INT
+                - column:
+                    name: group_id
+                    type: INT
                 - column:
                     name: created_at
                     type: TIMESTAMP
@@ -49,3 +65,15 @@ databaseChangeLog:
             tableName: users
             constraintName: uq_users_email
         # role is stored as string name of RoleName enum (STUDENT, CHIEF, ADMIN, VISITOR)
+        - addForeignKeyConstraint:
+            baseTableName: users
+            baseColumnNames: faculty_id
+            referencedTableName: faculties
+            referencedColumnNames: id
+            constraintName: fk_users_faculty
+        - addForeignKeyConstraint:
+            baseTableName: users
+            baseColumnNames: group_id
+            referencedTableName: groups
+            referencedColumnNames: id
+            constraintName: fk_users_group

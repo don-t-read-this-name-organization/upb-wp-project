@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: "11-create-news-tables"
+      id: "10-create-news"
       author: "frihetselsker"
       changes:
         - createTable:

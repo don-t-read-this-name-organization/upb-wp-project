@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: "02-create-professors-table"
+      id: "05-create-professors-table"
       author: "demesup"
       changes:
         - createTable:

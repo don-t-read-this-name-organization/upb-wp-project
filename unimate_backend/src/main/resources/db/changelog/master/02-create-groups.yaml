@@ -1,10 +1,10 @@
 databaseChangeLog:
   - changeSet:
-      id: "19-create-faculty-translations"
+      id: "02-create-groups"
       author: "frihetselsker"
       changes:
         - createTable:
-            tableName: faculty_translations
+            tableName: groups
             columns:
               - column:
                   name: id
@@ -14,30 +14,33 @@ databaseChangeLog:
                     primaryKey: true
                     nullable: false
               - column:
+                  name: name
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: year
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
                   name: faculty_id
                   type: INT
                   constraints:
                     nullable: false
               - column:
-                  name: language
-                  type: VARCHAR(2)
+                  name: active
+                  type: BOOLEAN
+                  defaultValueBoolean: true
                   constraints:
                     nullable: false
-              - column:
-                  name: name
-                  type: VARCHAR(255)
-                  constraints:
-                    nullable: false
-              - column:
-                  name: short_name
-                  type: VARCHAR(50)
         - addUniqueConstraint:
-            columnNames: faculty_id, language
-            tableName: faculty_translations
-            constraintName: uq_faculty_translations_faculty_lang
+            columnNames: name, faculty_id
+            tableName: groups
+            constraintName: uq_groups_name_faculty
         - addForeignKeyConstraint:
-            baseTableName: faculty_translations
+            baseTableName: groups
             baseColumnNames: faculty_id
             referencedTableName: faculties
             referencedColumnNames: id
-            constraintName: fk_faculty_translations_faculty
+            constraintName: fk_groups_faculty

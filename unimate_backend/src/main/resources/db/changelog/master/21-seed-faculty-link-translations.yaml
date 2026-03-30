@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: "30-seed-faculty-link-translations"
+      id: "21-seed-faculty-link-translations"
       author: "frihetselsker"
       changes:
         - insert:

@@ -1,0 +1,38 @@
+databaseChangeLog:
+  - changeSet:
+      id: "06-create-faculty-links-table"
+      author: "demesup"
+      changes:
+        - createTable:
+            tableName: faculty_links
+            columns:
+              - column:
+                  name: id
+                  type: INT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: faculty_id
+                  type: INT
+              - column:
+                  name: url
+                  type: VARCHAR(2000)
+              - column:
+                  name: icon
+                  type: varchar(100)
+                  defaultValue: "fas fa-link"
+              - column:
+                  name: color_class
+                  type: varchar(50)
+                  defaultValue: "link-icon-default"
+              - column:
+                  name: created_at
+                  type: TIMESTAMP
+        - addForeignKeyConstraint:
+            baseTableName: faculty_links
+            baseColumnNames: faculty_id
+            referencedTableName: faculties
+            referencedColumnNames: id
+            constraintName: fk_faculty_links_faculty

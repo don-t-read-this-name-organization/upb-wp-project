@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: "25-seed-fils-groups"
+      id: "15-seed-groups"
       author: "frihetselsker"
       changes:
         - insert:

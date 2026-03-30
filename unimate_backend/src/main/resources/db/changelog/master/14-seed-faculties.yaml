@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: "16-seed-faculties"
+      id: "14-seed-faculties"
       author: "frihetselsker"
       changes:
         - insert:
@@ -12,6 +12,9 @@ databaseChangeLog:
               - column:
                   name: short_name
                   value: "ELTH"
+              - column:
+                  name: website
+                  value: "http://www.electro.upb.ro/"
         - insert:
             tableName: faculties
             columns:
@@ -21,6 +24,9 @@ databaseChangeLog:
               - column:
                   name: short_name
                   value: "ENERG"
+              - column:
+                  name: website
+                  value: "http://energ.upb.ro/"
         - insert:
             tableName: faculties
             columns:
@@ -30,6 +36,9 @@ databaseChangeLog:
               - column:
                   name: short_name
                   value: "ACS"
+              - column:
+                  name: website
+                  value: "http://acs.pub.ro/"
         - insert:
             tableName: faculties
             columns:
@@ -39,6 +48,9 @@ databaseChangeLog:
               - column:
                   name: short_name
                   value: "ETTI"
+              - column:
+                  name: website
+                  value: "http://www.electronica.pub.ro/"
         - insert:
             tableName: faculties
             columns:
@@ -48,6 +60,9 @@ databaseChangeLog:
               - column:
                   name: short_name
                   value: "FIMM"
+              - column:
+                  name: website
+                  value: "https://mecanica.upb.ro/"
         - insert:
             tableName: faculties
             columns:
@@ -57,6 +72,9 @@ databaseChangeLog:
               - column:
                   name: short_name
                   value: "FIIR"
+              - column:
+                  name: website
+                  value: "https://fiir.upb.ro/"
         - insert:
             tableName: faculties
             columns:
@@ -66,6 +84,9 @@ databaseChangeLog:
               - column:
                   name: short_name
                   value: "ISB"
+              - column:
+                  name: website
+                  value: "https://isb.pub.ro/"
         - insert:
             tableName: faculties
             columns:
@@ -75,6 +96,9 @@ databaseChangeLog:
               - column:
                   name: short_name
                   value: "TRANS"
+              - column:
+                  name: website
+                  value: "https://transport.pub.ro/"
         - insert:
             tableName: faculties
             columns:
@@ -84,6 +108,9 @@ databaseChangeLog:
               - column:
                   name: short_name
                   value: "AERO"
+              - column:
+                  name: website
+                  value: "http://www.aero.pub.ro/"
         - insert:
             tableName: faculties
             columns:
@@ -93,6 +120,9 @@ databaseChangeLog:
               - column:
                   name: short_name
                   value: "SIM"
+              - column:
+                  name: website
+                  value: "http://www.sim.pub.ro/"
         - insert:
             tableName: faculties
             columns:
@@ -102,6 +132,9 @@ databaseChangeLog:
               - column:
                   name: short_name
                   value: "CHIMIE"
+              - column:
+                  name: website
+                  value: "http://www.chimie.upb.ro/"
         - insert:
             tableName: faculties
             columns:
@@ -111,6 +144,9 @@ databaseChangeLog:
               - column:
                   name: short_name
                   value: "FILS"
+              - column:
+                  name: website
+                  value: "http://fils.upb.ro/"
         - insert:
             tableName: faculties
             columns:
@@ -120,6 +156,9 @@ databaseChangeLog:
               - column:
                   name: short_name
                   value: "FSA"
+              - column:
+                  name: website
+                  value: "http://fsa.pub.ro/"
         - insert:
             tableName: faculties
             columns:
@@ -129,6 +168,9 @@ databaseChangeLog:
               - column:
                   name: short_name
                   value: "FIM"
+              - column:
+                  name: website
+                  value: "http://fim.pub.ro/"
         - insert:
             tableName: faculties
             columns:
@@ -138,3 +180,6 @@ databaseChangeLog:
               - column:
                   name: short_name
                   value: "FAIMA"
+              - column:
+                  name: website
+                  value: "https://faima.upb.ro/"
