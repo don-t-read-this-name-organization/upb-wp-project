@@ -16,9 +16,9 @@ import static lombok.AccessLevel.PRIVATE;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name = "notes")
+@Table(name = "files")
 @FieldDefaults(level = PRIVATE)
-public class Note {
+public class File {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,17 +28,24 @@ public class Note {
     @JoinColumn(name = "user_id", nullable = false)
     User user;
 
-    @Column
-    String title;
+    @ManyToOne
+    @JoinColumn(name = "folder_id")
+    Folder folder;
+
+    @Column(nullable = false)
+    String filename;
+
+    @Column(nullable = false)
+    String filePath;
+
+    @Column(length = 20)
+    String fileType;
 
     @Column
-    String collection;
+    Long fileSize;
 
-    @Column(columnDefinition = "LONGTEXT")
-    String content;
-
-    @Column(length = 500)
-    String description;
+    @Column(name = "display_name", length = 255)
+    String displayName;
 
     @Column(name = "created_at")
     @CreationTimestamp

@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 
@@ -16,9 +17,9 @@ import static lombok.AccessLevel.PRIVATE;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name = "notes")
+@Table(name = "folders")
 @FieldDefaults(level = PRIVATE)
-public class Note {
+public class Folder {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,21 +29,20 @@ public class Note {
     @JoinColumn(name = "user_id", nullable = false)
     User user;
 
-    @Column
-    String title;
+    @Column(nullable = false)
+    String name;
 
-    @Column
-    String collection;
-
-    @Column(columnDefinition = "LONGTEXT")
-    String content;
-
-    @Column(length = 500)
-    String description;
+    @ManyToOne
+    @JoinColumn(name = "parent_id")
+    Folder parent;
 
     @Column(name = "created_at")
     @CreationTimestamp
     LocalDateTime createdAt;
+
+    @Column(name = "updated_at")
+    @UpdateTimestamp
+    LocalDateTime updatedAt;
 
     @Column(columnDefinition = "TINYINT(1)", nullable = false)
     @Builder.Default

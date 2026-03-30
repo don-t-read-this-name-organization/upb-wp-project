@@ -12,6 +12,7 @@ import static lombok.AccessLevel.PRIVATE;
 @AllArgsConstructor
 @Builder
 public class SubtaskRequest {
+  private Integer id;
   private String title;
   private Boolean completed;
 }

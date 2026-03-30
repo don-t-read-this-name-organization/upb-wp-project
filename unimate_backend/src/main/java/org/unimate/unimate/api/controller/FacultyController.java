@@ -14,7 +14,7 @@ import static lombok.AccessLevel.PRIVATE;
 @RestController
 @RequestMapping("/api/faculties")
 @RequiredArgsConstructor
-@FieldDefaults(level = PRIVATE)
+@FieldDefaults(level = PRIVATE, makeFinal = true)
 public class FacultyController {
 
     FacultyService facultyService;

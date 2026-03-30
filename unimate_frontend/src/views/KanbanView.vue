@@ -40,7 +40,7 @@ const formPriority = ref<'high' | 'medium' | 'low'>('medium')
 const formStatus = ref<'TODO' | 'IN_PROGRESS' | 'DONE'>('TODO')
 const formKanbanColumn = ref('TODO')
 const formDeadline = ref('')
-const formSubtasks = ref<string[]>([])
+const formSubtasks = ref<{ id?: number, title: string, completed: boolean }[]>([])
 
 const getAuthHeaders = () => ({
   'Content-Type': 'application/json',
@@ -74,8 +74,8 @@ const createTask = async () => {
   const statusMap = { TODO: 'TODO', IN_PROGRESS: 'IN_PROGRESS', DONE: 'DONE' }
 
   const subtasks = formSubtasks.value
-    .filter(s => s.trim())
-    .map(title => ({ title, completed: false }))
+    .filter(s => s.title.trim())
+    .map(s => ({ title: s.title, completed: s.completed }))
 
   try {
     const response = await fetch('/api/tasks', {
@@ -119,8 +119,10 @@ const updateTask = async () => {
   const statusMap = { TODO: 'TODO', IN_PROGRESS: 'IN_PROGRESS', DONE: 'DONE' }
 
   const subtasks = formSubtasks.value
-    .filter(s => s.trim())
-    .map(title => ({ title, completed: false }))
+    .filter(s => s.title.trim())
+    .map(s => ({ id: s.id || null, title: s.title, completed: s.completed }))
+
+  const subtasksPayload = subtasks
 
   try {
     const response = await fetch(`/api/tasks/${editingTask.value.id}`, {
@@ -133,7 +135,7 @@ const updateTask = async () => {
         status: statusMap[formStatus.value],
         kanbanColumn: formKanbanColumn.value,
         deadline: formDeadline.value || null,
-        subtasks: subtasks.length > 0 ? subtasks : null,
+        subtasks: subtasksPayload,
       }),
     })
 
@@ -153,16 +155,19 @@ const updateTask = async () => {
   }
 }
 
-const toggleSubtask = async (subtask: Subtask) => {
+const toggleSubtask = async (subtask: { id?: number; completed: boolean }) => {
+  if (!subtask.id) return
   try {
-    await fetch(`/api/tasks/subtasks/${subtask.id}`, {
+    const response = await fetch(`/api/tasks/subtasks/${subtask.id}`, {
       method: 'PUT',
       headers: getAuthHeaders(),
       body: JSON.stringify({
         completed: !subtask.completed
       }),
     })
-    subtask.completed = !subtask.completed
+    if (response.ok) {
+      subtask.completed = !subtask.completed
+    }
   } catch (error) {
     console.error('Failed to toggle subtask:', error)
   }
@@ -270,7 +275,7 @@ const openModal = (task?: Task) => {
     formKanbanColumn.value = task.kanbanColumn || 'TODO'
     formStatus.value = (task.status as 'TODO' | 'IN_PROGRESS' | 'DONE') || 'TODO'
     formDeadline.value = task.deadline || ''
-    formSubtasks.value = task.subtasks?.map((s: { title: string }) => s.title) || []
+    formSubtasks.value = task.subtasks?.map((s: Subtask) => ({ id: s.id, title: s.title, completed: s.completed })) || []
   } else {
     editingTask.value = null
     formTitle.value = ''
@@ -290,7 +295,7 @@ const closeModal = () => {
 }
 
 const addSubtaskInput = () => {
-  formSubtasks.value.push('')
+  formSubtasks.value.push({ title: '', completed: false })
 }
 
 const removeSubtaskInput = (index: number) => {
@@ -527,20 +532,16 @@ onMounted(() => {
               <i class="fas fa-plus"></i> {{ t('kanban.addSubtask') }}
             </button>
           </div>
-          <div v-if="editingTask && editingTask.subtasks && editingTask.subtasks.length > 0" class="existing-subtasks">
-            <div v-for="subtask in editingTask.subtasks" :key="subtask.id" class="subtask-item">
+          <div v-if="formSubtasks.length > 0" class="subtasks-list">
+            <div v-for="(subtask, index) in formSubtasks" :key="index" class="subtask-row">
               <input
+                v-if="subtask.id"
                 type="checkbox"
                 :checked="subtask.completed"
                 @change="toggleSubtask(subtask)"
               />
-              <span :class="{ completed: subtask.completed }">{{ subtask.title }}</span>
-            </div>
-          </div>
-          <div v-if="formSubtasks.length > 0" class="new-subtasks">
-            <div v-for="(subtask, index) in formSubtasks" :key="index" class="subtask-input-row">
               <input
-                v-model="formSubtasks[index]"
+                v-model="subtask.title"
                 type="text"
                 class="form-control"
                 placeholder="Subtask title..."
@@ -812,8 +813,10 @@ onMounted(() => {
   display: flex;
   gap: 0.5rem;
 }
-.subtask-input-row input {
+.subtask-input-row input,
+.subtask-row input[type="text"] {
   flex: 1;
+  max-width: 200px;
 }
 .btn-remove {
   background: none;

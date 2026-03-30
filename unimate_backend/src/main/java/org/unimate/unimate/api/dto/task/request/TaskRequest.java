@@ -5,7 +5,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
 import org.unimate.unimate.api.dto.subtask.request.SubtaskRequest;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.unimate.unimate.domain.enums.TaskPriority;
+import org.unimate.unimate.domain.enums.TaskPriorityDeserializer;
 import org.unimate.unimate.domain.enums.TaskStatus;
 
 import java.time.LocalDate;

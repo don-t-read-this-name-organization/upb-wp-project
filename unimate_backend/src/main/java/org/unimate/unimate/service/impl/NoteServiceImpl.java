@@ -7,14 +7,11 @@ import org.springframework.transaction.annotation.Transactional;
 import org.unimate.unimate.api.dto.note.NoteRequest;
 import org.unimate.unimate.api.dto.note.NoteResponse;
 import org.unimate.unimate.domain.entities.Note;
-import org.unimate.unimate.domain.entities.NoteContent;
 import org.unimate.unimate.domain.entities.User;
-import org.unimate.unimate.repository.NoteContentRepository;
 import org.unimate.unimate.repository.NoteRepository;
 import org.unimate.unimate.repository.UserRepository;
 import org.unimate.unimate.service.NoteService;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,7 +23,6 @@ import static lombok.AccessLevel.PRIVATE;
 public class NoteServiceImpl implements NoteService {
 
     NoteRepository noteRepository;
-    NoteContentRepository noteContentRepository;
     UserRepository userRepository;
 
     @Override
@@ -39,8 +35,17 @@ public class NoteServiceImpl implements NoteService {
 
     @Override
     @Transactional(readOnly = true)
+    public List<NoteResponse> searchByUserId(Integer userId, String search) {
+        return noteRepository.findByUserIdAndActiveTrueAndTitleContainingIgnoreCaseOrContentContainingIgnoreCaseOrderByCreatedAtDesc(
+                userId, search, search).stream()
+                .map(NoteResponse::fromEntity)
+                .toList();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public NoteResponse findById(Integer id) {
-        return noteRepository.findByIdWithContents(id)
+        return noteRepository.findById(id)
                 .map(NoteResponse::fromEntity)
                 .orElse(null);
     }
@@ -54,22 +59,10 @@ public class NoteServiceImpl implements NoteService {
                 .user(user)
                 .title(request.getTitle())
                 .collection(request.getCollection())
-                .contents(new ArrayList<>())
+                .content(request.getContent())
+                .description(request.getDescription())
                 .active(true)
                 .build();
-
-        if (request.getContents() != null) {
-            for (NoteRequest.NoteContentRequest contentReq : request.getContents()) {
-                NoteContent content = NoteContent.builder()
-                        .note(note)
-                        .contentType(contentReq.getContentType())
-                        .content(contentReq.getContent())
-                        .filePath(contentReq.getFilePath())
-                        .sortOrder(contentReq.getSortOrder())
-                        .build();
-                note.getContents().add(content);
-            }
-        }
 
         note = noteRepository.save(note);
         return NoteResponse.fromEntity(note);
@@ -82,20 +75,8 @@ public class NoteServiceImpl implements NoteService {
         
         note.setTitle(request.getTitle());
         note.setCollection(request.getCollection());
-
-        note.getContents().clear();
-        if (request.getContents() != null) {
-            for (NoteRequest.NoteContentRequest contentReq : request.getContents()) {
-                NoteContent content = NoteContent.builder()
-                        .note(note)
-                        .contentType(contentReq.getContentType())
-                        .content(contentReq.getContent())
-                        .filePath(contentReq.getFilePath())
-                        .sortOrder(contentReq.getSortOrder())
-                        .build();
-                note.getContents().add(content);
-            }
-        }
+        note.setContent(request.getContent());
+        note.setDescription(request.getDescription());
 
         note = noteRepository.save(note);
         return NoteResponse.fromEntity(note);

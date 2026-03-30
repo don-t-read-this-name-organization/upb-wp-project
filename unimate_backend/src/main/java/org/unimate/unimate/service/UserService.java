@@ -20,6 +20,18 @@ public interface UserService {
   UserResponse create(UserRequest request);
 
   @Transactional
+  UserResponse createPending(UserRequest request);
+
+  @Transactional(readOnly = true)
+  List<User> findPendingUsers();
+
+  @Transactional
+  UserResponse approveUser(Integer id);
+
+  @Transactional
+  void rejectUser(Integer id);
+
+  @Transactional
   UserResponse update(User user, UserRequest request);
 
   void delete(User user);

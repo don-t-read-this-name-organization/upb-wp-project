@@ -23,6 +23,11 @@ public class UserController {
 
   UserService userService;
 
+  @PostMapping("/register")
+  public UserResponse register(@RequestBody UserRequest request) {
+    return userService.createPending(request);
+  }
+
   @PostMapping
   public UserResponse create(@RequestBody UserRequest request) {
     return userService.create(request);
@@ -51,5 +56,20 @@ public class UserController {
   public void delete(@PathVariable Integer id) {
     User user = userService.findById(id).orElseThrow(() -> new NotFoundException("User", id));
     userService.delete(user);
+  }
+
+  @GetMapping("/pending")
+  public List<UserResponse> listPending() {
+    return userService.findPendingUsers().stream().map(UserResponse::fromEntity).toList();
+  }
+
+  @PostMapping("/{id}/approve")
+  public UserResponse approve(@PathVariable Integer id) {
+    return userService.approveUser(id);
+  }
+
+  @PostMapping("/{id}/reject")
+  public void reject(@PathVariable Integer id) {
+    userService.rejectUser(id);
   }
 }

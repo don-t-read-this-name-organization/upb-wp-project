@@ -92,6 +92,13 @@ const handleLogin = async () => {
         <p v-if="error" class="error-message">{{ error }}</p>
       </form>
 
+      <div class="register-cta">
+        <router-link to="/register" class="btn btn-secondary btn-full-width">
+          <i class="fas fa-user-plus"></i>
+          {{ t('login.registerLink') }}
+        </router-link>
+      </div>
+
       <div class="demo-accounts-divider">
         <p class="demo-accounts-title">
           <strong>{{ t('login.demoAccounts') }}</strong>
@@ -150,6 +157,17 @@ const handleLogin = async () => {
   padding: 0.5rem;
   background: rgba(220, 53, 69, 0.1);
   border-radius: 4px;
+}
+
+.register-cta {
+  margin-top: 1.5rem;
+}
+
+.register-cta .btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
 }
 
 @keyframes fadeIn {

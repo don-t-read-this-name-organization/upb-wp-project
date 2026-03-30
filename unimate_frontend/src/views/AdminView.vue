@@ -2,15 +2,22 @@
 import { ref, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
+import { useAppStore } from '@/stores/appStore'
 
 const router = useRouter()
 const { t } = useI18n()
+const store = useAppStore()
 
 interface User {
   id: number
   username: string
   email: string
   role: 'ADMIN' | 'CHIEF' | 'STUDENT' | 'VISITOR'
+  firstName?: string
+  lastName?: string
+  faculty?: { name: string; shortName?: string }
+  group?: { name: string }
+  createdAt?: string
 }
 
 interface UserForm {
@@ -18,6 +25,8 @@ interface UserForm {
   email: string
   password: string
   role: 'ADMIN' | 'CHIEF' | 'STUDENT' | 'VISITOR'
+  firstName?: string
+  lastName?: string
 }
 
 interface Quote {
@@ -28,20 +37,53 @@ interface Quote {
 
 const users = ref<User[]>([])
 const pendingQuotes = ref<Quote[]>([])
+const pendingRegistrations = ref<User[]>([])
 const loading = ref(false)
+const pendingLoading = ref(false)
+const searchQuery = ref('')
 const quotesLoading = ref(false)
 const error = ref('')
 const showModal = ref(false)
-const showConfirmModal = ref(false)
-const confirmAction = ref<'approve' | 'reject' | null>(null)
-const confirmQuote = ref<Quote | null>(null)
 const editingUser = ref<User | null>(null)
 const form = ref<UserForm>({
   username: '',
   email: '',
   password: '',
   role: 'STUDENT',
+  firstName: '',
+  lastName: '',
 })
+
+const showConfirmModal = ref(false)
+const confirmMessage = ref('')
+const confirmCallback = ref<(() => void) | null>(null)
+
+const showAlertModal = ref(false)
+const alertMessage = ref('')
+
+function showConfirm(message: string, callback: () => void) {
+  confirmMessage.value = message
+  confirmCallback.value = callback
+  showConfirmModal.value = true
+}
+
+function handleConfirm() {
+  if (confirmCallback.value) {
+    confirmCallback.value()
+  }
+  showConfirmModal.value = false
+  confirmCallback.value = null
+}
+
+function handleConfirmCancel() {
+  showConfirmModal.value = false
+  confirmCallback.value = null
+}
+
+function showAlert(message: string) {
+  alertMessage.value = message
+  showAlertModal.value = true
+}
 
 const stats = computed(() => ({
   total: users.value.length,
@@ -49,6 +91,25 @@ const stats = computed(() => ({
   chiefs: users.value.filter((u) => u.role === 'CHIEF').length,
   admins: users.value.filter((u) => u.role === 'ADMIN').length,
 }))
+
+const filteredUsers = computed(() => {
+  const currentUserId = store.user?.id
+  let result = users.value.filter((u) => u.id !== currentUserId)
+  
+  if (searchQuery.value.trim()) {
+    const query = searchQuery.value.toLowerCase()
+    result = result.filter((u) => 
+      u.username.toLowerCase().includes(query) ||
+      u.email.toLowerCase().includes(query) ||
+      (u.firstName && u.firstName.toLowerCase().includes(query)) ||
+      (u.lastName && u.lastName.toLowerCase().includes(query)) ||
+      (u.faculty?.name && u.faculty.name.toLowerCase().includes(query)) ||
+      (u.group?.name && u.group.name.toLowerCase().includes(query))
+    )
+  }
+  
+  return result
+})
 
 const getRoleBadgeClass = (role: string) => {
   switch (role) {
@@ -95,7 +156,7 @@ const fetchUsers = async () => {
 
 const openAddModal = () => {
   editingUser.value = null
-  form.value = { username: '', email: '', password: '', role: 'STUDENT' }
+  form.value = { username: '', email: '', password: '', role: 'STUDENT', firstName: '', lastName: '' }
   showModal.value = true
 }
 
@@ -106,6 +167,8 @@ const openEditModal = (user: User) => {
     email: user.email,
     password: '',
     role: user.role,
+    firstName: user.firstName || '',
+    lastName: user.lastName || '',
   }
   showModal.value = true
 }
@@ -113,7 +176,7 @@ const openEditModal = (user: User) => {
 const closeModal = () => {
   showModal.value = false
   editingUser.value = null
-  form.value = { username: '', email: '', password: '', role: 'STUDENT' }
+  form.value = { username: '', email: '', password: '', role: 'STUDENT', firstName: '', lastName: '' }
 }
 
 const handleSubmit = async () => {
@@ -143,31 +206,27 @@ const handleSubmit = async () => {
 }
 
 const deleteUser = async (user: User) => {
-  if (!confirm(t('common.confirm') + ` "${user.username}"?`)) return
-  error.value = ''
-  const token = localStorage.getItem('token')
-  try {
-    const response = await fetch(`/api/users/${user.id}`, {
-      method: 'DELETE',
-      headers: {
-        Authorization: `Basic ${token}`,
-      },
-    })
-    if (!response.ok) throw new Error('Delete failed')
-    await fetchUsers()
-  } catch {
-    error.value = t('common.error')
-  }
+  showConfirm(t('common.confirm') + ` "${user.username}"?`, async () => {
+    error.value = ''
+    const token = localStorage.getItem('token')
+    try {
+      const response = await fetch(`/api/users/${user.id}`, {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Basic ${token}`,
+        },
+      })
+      if (!response.ok) throw new Error('Delete failed')
+      await fetchUsers()
+    } catch {
+      error.value = t('common.error')
+    }
+  })
 }
 
 const fetchPendingQuotes = async () => {
   quotesLoading.value = true
   try {
-    // const response = await fetch('/api/quotes/pending', {
-    //   headers: {
-    //     Authorization: `Basic ${token}`,
-    //   },
-    // })
     const response = await fetch('/api/quotes/pending')
     if (!response.ok) throw new Error('Failed to fetch pending quotes')
     pendingQuotes.value = await response.json()
@@ -178,45 +237,80 @@ const fetchPendingQuotes = async () => {
   }
 }
 
-const openConfirmModal = (action: 'approve' | 'reject', quote: Quote) => {
-  confirmAction.value = action
-  confirmQuote.value = quote
-  showConfirmModal.value = true
-}
-
-const closeConfirmModal = () => {
-  showConfirmModal.value = false
-  confirmAction.value = null
-  confirmQuote.value = null
-}
-
-const handleConfirmAction = async () => {
-  if (!confirmQuote.value || !confirmAction.value) return
-
-  const quote = confirmQuote.value
-  closeConfirmModal()
-
-  try {
-    if (confirmAction.value === 'approve') {
+const handleApproveQuote = async (quote: Quote) => {
+  showConfirm(t('admin.approveConfirm', { author: quote.author }), async () => {
+    try {
       const response = await fetch(`/api/quotes/${quote.id}/approve`, {
         method: 'POST',
       })
       if (!response.ok) throw new Error('Failed to approve quote')
-    } else {
+      await fetchPendingQuotes()
+    } catch {
+      showAlert(t('common.error'))
+    }
+  })
+}
+
+const handleRejectQuote = async (quote: Quote) => {
+  showConfirm(t('admin.rejectConfirm', { author: quote.author }), async () => {
+    try {
       const response = await fetch(`/api/quotes/${quote.id}/reject`, {
         method: 'POST',
       })
       if (!response.ok) throw new Error('Failed to reject quote')
+      await fetchPendingQuotes()
+    } catch {
+      showAlert(t('common.error'))
     }
-    await fetchPendingQuotes()
-  } catch {
-    error.value = `${t('common.error')}`
+  })
+}
+
+const fetchPendingRegistrations = async () => {
+  pendingLoading.value = true
+  try {
+    const response = await fetch('/api/users/pending')
+    if (!response.ok) throw new Error('Failed to fetch pending registrations')
+    pendingRegistrations.value = await response.json()
+  } catch (e) {
+    console.error('Failed to fetch pending registrations:', e)
+  } finally {
+    pendingLoading.value = false
   }
+}
+
+const handleApproveRegistration = async (user: User) => {
+  showConfirm(t('admin.approveRegistrationConfirm', { username: user.username }), async () => {
+    try {
+      const response = await fetch(`/api/users/${user.id}/approve`, {
+        method: 'POST',
+      })
+      if (!response.ok) throw new Error('Failed to approve registration')
+      await fetchPendingRegistrations()
+      showAlert(t('admin.registrationApproved'))
+    } catch {
+      showAlert(t('common.error'))
+    }
+  })
+}
+
+const handleRejectRegistration = async (user: User) => {
+  showConfirm(t('admin.rejectRegistrationConfirm', { username: user.username }), async () => {
+    try {
+      const response = await fetch(`/api/users/${user.id}/reject`, {
+        method: 'POST',
+      })
+      if (!response.ok) throw new Error('Failed to reject registration')
+      await fetchPendingRegistrations()
+    } catch {
+      showAlert(t('common.error'))
+    }
+  })
 }
 
 onMounted(() => {
   fetchUsers()
   fetchPendingQuotes()
+  fetchPendingRegistrations()
 })
 </script>
 
@@ -246,7 +340,17 @@ onMounted(() => {
       </div>
 
       <div class="admin-section">
-        <h3 class="section-title">{{ t('admin.userManagement') }}</h3>
+        <div class="section-header">
+          <h3 class="section-title">{{ t('admin.userManagement') }}</h3>
+          <div class="search-box">
+            <i class="fas fa-search"></i>
+            <input
+              v-model="searchQuery"
+              type="text"
+              placeholder="Search users..."
+            />
+          </div>
+        </div>
         <div v-if="loading" class="loading-state">
           <i class="fas fa-spinner fa-spin"></i> {{ t('admin.loadingUsers') }}
         </div>
@@ -255,16 +359,24 @@ onMounted(() => {
             <tr>
               <th>{{ t('admin.id') }}</th>
               <th>{{ t('admin.username') }}</th>
+              <th>First Name</th>
+              <th>Last Name</th>
               <th>{{ t('admin.email') }}</th>
+              <th>Faculty</th>
+              <th>Group</th>
               <th>{{ t('admin.role') }}</th>
               <th>{{ t('admin.actions') }}</th>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="user in users" :key="user.id">
+            <tr v-for="user in filteredUsers" :key="user.id">
               <td>{{ user.id }}</td>
               <td>{{ user.username }}</td>
+              <td>{{ user.firstName || '-' }}</td>
+              <td>{{ user.lastName || '-' }}</td>
               <td>{{ user.email }}</td>
+              <td>{{ user.faculty?.shortName || user.faculty?.name || '-' }}</td>
+              <td>{{ user.group?.name || '-' }}</td>
               <td>
                 <span :class="['user-badge', getRoleBadgeClass(user.role)]">
                   {{ getRoleLabel(user.role) }}
@@ -279,8 +391,8 @@ onMounted(() => {
                 </button>
               </td>
             </tr>
-            <tr v-if="users.length === 0">
-              <td colspan="5" class="empty-state">{{ t('admin.noUsersFound') }}</td>
+            <tr v-if="filteredUsers.length === 0">
+              <td colspan="9" class="empty-state">{{ t('admin.noUsersFound') }}</td>
             </tr>
           </tbody>
         </table>
@@ -325,10 +437,34 @@ onMounted(() => {
             <div class="quote-text">{{ quote.text }}</div>
             <div class="quote-author">- {{ quote.author }}</div>
             <div class="quote-actions">
-              <button class="btn btn-success btn-sm" @click="openConfirmModal('approve', quote)">
+              <button class="btn btn-success btn-sm" @click="handleApproveQuote(quote)">
                 <i class="fas fa-check"></i> {{ t('admin.approve') }}
               </button>
-              <button class="btn btn-danger btn-sm" @click="openConfirmModal('reject', quote)">
+              <button class="btn btn-danger btn-sm" @click="handleRejectQuote(quote)">
+                <i class="fas fa-times"></i> {{ t('admin.reject') }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="admin-section">
+        <h3 class="section-title">{{ t('admin.pendingRegistrations') }}</h3>
+        <div v-if="pendingLoading" class="loading-state">
+          <i class="fas fa-spinner fa-spin"></i> {{ t('admin.loadingRegistrations') }}
+        </div>
+        <div v-else-if="pendingRegistrations.length === 0" class="empty-state">
+          {{ t('admin.noPendingRegistrations') }}
+        </div>
+        <div v-else class="quotes-grid">
+          <div v-for="user in pendingRegistrations" :key="user.id" class="quote-card">
+            <div class="quote-text">{{ user.firstName }} {{ user.lastName }}</div>
+            <div class="quote-author">@{{ user.username }} - {{ user.email }}</div>
+            <div class="quote-actions">
+              <button class="btn btn-success btn-sm" @click="handleApproveRegistration(user)">
+                <i class="fas fa-check"></i> {{ t('admin.approve') }}
+              </button>
+              <button class="btn btn-danger btn-sm" @click="handleRejectRegistration(user)">
                 <i class="fas fa-times"></i> {{ t('admin.reject') }}
               </button>
             </div>
@@ -346,6 +482,26 @@ onMounted(() => {
           </button>
         </div>
         <form @submit.prevent="handleSubmit">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="firstName">First Name</label>
+              <input
+                v-model="form.firstName"
+                type="text"
+                id="firstName"
+                class="form-control"
+              />
+            </div>
+            <div class="form-group">
+              <label for="lastName">Last Name</label>
+              <input
+                v-model="form.lastName"
+                type="text"
+                id="lastName"
+                class="form-control"
+              />
+            </div>
+          </div>
           <div class="form-group">
             <label for="username">{{ t('admin.username') }}</label>
             <input
@@ -393,28 +549,42 @@ onMounted(() => {
       </div>
     </div>
 
-    <div v-if="showConfirmModal" class="modal-overlay" @click.self="closeConfirmModal">
-      <div class="modal-content modal-confirm">
-        <div class="modal-icon" :class="confirmAction">
-          <i :class="confirmAction === 'approve' ? 'fas fa-check-circle' : 'fas fa-times-circle'"></i>
+    <div v-if="showConfirmModal" class="modal-overlay" @click.self="handleConfirmCancel">
+      <div class="modal">
+        <div class="modal-header">
+          <h3><i class="fas fa-question-circle"></i> {{ t('common.confirm') }}</h3>
+          <button class="modal-close" @click="handleConfirmCancel">
+            <i class="fas fa-times"></i>
+          </button>
         </div>
-        <h3>{{ confirmAction === 'approve' ? t('admin.approveQuote') : t('admin.rejectQuote') }}</h3>
-        <p v-if="confirmAction === 'approve'">
-          {{ t('admin.approveConfirm', { author: confirmQuote?.author }) }}
-        </p>
-        <p v-else>
-          {{ t('admin.rejectConfirm', { author: confirmQuote?.author }) }}
-          <br><small>{{ t('admin.cannotBeUndone') }}</small>
-        </p>
-        <div class="modal-actions confirm-actions">
-          <button type="button" class="btn btn-secondary" @click="closeConfirmModal">{{ t('common.cancel') }}</button>
-          <button 
-            type="button" 
-            class="btn" 
-            :class="confirmAction === 'approve' ? 'btn-success' : 'btn-danger'"
-            @click="handleConfirmAction"
-          >
-            {{ confirmAction === 'approve' ? t('admin.approve') : t('admin.reject') }}
+        <div class="modal-body">
+          <p>{{ confirmMessage }}</p>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" @click="handleConfirmCancel">
+            {{ t('common.cancel') }}
+          </button>
+          <button class="btn btn-danger" @click="handleConfirm">
+            {{ t('common.confirm') }}
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div v-if="showAlertModal" class="modal-overlay" @click.self="showAlertModal = false">
+      <div class="modal">
+        <div class="modal-header">
+          <h3><i class="fas fa-info-circle"></i> {{ t('common.error') }}</h3>
+          <button class="modal-close" @click="showAlertModal = false">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>{{ alertMessage }}</p>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-primary" @click="showAlertModal = false">
+            OK
           </button>
         </div>
       </div>
@@ -471,6 +641,42 @@ onMounted(() => {
   margin-bottom: 1rem;
   padding-bottom: 0.5rem;
   border-bottom: 1px solid var(--border-light);
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.section-header .section-title {
+  margin-bottom: 0;
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.search-box {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  background: var(--bg-color);
+}
+
+.search-box i {
+  color: var(--text-muted);
+}
+
+.search-box input {
+  border: none;
+  background: transparent;
+  outline: none;
+  width: 200px;
   color: var(--text-color);
 }
 
@@ -606,6 +812,14 @@ onMounted(() => {
   z-index: 1000;
 }
 
+.modal {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  width: 90%;
+  max-width: 450px;
+  box-shadow: var(--shadow);
+}
+
 .modal-content {
   background: var(--card-bg);
   border-radius: var(--radius);
@@ -619,7 +833,8 @@ onMounted(() => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1.5rem;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid var(--border-light);
 }
 
 .modal-header h3 {
@@ -638,11 +853,16 @@ onMounted(() => {
   color: var(--text-color);
 }
 
-.modal-actions {
+.modal-body {
+  padding: 1.5rem;
+}
+
+.modal-footer {
   display: flex;
-  gap: 1rem;
   justify-content: flex-end;
-  margin-top: 1.5rem;
+  gap: 0.5rem;
+  padding: 1rem 1.5rem;
+  border-top: 1px solid var(--border-light);
 }
 
 .form-hint {
@@ -650,6 +870,38 @@ onMounted(() => {
   color: var(--text-muted);
   font-size: 0.8rem;
   margin-top: 0.25rem;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+  margin-top: 1.5rem;
+}
+
+.form-control {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  background: var(--bg-color);
+  color: var(--text-color);
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
 }
 
 .quotes-grid {
@@ -713,42 +965,6 @@ onMounted(() => {
 
 .btn-danger:hover {
   background-color: #c08080;
-}
-
-.modal-confirm {
-  text-align: center;
-  max-width: 380px;
-}
-
-.modal-icon {
-  font-size: 3rem;
-  margin-bottom: 1rem;
-}
-
-.modal-icon.approve {
-  color: var(--secondary-color);
-}
-
-.modal-icon.reject {
-  color: var(--accent-blush);
-}
-
-.modal-confirm h3 {
-  margin-bottom: 0.75rem;
-}
-
-.modal-confirm p {
-  color: var(--text-muted);
-  margin-bottom: 1.5rem;
-  line-height: 1.5;
-}
-
-.modal-confirm small {
-  color: var(--text-subtle);
-}
-
-.confirm-actions {
-  justify-content: center;
 }
 
 </style>

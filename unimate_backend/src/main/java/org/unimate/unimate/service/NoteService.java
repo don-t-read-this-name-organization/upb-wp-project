@@ -8,6 +8,7 @@ import java.util.List;
 
 public interface NoteService {
     List<NoteResponse> findByUserId(Integer userId);
+    List<NoteResponse> searchByUserId(Integer userId, String search);
     NoteResponse findById(Integer id);
     NoteResponse create(Integer userId, NoteRequest request);
     NoteResponse update(Integer id, NoteRequest request);

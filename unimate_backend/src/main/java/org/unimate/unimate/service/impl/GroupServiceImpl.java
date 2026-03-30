@@ -3,6 +3,7 @@ package org.unimate.unimate.service.impl;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.unimate.unimate.domain.entities.Faculty;
 import org.unimate.unimate.domain.entities.Group;
 import org.unimate.unimate.repository.FacultyTranslationRepository;
@@ -23,16 +24,19 @@ public class GroupServiceImpl implements GroupService {
     FacultyTranslationRepository facultyTranslationRepository;
 
     @Override
+    @Transactional(readOnly = true)
     public List<Group> findAll() {
         return groupRepository.findAll();
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Optional<Group> findById(Integer id) {
         return groupRepository.findById(id);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Group> findWithTranslation(String language) {
         return groupRepository.findAll().stream()
             .map(group -> applyFacultyTranslation(group, language))
@@ -40,11 +44,13 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Group> findByFacultyId(Integer facultyId) {
         return groupRepository.findByFacultyId(facultyId);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Group> findByFacultyIdWithTranslation(Integer facultyId, String language) {
         return groupRepository.findByFacultyId(facultyId).stream()
             .map(group -> applyFacultyTranslation(group, language))

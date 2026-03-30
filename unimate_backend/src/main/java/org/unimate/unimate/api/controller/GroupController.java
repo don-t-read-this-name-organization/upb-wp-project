@@ -13,7 +13,7 @@ import static lombok.AccessLevel.PRIVATE;
 @RestController
 @RequestMapping("/api/groups")
 @RequiredArgsConstructor
-@FieldDefaults(level = PRIVATE)
+@FieldDefaults(level = PRIVATE, makeFinal = true)
 public class GroupController {
 
     GroupService groupService;

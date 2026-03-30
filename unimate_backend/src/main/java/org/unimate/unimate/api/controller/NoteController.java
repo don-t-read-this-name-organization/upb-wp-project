@@ -22,7 +22,12 @@ public class NoteController {
     final NoteService noteService;
 
     @GetMapping
-    public ResponseEntity<List<NoteResponse>> getNotes(@RequestParam Integer userId) {
+    public ResponseEntity<List<NoteResponse>> getNotes(
+            @RequestParam Integer userId,
+            @RequestParam(required = false) String search) {
+        if (search != null && !search.isEmpty()) {
+            return ResponseEntity.ok(noteService.searchByUserId(userId, search));
+        }
         return ResponseEntity.ok(noteService.findByUserId(userId));
     }
 

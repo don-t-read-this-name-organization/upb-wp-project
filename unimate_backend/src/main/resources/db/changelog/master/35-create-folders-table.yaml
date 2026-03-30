@@ -1,0 +1,52 @@
+databaseChangeLog:
+  - changeSet:
+      id: "35-create-folders-table"
+      author: "frihelselsker"
+      changes:
+        - createTable:
+            tableName: folders
+            columns:
+              - column:
+                  name: id
+                  type: INT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: name
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: parent_id
+                  type: INT
+              - column:
+                  name: created_at
+                  type: TIMESTAMP
+              - column:
+                  name: updated_at
+                  type: TIMESTAMP
+              - column:
+                  name: active
+                  type: TINYINT(1)
+                  defaultValueBoolean: true
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            baseTableName: folders
+            baseColumnNames: user_id
+            referencedTableName: users
+            referencedColumnNames: id
+            constraintName: fk_folders_user
+        - addForeignKeyConstraint:
+            baseTableName: folders
+            baseColumnNames: parent_id
+            referencedTableName: folders
+            referencedColumnNames: id
+            constraintName: fk_folders_parent

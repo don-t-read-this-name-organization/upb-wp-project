@@ -21,6 +21,7 @@ public class UserResponse {
     private String lastName;
     private String email;
     private String role; // STUDENT, CHIEF, ADMIN, VISITOR
+    private Boolean active;
     private FacultyInfo faculty;
     private GroupInfo group;
 
@@ -70,6 +71,7 @@ public class UserResponse {
             .firstName(user.getFirstName())
             .lastName(user.getLastName())
             .role(user.getRole().name())
+            .active(user.getActive())
             .faculty(FacultyInfo.fromEntity(user.getFaculty()))
             .group(GroupInfo.fromEntity(user.getStudyGroup()))
             .build();

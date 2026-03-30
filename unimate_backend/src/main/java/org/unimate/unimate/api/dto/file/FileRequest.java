@@ -1,4 +1,4 @@
-package org.unimate.unimate.api.dto.note;
+package org.unimate.unimate.api.dto.file;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,10 +11,7 @@ import static lombok.AccessLevel.PRIVATE;
 @FieldDefaults(level = PRIVATE)
 @AllArgsConstructor
 @Builder
-public class NoteRequest {
-    Integer userId;
-    String title;
-    String collection;
-    String content;
-    String description;
+public class FileRequest {
+    String displayName;
+    Integer folderId;
 }

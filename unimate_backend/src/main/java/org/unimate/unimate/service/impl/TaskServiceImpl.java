@@ -38,7 +38,7 @@ public class TaskServiceImpl implements TaskService {
 
   @Override
   public Optional<Task> findById(Integer id) {
-    return taskRepository.findById(id);
+    return taskRepository.findByIdWithSubtasks(id);
   }
 
   @Override
@@ -112,14 +112,43 @@ public class TaskServiceImpl implements TaskService {
     }
 
     if (request.getSubtasks() != null) {
-      task.getSubtasks().clear();
+      List<Subtask> existingSubtasks = new ArrayList<>(task.getSubtasks());
+      List<Integer> requestSubtaskIds = new ArrayList<>();
+
       for (var subtaskReq : request.getSubtasks()) {
-        Subtask subtask = Subtask.builder()
-            .task(task)
-            .title(subtaskReq.getTitle())
-            .completed(subtaskReq.getCompleted() != null ? subtaskReq.getCompleted() : false)
-            .build();
-        task.getSubtasks().add(subtask);
+        Subtask subtask;
+        if (subtaskReq.getId() != null) {
+          subtask = subtaskRepository.findById(subtaskReq.getId()).orElse(null);
+          if (subtask != null && subtask.getTask().getId().equals(task.getId())) {
+            subtask.setTitle(subtaskReq.getTitle());
+            subtask.setCompleted(subtaskReq.getCompleted() != null ? subtaskReq.getCompleted() : false);
+            requestSubtaskIds.add(subtaskReq.getId());
+            if (!task.getSubtasks().contains(subtask)) {
+              task.getSubtasks().add(subtask);
+            }
+          } else {
+            subtask = Subtask.builder()
+                .task(task)
+                .title(subtaskReq.getTitle())
+                .completed(subtaskReq.getCompleted() != null ? subtaskReq.getCompleted() : false)
+                .build();
+            task.getSubtasks().add(subtask);
+          }
+        } else {
+          subtask = Subtask.builder()
+              .task(task)
+              .title(subtaskReq.getTitle())
+              .completed(subtaskReq.getCompleted() != null ? subtaskReq.getCompleted() : false)
+              .build();
+          task.getSubtasks().add(subtask);
+        }
+      }
+
+      for (Subtask existing : existingSubtasks) {
+        if (!requestSubtaskIds.contains(existing.getId())) {
+          task.getSubtasks().remove(existing);
+          subtaskRepository.delete(existing);
+        }
       }
     }
 
@@ -150,7 +179,7 @@ public class TaskServiceImpl implements TaskService {
     taskRepository.save(task);
 
     log.info("Subtask added to task {}: {}", taskId, title);
-    return subtaskRepository.save(subtask);
+    return subtask;
   }
 
   @Transactional

@@ -43,7 +43,7 @@ public class TaskResponse {
             .createdAt(task.getCreatedAt())
             .active(task.getActive())
             .subtasks(task.getSubtasks() != null 
-                ? task.getSubtasks().stream().map(SubtaskResponse::fromEntity).toList() 
+                ? task.getSubtasks().stream().map(SubtaskResponse::fromEntity).toList()
                 : null)
             .build();
     }

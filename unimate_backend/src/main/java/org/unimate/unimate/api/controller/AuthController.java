@@ -3,7 +3,6 @@ package org.unimate.unimate.api.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -19,11 +18,9 @@ import static lombok.AccessLevel.PRIVATE;
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
-@FieldDefaults(level = PRIVATE)
+@FieldDefaults(level = PRIVATE, makeFinal = true)
 public class AuthController {
-    @Autowired
     UserService userService;
-    @Autowired
     PasswordEncoder passwordEncoder;
 
     @PostMapping("/login")
