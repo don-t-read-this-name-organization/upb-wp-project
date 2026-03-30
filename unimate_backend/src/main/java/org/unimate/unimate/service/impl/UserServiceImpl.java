@@ -196,4 +196,19 @@ public class UserServiceImpl implements UserService {
     return userRepository.findByEmail(email);
   }
 
+  @Override
+  @Transactional
+  public void changePassword(Integer userId, String oldPassword, String newPassword) {
+    User user = userRepository.findById(userId)
+        .orElseThrow(() -> new NotFoundException("User", userId));
+
+    if (!passwordEncoder.matches(oldPassword, user.getPasswordHash())) {
+      throw new ValidationException("Current password is incorrect");
+    }
+
+    user.setPasswordHash(passwordEncoder.encode(newPassword));
+    save(user);
+    log.info("Password changed for user: {}", user.getEmail());
+  }
+
 }

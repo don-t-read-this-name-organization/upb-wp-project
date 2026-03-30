@@ -85,9 +85,6 @@ public class NoteServiceImpl implements NoteService {
     @Override
     @Transactional
     public void delete(Integer id) {
-        noteRepository.findById(id).ifPresent(note -> {
-            note.setActive(false);
-            noteRepository.save(note);
-        });
+        noteRepository.deleteById(id);
     }
 }

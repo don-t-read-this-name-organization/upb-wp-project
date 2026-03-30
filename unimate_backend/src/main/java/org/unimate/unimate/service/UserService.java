@@ -39,4 +39,7 @@ public interface UserService {
   Optional<Integer> findIdByEmail(String email);
 
   Optional<User> findByEmail(String email);
+
+  @Transactional
+  void changePassword(Integer userId, String oldPassword, String newPassword);
 }

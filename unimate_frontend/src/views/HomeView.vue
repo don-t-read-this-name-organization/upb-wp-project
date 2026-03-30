@@ -28,7 +28,7 @@ const currentLang = computed(() => languageMap[locale.value] || 'en')
 const showMap = computed(() => !store.isAdmin)
 const showNews = computed(() => !store.isAdmin)
 const showQuotes = computed(() => !store.isAdmin)
-const showWelcome = computed(() => store.isAdmin)
+const showWelcome = computed(() => true)
 
 const news = computed(() => {
   return newsData.value.map((item) => {
@@ -53,7 +53,7 @@ const news = computed(() => {
   })
 })
 
-const latestNews = computed(() => news.value.slice(0, 4))
+const latestNews = computed(() => news.value.slice(0, 6))
 
 const showViewMore = computed(() => news.value.length >= 6)
 
@@ -116,11 +116,7 @@ const nextMap = () => {
     <section v-if="showWelcome" class="card fade-in">
       <h1 class="card-title">{{ $t('welcome') }}</h1>
       <p class="welcome-text">{{ $t('description') }}</p>
-      <p class="welcome-text" style="margin-top: 1rem;">
-        <RouterLink to="/admin" class="btn btn-primary">
-          <i class="fas fa-user-shield"></i> {{ t('menu.admin') }}
-        </RouterLink>
-      </p>
+      <p class="welcome-text" style="margin-top: 1rem;"></p>
     </section>
 
     <section v-if="showMap" class="card map-container fade-in">

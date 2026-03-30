@@ -3,14 +3,17 @@ package org.unimate.unimate.api.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.unimate.unimate.api.dto.user.request.UserRequest;
 import org.unimate.unimate.api.dto.user.response.UserResponse;
 import org.unimate.unimate.domain.entities.User;
 import org.unimate.unimate.exception.NotFoundException;
+import org.unimate.unimate.exception.ValidationException;
 import org.unimate.unimate.service.UserService;
 
 import java.util.List;
+import java.util.Map;
 
 import static lombok.AccessLevel.PRIVATE;
 
@@ -71,5 +74,19 @@ public class UserController {
   @PostMapping("/{id}/reject")
   public void reject(@PathVariable Integer id) {
     userService.rejectUser(id);
+  }
+
+  @PostMapping("/{id}/change-password")
+  public ResponseEntity<?> changePassword(@PathVariable Integer id, @RequestBody Map<String, String> request) {
+    try {
+      String oldPassword = request.get("oldPassword");
+      String newPassword = request.get("newPassword");
+      userService.changePassword(id, oldPassword, newPassword);
+      return ResponseEntity.ok().build();
+    } catch (ValidationException e) {
+      return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
+    } catch (NotFoundException e) {
+      return ResponseEntity.notFound().build();
+    }
   }
 }
