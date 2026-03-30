@@ -213,7 +213,7 @@ async function deleteNews(item: NewsPiece) {
               method: 'DELETE'
             })
           }
-        } catch (e) {
+        } catch {
           console.warn('Failed to delete image:', url)
         }
       }

@@ -11,7 +11,6 @@ public interface QuoteService {
     List<Quote> findAll();
     List<Quote> findNRandomQuotes(int number);
     List<Quote> findAllPending();
-    Quote save(Quote quote);
     @Transactional
     QuoteResponse create(QuoteRequest request);
 

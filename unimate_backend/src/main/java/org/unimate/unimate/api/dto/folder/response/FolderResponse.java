@@ -1,4 +1,4 @@
-package org.unimate.unimate.api.dto.folder;
+package org.unimate.unimate.api.dto.folder.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

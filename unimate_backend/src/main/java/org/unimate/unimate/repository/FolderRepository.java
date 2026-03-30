@@ -10,10 +10,7 @@ import java.util.Optional;
 @Repository
 public interface FolderRepository extends JpaRepository<Folder, Integer> {
     List<Folder> findByUserIdAndActiveTrueOrderByNameAsc(Integer userId);
-    
     List<Folder> findByUserIdAndParentIdAndActiveTrueOrderByNameAsc(Integer userId, Integer parentId);
-    
     List<Folder> findByUserIdAndParentIsNullAndActiveTrueOrderByNameAsc(Integer userId);
-    
     Optional<Folder> findByIdAndUserIdAndActiveTrue(Integer id, Integer userId);
 }

@@ -13,16 +13,12 @@ import java.util.Optional;
 public interface QuoteRepository extends CrudRepository<Quote, Integer> {
     @Query(value = "SELECT * FROM quotes WHERE active = true ORDER BY RAND() LIMIT :number", nativeQuery = true)
     List<Quote> findNRandomQuotes(@Param("number") int number);
-
     @Query(value = "SELECT * FROM quotes WHERE active = true AND id = :id", nativeQuery = true)
     Optional<Quote> findById(@Param("id") Integer id);
-
     @Query(value = "SELECT * FROM quotes WHERE active = true ORDER BY id desc", nativeQuery = true)
     List<Quote> findAll();
-
     @Query(value = "SELECT * FROM quotes WHERE active = false ORDER BY id desc", nativeQuery = true)
     List<Quote> findAllPending();
-
     @Query(value = "SELECT * FROM quotes WHERE active = false AND id = :id", nativeQuery = true)
     Optional<Quote> findPendingById(@Param("id") Integer id);
 }

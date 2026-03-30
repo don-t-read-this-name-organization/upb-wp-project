@@ -23,7 +23,7 @@ public interface UserRepository extends CrudRepository<User, Integer> {
   @Query("SELECT u FROM User u LEFT JOIN FETCH u.faculty LEFT JOIN FETCH u.studyGroup WHERE u.id = :id")
   Optional<User> findByIdIncludingInactive(@Param("id") Integer id);
 
-  @Query(value = "select id from users where email= :email and active=true", nativeQuery = true)
+  @Query(value = "SELECT id FROM users WHERE email= :email AND active=true", nativeQuery = true)
   Optional<Integer> findIdByEmail(@Param("email") String email);
 
   @Query("SELECT u FROM User u LEFT JOIN FETCH u.faculty LEFT JOIN FETCH u.studyGroup WHERE u.email = :email")

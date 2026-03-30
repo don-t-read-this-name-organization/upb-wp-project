@@ -32,6 +32,7 @@ public class AuthController {
             return ResponseEntity.badRequest().body(Map.of("error", "Email and password are required"));
         }
 
+        // demesup: please fix this
         return userService.findByEmail(email)
             .filter(user -> {
                 String storedHash = user.getPasswordHash();

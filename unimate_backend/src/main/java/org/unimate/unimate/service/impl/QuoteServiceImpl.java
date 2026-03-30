@@ -37,11 +37,6 @@ public class QuoteServiceImpl implements QuoteService {
     }
 
     @Override
-    public Quote save(Quote quote) {
-        return quoteRepository.save(quote);
-    }
-
-    @Override
     public QuoteResponse create(QuoteRequest request) {
         Quote quote = Quote.builder()
                 .text(request.getText())

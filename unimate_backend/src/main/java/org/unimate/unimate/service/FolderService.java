@@ -1,7 +1,7 @@
 package org.unimate.unimate.service;
 
-import org.unimate.unimate.api.dto.folder.FolderResponse;
-import org.unimate.unimate.api.dto.folder.FolderRequest;
+import org.unimate.unimate.api.dto.folder.response.FolderResponse;
+import org.unimate.unimate.api.dto.folder.request.FolderRequest;
 
 import java.util.List;
 

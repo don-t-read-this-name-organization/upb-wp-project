@@ -36,8 +36,6 @@ public interface UserService {
 
   void delete(User user);
 
-  Optional<Integer> findIdByEmail(String email);
-
   Optional<User> findByEmail(String email);
 
   @Transactional

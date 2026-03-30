@@ -14,10 +14,8 @@ import java.util.Optional;
 public interface NewsPieceRepository extends CrudRepository<NewsPiece, Integer> {
     @Query("SELECT n FROM NewsPiece n LEFT JOIN FETCH n.translations ORDER BY n.publishDate DESC")
     List<NewsPiece> findAll();
-
     @Query("SELECT n FROM NewsPiece n LEFT JOIN FETCH n.translations ORDER BY n.publishDate DESC")
     List<NewsPiece> findLatest(Pageable pageable);
-
     @Query("SELECT n FROM NewsPiece n LEFT JOIN FETCH n.translations WHERE n.id = :id")
     Optional<NewsPiece> findById(@Param("id") Integer id);
 }

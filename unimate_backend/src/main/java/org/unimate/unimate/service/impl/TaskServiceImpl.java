@@ -80,7 +80,6 @@ public class TaskServiceImpl implements TaskService {
     }
 
     Task savedTask = save(task);
-    log.info("Task created: {}", savedTask.getId());
     return TaskResponse.fromEntity(savedTask);
   }
 
@@ -151,9 +150,7 @@ public class TaskServiceImpl implements TaskService {
         }
       }
     }
-
     Task updatedTask = save(task);
-    log.info("Task updated: {}", updatedTask.getId());
     return TaskResponse.fromEntity(updatedTask);
   }
 
@@ -178,7 +175,6 @@ public class TaskServiceImpl implements TaskService {
     task.getSubtasks().add(subtask);
     taskRepository.save(task);
 
-    log.info("Subtask added to task {}: {}", taskId, title);
     return subtask;
   }
 
@@ -195,7 +191,6 @@ public class TaskServiceImpl implements TaskService {
       subtask.setCompleted(completed);
     }
 
-    log.info("Subtask updated: {}", subtaskId);
     return subtaskRepository.save(subtask);
   }
 
@@ -205,6 +200,5 @@ public class TaskServiceImpl implements TaskService {
     Subtask subtask = subtaskRepository.findById(subtaskId)
         .orElseThrow(() -> new IllegalArgumentException("Subtask not found"));
     subtaskRepository.delete(subtask);
-    log.info("Subtask deleted: {}", subtaskId);
   }
 }

@@ -59,18 +59,10 @@ const changePassword = async () => {
       const error = await response.json()
       passwordError.value = error.error || t('profile.passwordIncorrect')
     }
-  } catch (error) {
+  } catch {
     passwordError.value = t('profile.passwordIncorrect')
   } finally {
     passwordLoading.value = false
-  }
-}
-
-const getAuthHeaders = () => {
-  const token = localStorage.getItem('token')
-  return {
-    'Content-Type': 'application/json',
-    ...(token ? { Authorization: `Bearer ${token}` } : {}),
   }
 }
 </script>

@@ -89,7 +89,6 @@ public class UserServiceImpl implements UserService {
 
     final User savedUser = save(user);
 
-    log.info("User created: {}", savedUser.getEmail());
     return UserResponse.fromEntity(savedUser);
   }
 
@@ -147,7 +146,6 @@ public class UserServiceImpl implements UserService {
     user.setActive(true);
     User savedUser = save(user);
 
-    log.info("User approved: {}", savedUser.getEmail());
     return UserResponse.fromEntity(savedUser);
   }
 
@@ -158,7 +156,6 @@ public class UserServiceImpl implements UserService {
         .orElseThrow(() -> new NotFoundException("User", id));
     
     userRepository.delete(user);
-    log.info("Pending user rejected and deleted: {}", user.getEmail());
   }
 
   @Transactional
@@ -173,7 +170,6 @@ public class UserServiceImpl implements UserService {
 
     user.update(request, faculty, group);
     User updatedUser = save(user);
-    log.info("User updated: {}", user.getEmail());
     return UserResponse.fromEntity(updatedUser);
   }
 
@@ -182,13 +178,6 @@ public class UserServiceImpl implements UserService {
     user.delete();
     save(user);
   }
-
-  @Override
-  @Transactional(readOnly = true)
-  public Optional<Integer> findIdByEmail(String email) {
-    return userRepository.findIdByEmail(email);
-  }
-
 
   @Override
   @Transactional(readOnly = true)
@@ -208,7 +197,6 @@ public class UserServiceImpl implements UserService {
 
     user.setPasswordHash(passwordEncoder.encode(newPassword));
     save(user);
-    log.info("Password changed for user: {}", user.getEmail());
   }
 
 }

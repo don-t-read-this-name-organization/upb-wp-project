@@ -53,7 +53,7 @@ async function fetchFacultyLinks() {
     const response = await fetch(`/api/faculty-links/${facultyId}?lang=${locale.value}`)
     if (response.ok) {
       const data = await response.json()
-      facultyLinks.value = data.map((link: any) => ({
+      facultyLinks.value = data.map((link: Link) => ({
         key: link.key,
         title: link.title,
         description: link.description || '',

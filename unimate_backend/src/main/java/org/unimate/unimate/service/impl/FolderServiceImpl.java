@@ -2,8 +2,8 @@ package org.unimate.unimate.service.impl;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.unimate.unimate.api.dto.folder.FolderRequest;
-import org.unimate.unimate.api.dto.folder.FolderResponse;
+import org.unimate.unimate.api.dto.folder.request.FolderRequest;
+import org.unimate.unimate.api.dto.folder.response.FolderResponse;
 import org.unimate.unimate.domain.entities.Folder;
 import org.unimate.unimate.domain.entities.User;
 import org.unimate.unimate.repository.FolderRepository;

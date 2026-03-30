@@ -2,8 +2,8 @@ package org.unimate.unimate.api.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.unimate.unimate.api.dto.folder.FolderRequest;
-import org.unimate.unimate.api.dto.folder.FolderResponse;
+import org.unimate.unimate.api.dto.folder.request.FolderRequest;
+import org.unimate.unimate.api.dto.folder.response.FolderResponse;
 import org.unimate.unimate.service.FolderService;
 import org.unimate.unimate.service.UserService;
 
@@ -14,11 +14,9 @@ import java.util.List;
 public class FolderController {
 
     private final FolderService folderService;
-    private final UserService userService;
 
-    public FolderController(FolderService folderService, UserService userService) {
+    public FolderController(FolderService folderService) {
         this.folderService = folderService;
-        this.userService = userService;
     }
 
     @GetMapping

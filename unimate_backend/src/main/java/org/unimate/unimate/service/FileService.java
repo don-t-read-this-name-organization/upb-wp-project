@@ -1,6 +1,6 @@
 package org.unimate.unimate.service;
 
-import org.unimate.unimate.api.dto.file.FileResponse;
+import org.unimate.unimate.api.dto.file.response.FileResponse;
 import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
 

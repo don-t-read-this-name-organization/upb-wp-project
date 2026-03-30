@@ -10,9 +10,6 @@ import java.util.Optional;
 
 @Repository
 public interface TaskRepository extends CrudRepository<Task, Integer> {
-  List<Task> findByUserIdAndActiveTrue(Integer userId);
-  List<Task> findByActiveTrue();
-
   @Query("SELECT t FROM Task t LEFT JOIN FETCH t.subtasks WHERE t.user.id = :userId AND t.active = true")
   List<Task> findByUserIdAndActiveTrueWithSubtasks(Integer userId);
 

@@ -9,8 +9,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.unimate.unimate.api.dto.file.FileRequest;
-import org.unimate.unimate.api.dto.file.FileResponse;
+import org.unimate.unimate.api.dto.file.request.FileRequest;
+import org.unimate.unimate.api.dto.file.response.FileResponse;
 import org.unimate.unimate.service.FileService;
 
 import java.io.IOException;
