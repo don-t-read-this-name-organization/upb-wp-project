@@ -4,10 +4,15 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.unimate.unimate.api.dto.user.request.UserRequest;
 import org.unimate.unimate.domain.enums.RoleName;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
+import java.util.List;
 
 import static lombok.AccessLevel.PRIVATE;
 
@@ -24,7 +29,7 @@ import static lombok.AccessLevel.PRIVATE;
     })
 @FieldDefaults(level = PRIVATE)
 @Builder
-public class User {
+public class User implements UserDetails {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -63,6 +68,20 @@ public class User {
   @CreationTimestamp
   private LocalDateTime createdAt;
 
+  @Builder.Default
+  @Column(name = "login_attempts", nullable = false)
+  private Integer loginAttempts = 0;
+
+  @Column(name = "locked_until")
+  private LocalDateTime lockedUntil;
+
+  @Builder.Default
+  @Column(name = "password_expired", nullable = false, columnDefinition = "TINYINT(1)")
+  private Boolean passwordExpired = false;
+
+  @Column(name = "password_changed_at")
+  private LocalDateTime passwordChangedAt;
+
   @Column(columnDefinition = "TINYINT(1)", nullable = false)
   @Builder.Default
   Boolean active = true;
@@ -91,5 +110,41 @@ public class User {
 
   public void delete() {
     this.active = false;
+  }
+
+  // UserDetails implementation
+  @Override
+  public Collection<? extends GrantedAuthority> getAuthorities() {
+    return List.of(new SimpleGrantedAuthority("ROLE_" + role.name()));
+  }
+
+  @Override
+  public String getPassword() {
+    return passwordHash;
+  }
+
+  @Override
+  public String getUsername() {
+    return email;
+  }
+
+  @Override
+  public boolean isAccountNonExpired() {
+    return active;
+  }
+
+  @Override
+  public boolean isAccountNonLocked() {
+    return active && (lockedUntil == null || lockedUntil.isBefore(LocalDateTime.now()));
+  }
+
+  @Override
+  public boolean isCredentialsNonExpired() {
+    return !passwordExpired;
+  }
+
+  @Override
+  public boolean isEnabled() {
+    return active;
   }
 }
