@@ -4,6 +4,10 @@ import { useI18n } from 'vue-i18n'
 import { useAppStore } from '@/stores/appStore'
 import { parseMarkdown } from '@/utils/markdown'
 import { MdEditor } from 'md-editor-v3'
+<<<<<<< Updated upstream
+=======
+import BaseModal from '@/components/BaseModal.vue'
+>>>>>>> Stashed changes
 import 'md-editor-v3/lib/style.css'
 
 const { t } = useI18n()
@@ -357,7 +361,11 @@ watch(
       </div>
     </div>
 
+<<<<<<< Updated upstream
     <div v-if="showEditModal" class="modal-overlay" @click.self="closeEditModal">
+=======
+    <BaseModal v-model="showEditModal" size="xl" :show-close="false" @close="closeEditModal">
+>>>>>>> Stashed changes
       <div class="modal edit-modal">
         <div class="modal-header">
           <h3>{{ editingNote ? t('notes.editNote') : t('notes.newNote') }}</h3>
@@ -409,9 +417,15 @@ watch(
           </button>
         </div>
       </div>
+<<<<<<< Updated upstream
     </div>
 
     <div v-if="showFullModal && viewingNote" class="modal-overlay" @click.self="closeFullModal">
+=======
+    </BaseModal>
+
+    <BaseModal v-if="viewingNote" v-model="showFullModal" size="xl" :show-close="false" @close="closeFullModal">
+>>>>>>> Stashed changes
       <div class="modal full-modal">
         <div class="modal-header">
           <h3>{{ viewingNote.title }}</h3>
@@ -423,9 +437,15 @@ watch(
           <div class="markdown-rendered" v-html="parseMarkdown(viewingNote.content)"></div>
         </div>
       </div>
+<<<<<<< Updated upstream
     </div>
 
     <div v-if="showConfirmModal" class="modal-overlay" @click.self="handleConfirmCancel">
+=======
+    </BaseModal>
+
+    <BaseModal v-model="showConfirmModal" size="sm" :show-close="false" @close="handleConfirmCancel">
+>>>>>>> Stashed changes
       <div class="modal">
         <div class="modal-header">
           <h3><i class="fas fa-question-circle"></i> {{ t('common.confirm') }}</h3>
@@ -445,7 +465,11 @@ watch(
           </button>
         </div>
       </div>
+<<<<<<< Updated upstream
     </div>
+=======
+    </BaseModal>
+>>>>>>> Stashed changes
   </div>
 </template>
 
@@ -573,6 +597,7 @@ watch(
   padding: 2rem;
 }
 
+<<<<<<< Updated upstream
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -586,6 +611,8 @@ watch(
   z-index: 1000;
 }
 
+=======
+>>>>>>> Stashed changes
 .modal {
   background: var(--card-bg);
   border-radius: var(--radius);
@@ -719,3 +746,7 @@ watch(
   width: 250px;
 }
 </style>
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes

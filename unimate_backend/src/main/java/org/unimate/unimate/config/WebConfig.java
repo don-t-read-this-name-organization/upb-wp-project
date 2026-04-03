@@ -12,6 +12,9 @@ public class WebConfig implements WebMvcConfigurer {
     @Value("${app.upload.path}")
     String uploadPath;
 
+    @Value("${cors.allowed-origins:*}")
+    String allowedOrigins;
+
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/uploads/**")
@@ -20,12 +23,13 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
+        String[] origins = allowedOrigins.split(",");
         registry.addMapping("/api/**")
-                .allowedOrigins("*")
+                .allowedOrigins(origins)
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*");
         registry.addMapping("/uploads/**")
-                .allowedOrigins("*")
+                .allowedOrigins(origins)
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*");
     }

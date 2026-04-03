@@ -1,0 +1,90 @@
+databaseChangeLog:
+  - changeSet:
+      id: "29-seed-default-schedules"
+      author: "codex"
+      changes:
+        - sql:
+            splitStatements: true
+            stripComments: true
+            sql: |
+              -- Seed default weekly schedule entries for active users assigned to a group.
+              -- Same timetable pattern is duplicated for all groups/users.
+              INSERT INTO schedules (user_id, course_name, day_of_week, start_time, end_time, location, active)
+              SELECT u.id, 'Mathematics', 'MONDAY', '08:00:00', '10:00:00', 'A101', TRUE
+              FROM users u
+              WHERE u.active = TRUE
+                AND u.group_id IS NOT NULL
+                AND NOT EXISTS (
+                  SELECT 1
+                  FROM schedules s
+                  WHERE s.user_id = u.id
+                    AND s.course_name = 'Mathematics'
+                    AND s.day_of_week = 'MONDAY'
+                    AND s.start_time = '08:00:00'
+                    AND s.end_time = '10:00:00'
+                    AND s.active = TRUE
+                );
+
+              INSERT INTO schedules (user_id, course_name, day_of_week, start_time, end_time, location, active)
+              SELECT u.id, 'Physics', 'TUESDAY', '10:00:00', '12:00:00', 'B202', TRUE
+              FROM users u
+              WHERE u.active = TRUE
+                AND u.group_id IS NOT NULL
+                AND NOT EXISTS (
+                  SELECT 1
+                  FROM schedules s
+                  WHERE s.user_id = u.id
+                    AND s.course_name = 'Physics'
+                    AND s.day_of_week = 'TUESDAY'
+                    AND s.start_time = '10:00:00'
+                    AND s.end_time = '12:00:00'
+                    AND s.active = TRUE
+                );
+
+              INSERT INTO schedules (user_id, course_name, day_of_week, start_time, end_time, location, active)
+              SELECT u.id, 'Programming', 'WEDNESDAY', '12:00:00', '14:00:00', 'C303', TRUE
+              FROM users u
+              WHERE u.active = TRUE
+                AND u.group_id IS NOT NULL
+                AND NOT EXISTS (
+                  SELECT 1
+                  FROM schedules s
+                  WHERE s.user_id = u.id
+                    AND s.course_name = 'Programming'
+                    AND s.day_of_week = 'WEDNESDAY'
+                    AND s.start_time = '12:00:00'
+                    AND s.end_time = '14:00:00'
+                    AND s.active = TRUE
+                );
+
+              INSERT INTO schedules (user_id, course_name, day_of_week, start_time, end_time, location, active)
+              SELECT u.id, 'Electronics', 'THURSDAY', '14:00:00', '16:00:00', 'D404', TRUE
+              FROM users u
+              WHERE u.active = TRUE
+                AND u.group_id IS NOT NULL
+                AND NOT EXISTS (
+                  SELECT 1
+                  FROM schedules s
+                  WHERE s.user_id = u.id
+                    AND s.course_name = 'Electronics'
+                    AND s.day_of_week = 'THURSDAY'
+                    AND s.start_time = '14:00:00'
+                    AND s.end_time = '16:00:00'
+                    AND s.active = TRUE
+                );
+
+              INSERT INTO schedules (user_id, course_name, day_of_week, start_time, end_time, location, active)
+              SELECT u.id, 'English', 'FRIDAY', '08:00:00', '10:00:00', 'E505', TRUE
+              FROM users u
+              WHERE u.active = TRUE
+                AND u.group_id IS NOT NULL
+                AND NOT EXISTS (
+                  SELECT 1
+                  FROM schedules s
+                  WHERE s.user_id = u.id
+                    AND s.course_name = 'English'
+                    AND s.day_of_week = 'FRIDAY'
+                    AND s.start_time = '08:00:00'
+                    AND s.end_time = '10:00:00'
+                    AND s.active = TRUE
+                );

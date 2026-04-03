@@ -1,0 +1,222 @@
+databaseChangeLog:
+  - changeSet:
+      id: "28-seed-generated-data"
+      author: "codex"
+      changes:
+        - sql:
+            splitStatements: true
+            stripComments: true
+            sql: |
+              -- Ensure faculty_links.active exists (older changelogs missed this column)
+              SET @active_col_exists := (
+                SELECT COUNT(*)
+                FROM information_schema.columns
+                WHERE table_schema = DATABASE()
+                  AND table_name = 'faculty_links'
+                  AND column_name = 'active'
+              );
+              SET @alter_sql := IF(
+                @active_col_exists = 0,
+                'ALTER TABLE faculty_links ADD COLUMN active TINYINT(1) NOT NULL DEFAULT 1',
+                'SELECT 1'
+              );
+              PREPARE stmt FROM @alter_sql;
+              EXECUTE stmt;
+              DEALLOCATE PREPARE stmt;
+
+              -- Normalize faculties to the real list (exact short names and websites)
+              UPDATE faculties SET name = 'Facultatea de Inginerie Electrică', website = 'http://www.electro.upb.ro/' WHERE short_name = 'ELTH';
+              UPDATE faculties SET name = 'Facultatea de Energetică', website = 'http://energ.upb.ro/' WHERE short_name = 'ENERG';
+              UPDATE faculties SET name = 'Facultatea de Automatică și Calculatoare', website = 'http://acs.pub.ro/' WHERE short_name = 'ACS';
+              UPDATE faculties SET name = 'Facultatea de Electronică, Telecomunicații și Tehnologia Informației', website = 'http://www.electronica.pub.ro/' WHERE short_name = 'ETTI';
+              UPDATE faculties SET name = 'Facultatea de Inginerie Mecanică și Mecatronică', website = 'https://mecanica.upb.ro/' WHERE short_name = 'FIMM';
+              UPDATE faculties SET name = 'Facultatea de Inginerie Industrială și Robotică', website = 'https://fiir.upb.ro/' WHERE short_name = 'FIIR';
+              UPDATE faculties SET name = 'Facultatea de Ingineria Sistemelor Biotehnice', website = 'https://isb.pub.ro/' WHERE short_name = 'ISB';
+              UPDATE faculties SET name = 'Facultatea de Transporturi', website = 'https://transport.pub.ro/' WHERE short_name = 'TRANS';
+              UPDATE faculties SET name = 'Facultatea de Inginerie Aerospațială', website = 'http://www.aero.pub.ro/' WHERE short_name = 'AERO';
+              UPDATE faculties SET name = 'Facultatea de Știința și Ingineria Materialelor', website = 'http://www.sim.pub.ro/' WHERE short_name = 'SIM';
+              UPDATE faculties SET name = 'Facultatea de Inginerie Chimică și Biotehnologii', website = 'http://www.chimie.upb.ro/' WHERE short_name = 'CHIMIE';
+              UPDATE faculties SET name = 'Facultatea de Inginerie în Limbi Străine', website = 'http://fils.upb.ro/' WHERE short_name = 'FILS';
+              UPDATE faculties SET name = 'Facultatea de Științe Aplicate', website = 'http://fsa.pub.ro/' WHERE short_name = 'FSA';
+              UPDATE faculties SET name = 'Facultatea de Inginerie Medicală', website = 'http://fim.pub.ro/' WHERE short_name = 'FIM';
+              UPDATE faculties SET name = 'Facultatea de Antreprenoriat, Ingineria și Managementul Afacerilor', website = 'https://faima.upb.ro/' WHERE short_name = 'FAIMA';
+
+              -- Generate groups for all faculties (years 1-4, series A/B), idempotent
+              INSERT INTO student_groups (name, year, faculty_id, active)
+              SELECT CONCAT(f.short_name, '-', y.y, s.s), y.y, f.id, TRUE
+              FROM faculties f
+              CROSS JOIN (SELECT 1 AS y UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4) y
+              CROSS JOIN (SELECT 'A' AS s UNION ALL SELECT 'B') s
+              LEFT JOIN student_groups g
+                ON g.faculty_id = f.id
+               AND g.name = CONCAT(f.short_name, '-', y.y, s.s)
+              WHERE g.id IS NULL;
+
+              -- Generate professors for all faculties, idempotent
+              INSERT INTO professors (name, department, faculty, active)
+              SELECT CONCAT('Prof. ', f.short_name, ' Core'), 'Core Engineering', f.short_name, TRUE
+              FROM faculties f
+              WHERE NOT EXISTS (
+                SELECT 1 FROM professors p
+                WHERE p.name = CONCAT('Prof. ', f.short_name, ' Core')
+              );
+
+              INSERT INTO professors (name, department, faculty, active)
+              SELECT CONCAT('Prof. ', f.short_name, ' Applied'), 'Applied Sciences', f.short_name, TRUE
+              FROM faculties f
+              WHERE NOT EXISTS (
+                SELECT 1 FROM professors p
+                WHERE p.name = CONCAT('Prof. ', f.short_name, ' Applied')
+              );
+
+              INSERT INTO professors (name, department, faculty, active)
+              SELECT CONCAT('Prof. ', f.short_name, ' Systems'), 'Systems and Design', f.short_name, TRUE
+              FROM faculties f
+              WHERE NOT EXISTS (
+                SELECT 1 FROM professors p
+                WHERE p.name = CONCAT('Prof. ', f.short_name, ' Systems')
+              );
+
+              -- Generate one official link per faculty, idempotent
+              INSERT INTO faculty_links (faculty_id, url, icon, color_class, active)
+              SELECT f.id, f.website, 'fas fa-globe', 'link-icon-globe', TRUE
+              FROM faculties f
+              WHERE NOT EXISTS (
+                SELECT 1 FROM faculty_links fl
+                WHERE fl.faculty_id = f.id
+                  AND fl.url = f.website
+              );
+
+              -- Generate link translations (EN/RO/DE/FR), idempotent
+              INSERT INTO faculty_link_translations (faculty_link_id, language, title, description)
+              SELECT fl.id, 'en', 'Official Faculty Website', CONCAT('Official website for ', f.short_name)
+              FROM faculty_links fl
+              JOIN faculties f ON f.id = fl.faculty_id
+              WHERE fl.url = f.website
+                AND NOT EXISTS (
+                  SELECT 1 FROM faculty_link_translations t
+                  WHERE t.faculty_link_id = fl.id AND t.language = 'en'
+                );
+
+              INSERT INTO faculty_link_translations (faculty_link_id, language, title, description)
+              SELECT fl.id, 'ro', 'Site Oficial al Facultății', CONCAT('Website oficial pentru ', f.short_name)
+              FROM faculty_links fl
+              JOIN faculties f ON f.id = fl.faculty_id
+              WHERE fl.url = f.website
+                AND NOT EXISTS (
+                  SELECT 1 FROM faculty_link_translations t
+                  WHERE t.faculty_link_id = fl.id AND t.language = 'ro'
+                );
+
+              INSERT INTO faculty_link_translations (faculty_link_id, language, title, description)
+              SELECT fl.id, 'de', 'Offizielle Fakultätsseite', CONCAT('Offizielle Website für ', f.short_name)
+              FROM faculty_links fl
+              JOIN faculties f ON f.id = fl.faculty_id
+              WHERE fl.url = f.website
+                AND NOT EXISTS (
+                  SELECT 1 FROM faculty_link_translations t
+                  WHERE t.faculty_link_id = fl.id AND t.language = 'de'
+                );
+
+              INSERT INTO faculty_link_translations (faculty_link_id, language, title, description)
+              SELECT fl.id, 'fr', 'Site Officiel de la Faculté', CONCAT('Site officiel pour ', f.short_name)
+              FROM faculty_links fl
+              JOIN faculties f ON f.id = fl.faculty_id
+              WHERE fl.url = f.website
+                AND NOT EXISTS (
+                  SELECT 1 FROM faculty_link_translations t
+                  WHERE t.faculty_link_id = fl.id AND t.language = 'fr'
+                );
+
+              -- Add generated quotes, idempotent
+              INSERT INTO quotes (author, text, active)
+              SELECT 'UniMate Bot', q.txt, TRUE
+              FROM (
+                SELECT 'Progress beats perfection in every lab session.' AS txt UNION ALL
+                SELECT 'Ask early, build often, iterate always.' UNION ALL
+                SELECT 'A clean commit today saves hours tomorrow.' UNION ALL
+                SELECT 'Engineering is teamwork under deadline pressure.' UNION ALL
+                SELECT 'Measure first, optimize second.' UNION ALL
+                SELECT 'Good notes are future exam points.' UNION ALL
+                SELECT 'Small daily effort compounds by finals week.' UNION ALL
+                SELECT 'Reliable systems are designed, not hoped for.' UNION ALL
+                SELECT 'Consistency is a superpower in university.' UNION ALL
+                SELECT 'Debugging is learning with evidence.'
+              ) q
+              WHERE NOT EXISTS (
+                SELECT 1 FROM quotes existing WHERE existing.text = q.txt
+              );
+
+              -- Add generated multilingual news (fixed IDs), idempotent
+              INSERT INTO news (id, publish_date)
+              SELECT 101, '2026-04-01 09:00:00'
+              WHERE NOT EXISTS (SELECT 1 FROM news WHERE id = 101);
+              INSERT INTO news (id, publish_date)
+              SELECT 102, '2026-04-03 11:00:00'
+              WHERE NOT EXISTS (SELECT 1 FROM news WHERE id = 102);
+              INSERT INTO news (id, publish_date)
+              SELECT 103, '2026-04-05 14:00:00'
+              WHERE NOT EXISTS (SELECT 1 FROM news WHERE id = 103);
+
+              INSERT INTO news_translations (news_id, language, title, body)
+              SELECT 101, 'en', 'Laboratory Access Update', 'All engineering labs now support extended evening access until 20:00.'
+              WHERE NOT EXISTS (
+                SELECT 1 FROM news_translations WHERE news_id = 101 AND language = 'en'
+              );
+              INSERT INTO news_translations (news_id, language, title, body)
+              SELECT 101, 'ro', 'Actualizare Acces Laboratoare', 'Toate laboratoarele de inginerie au program extins până la ora 20:00.'
+              WHERE NOT EXISTS (
+                SELECT 1 FROM news_translations WHERE news_id = 101 AND language = 'ro'
+              );
+              INSERT INTO news_translations (news_id, language, title, body)
+              SELECT 101, 'de', 'Aktualisierung des Laborzugangs', 'Alle Ingenieurlabore haben jetzt verlängerten Zugang bis 20:00 Uhr.'
+              WHERE NOT EXISTS (
+                SELECT 1 FROM news_translations WHERE news_id = 101 AND language = 'de'
+              );
+              INSERT INTO news_translations (news_id, language, title, body)
+              SELECT 101, 'fr', 'Mise à jour accès laboratoires', 'Tous les laboratoires d’ingénierie sont ouverts jusqu’à 20h00.'
+              WHERE NOT EXISTS (
+                SELECT 1 FROM news_translations WHERE news_id = 101 AND language = 'fr'
+              );
+
+              INSERT INTO news_translations (news_id, language, title, body)
+              SELECT 102, 'en', 'Scholarship Call 2026', 'Merit scholarship applications are open this week. Submit your documents online.'
+              WHERE NOT EXISTS (
+                SELECT 1 FROM news_translations WHERE news_id = 102 AND language = 'en'
+              );
+              INSERT INTO news_translations (news_id, language, title, body)
+              SELECT 102, 'ro', 'Apel Burse 2026', 'Aplicațiile pentru bursele de merit sunt deschise în această săptămână.'
+              WHERE NOT EXISTS (
+                SELECT 1 FROM news_translations WHERE news_id = 102 AND language = 'ro'
+              );
+              INSERT INTO news_translations (news_id, language, title, body)
+              SELECT 102, 'de', 'Stipendienausschreibung 2026', 'Bewerbungen für Leistungsstipendien sind diese Woche geöffnet.'
+              WHERE NOT EXISTS (
+                SELECT 1 FROM news_translations WHERE news_id = 102 AND language = 'de'
+              );
+              INSERT INTO news_translations (news_id, language, title, body)
+              SELECT 102, 'fr', 'Appel bourses 2026', 'Les candidatures aux bourses de mérite sont ouvertes cette semaine.'
+              WHERE NOT EXISTS (
+                SELECT 1 FROM news_translations WHERE news_id = 102 AND language = 'fr'
+              );
+
+              INSERT INTO news_translations (news_id, language, title, body)
+              SELECT 103, 'en', 'Hackathon Registration Open', 'Interfaculty hackathon registration is now open for teams of 3-5 students.'
+              WHERE NOT EXISTS (
+                SELECT 1 FROM news_translations WHERE news_id = 103 AND language = 'en'
+              );
+              INSERT INTO news_translations (news_id, language, title, body)
+              SELECT 103, 'ro', 'Înscrieri Hackathon Deschise', 'Înscrierile pentru hackathon-ul interfacultăți sunt deschise pentru echipe de 3-5 studenți.'
+              WHERE NOT EXISTS (
+                SELECT 1 FROM news_translations WHERE news_id = 103 AND language = 'ro'
+              );
+              INSERT INTO news_translations (news_id, language, title, body)
+              SELECT 103, 'de', 'Hackathon-Anmeldung geöffnet', 'Die Anmeldung für den inter-fakultären Hackathon ist für Teams mit 3-5 Studierenden offen.'
+              WHERE NOT EXISTS (
+                SELECT 1 FROM news_translations WHERE news_id = 103 AND language = 'de'
+              );
+              INSERT INTO news_translations (news_id, language, title, body)
+              SELECT 103, 'fr', 'Inscription Hackathon ouverte', 'L’inscription au hackathon inter-facultés est ouverte pour des équipes de 3 à 5 étudiants.'
+              WHERE NOT EXISTS (
+                SELECT 1 FROM news_translations WHERE news_id = 103 AND language = 'fr'
+              );

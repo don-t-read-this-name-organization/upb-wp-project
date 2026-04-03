@@ -1,0 +1,76 @@
+databaseChangeLog:
+  - changeSet:
+      id: "24-create-schedules-table"
+      author: "codex"
+      changes:
+        - createTable:
+            tableName: schedules
+            columns:
+              - column:
+                  name: id
+                  type: INT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: course_name
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: day_of_week
+                  type: VARCHAR(20)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: start_time
+                  type: TIME
+                  constraints:
+                    nullable: false
+              - column:
+                  name: end_time
+                  type: TIME
+                  constraints:
+                    nullable: false
+              - column:
+                  name: location
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: TIMESTAMP
+              - column:
+                  name: active
+                  type: BOOLEAN
+                  defaultValueBoolean: true
+                  constraints:
+                    nullable: false
+        - createIndex:
+            tableName: schedules
+            indexName: idx_schedules_user_active
+            columns:
+              - column:
+                  name: user_id
+              - column:
+                  name: active
+        - createIndex:
+            tableName: schedules
+            indexName: idx_schedules_day_time
+            columns:
+              - column:
+                  name: day_of_week
+              - column:
+                  name: start_time
+        - addForeignKeyConstraint:
+            baseTableName: schedules
+            baseColumnNames: user_id
+            referencedTableName: users
+            referencedColumnNames: id
+            constraintName: fk_schedules_user

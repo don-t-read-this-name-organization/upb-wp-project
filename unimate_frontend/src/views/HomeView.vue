@@ -6,31 +6,72 @@ import { useAppStore } from '@/stores/appStore'
 import { parseMarkdown } from '@/utils/markdown'
 import WeatherWidget from '@/components/WeatherWidget.vue'
 import QuoteWidget from '@/components/QuoteWidget.vue'
+<<<<<<< Updated upstream
+=======
+import BaseModal from '@/components/BaseModal.vue'
+>>>>>>> Stashed changes
 
 const router = useRouter()
 const { locale, t } = useI18n()
 const store = useAppStore()
 
+<<<<<<< Updated upstream
 const isPanelCollapsed = ref(true)
 const newsData = ref([])
 const loading = ref(true)
 const selectedNews = ref(null)
 
 const languageMap = {
+=======
+interface NewsTranslation {
+  language: string
+  title: string
+  body: string
+}
+
+interface NewsItem {
+  id: number
+  publishDate: string
+  translations: NewsTranslation[]
+}
+
+interface NewsCard {
+  id: number
+  date: string
+  title: string
+  body: string
+  truncatedBody: string
+}
+
+const isPanelCollapsed = ref(true)
+const newsData = ref<NewsItem[]>([])
+const loading = ref(true)
+const selectedNews = ref<NewsCard | null>(null)
+
+const languageMap: Record<string, string> = {
+>>>>>>> Stashed changes
   en: 'en',
   de: 'de',
   fr: 'fr',
   ro: 'ro',
 }
 
+<<<<<<< Updated upstream
 const currentLang = computed(() => languageMap[locale.value] || 'en')
+=======
+const currentLang = computed(() => languageMap[locale.value] ?? 'en')
+>>>>>>> Stashed changes
 
 const showMap = computed(() => !store.isAdmin)
 const showNews = computed(() => !store.isAdmin)
 const showQuotes = computed(() => !store.isAdmin)
 const showWelcome = computed(() => true)
 
+<<<<<<< Updated upstream
 const news = computed(() => {
+=======
+const news = computed<NewsCard[]>(() => {
+>>>>>>> Stashed changes
   return newsData.value.map((item) => {
     const translation = item.translations?.find(
       (t) => t.language === currentLang.value
@@ -70,7 +111,11 @@ async function fetchNews() {
   }
 }
 
+<<<<<<< Updated upstream
 function openNewsModal(item) {
+=======
+function openNewsModal(item: NewsCard) {
+>>>>>>> Stashed changes
   selectedNews.value = item
 }
 
@@ -101,6 +146,11 @@ const maps = [
 ]
 
 const currentMapIndex = ref(0)
+<<<<<<< Updated upstream
+=======
+const currentMapSrc = computed(() => maps[currentMapIndex.value]?.src ?? '')
+const currentMapName = computed(() => maps[currentMapIndex.value]?.name ?? '')
+>>>>>>> Stashed changes
 
 const prevMap = () => {
   currentMapIndex.value = currentMapIndex.value === 0 ? maps.length - 1 : currentMapIndex.value - 1
@@ -128,7 +178,11 @@ const nextMap = () => {
           </svg>
         </button>
         <div class="map-wrapper">
+<<<<<<< Updated upstream
           <img :src="maps[currentMapIndex].src" class="map-image" :alt="maps[currentMapIndex].name" />
+=======
+          <img :src="currentMapSrc" class="map-image" :alt="currentMapName" />
+>>>>>>> Stashed changes
         </div>
         <button class="map-arrow map-arrow-right" @click="nextMap" aria-label="Next map">
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -172,6 +226,7 @@ const nextMap = () => {
       <div class="panel-content">
         <WeatherWidget />
         <QuoteWidget />
+<<<<<<< Updated upstream
       </div>
     </div>
 
@@ -183,8 +238,31 @@ const nextMap = () => {
         <div class="news-modal-date">{{ selectedNews.date }}</div>
         <h2 class="news-modal-title">{{ selectedNews.title }}</h2>
         <div class="news-modal-body" v-html="parseMarkdown(selectedNews.body)"></div>
+=======
+>>>>>>> Stashed changes
       </div>
     </div>
+
+    <BaseModal
+      v-if="selectedNews"
+      :model-value="true"
+      size="lg"
+      :show-close="false"
+      @update:modelValue="closeNewsModal"
+      @close="closeNewsModal"
+    >
+      <template #header>
+        <div></div>
+      </template>
+      <div class="modal-content news-modal">
+        <button class="modal-close" @click="closeNewsModal">
+          <i class="fas fa-times"></i>
+        </button>
+        <div class="news-modal-date">{{ selectedNews.date }}</div>
+        <h2 class="news-modal-title">{{ selectedNews.title }}</h2>
+        <div class="news-modal-body" v-html="parseMarkdown(selectedNews.body)"></div>
+      </div>
+    </BaseModal>
   </div>
 </template>
 
@@ -417,6 +495,7 @@ const nextMap = () => {
   }
 }
 
+<<<<<<< Updated upstream
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -431,6 +510,8 @@ const nextMap = () => {
   padding: 1rem;
 }
 
+=======
+>>>>>>> Stashed changes
 .modal-content {
   background: var(--card-bg);
   border-radius: var(--radius);
@@ -509,3 +590,7 @@ const nextMap = () => {
   color: var(--primary-color);
 }
 </style>
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes

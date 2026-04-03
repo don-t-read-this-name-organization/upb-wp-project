@@ -1,0 +1,53 @@
+databaseChangeLog:
+  - changeSet:
+      id: "23-create-timetables-table"
+      author: "codex"
+      changes:
+        - createTable:
+            tableName: timetables
+            columns:
+              - column:
+                  name: id
+                  type: INT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: filename
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: file_path
+                  type: VARCHAR(500)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: uploaded_at
+                  type: TIMESTAMP
+              - column:
+                  name: active
+                  type: BOOLEAN
+                  defaultValueBoolean: true
+                  constraints:
+                    nullable: false
+        - createIndex:
+            tableName: timetables
+            indexName: idx_timetables_user_active
+            columns:
+              - column:
+                  name: user_id
+              - column:
+                  name: active
+        - addForeignKeyConstraint:
+            baseTableName: timetables
+            baseColumnNames: user_id
+            referencedTableName: users
+            referencedColumnNames: id
+            constraintName: fk_timetables_user

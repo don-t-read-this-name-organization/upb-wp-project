@@ -3,6 +3,10 @@ import { ref, computed, onMounted } from 'vue'
 import draggable from 'vuedraggable'
 import { useAppStore } from '@/stores/appStore'
 import { useI18n } from 'vue-i18n'
+<<<<<<< Updated upstream
+=======
+import BaseModal from '@/components/BaseModal.vue'
+>>>>>>> Stashed changes
 
 const { t } = useI18n()
 
@@ -470,8 +474,13 @@ onMounted(() => {
     </div>
   </main>
 
+<<<<<<< Updated upstream
   <div v-if="showModal" class="modal-overlay" @click="closeModal">
     <div class="modal-content modal-large" @click.stop>
+=======
+  <BaseModal v-model="showModal" size="lg" :show-close="false" @close="closeModal">
+    <div class="modal-content modal-large">
+>>>>>>> Stashed changes
       <div class="modal-header">
         <h3>{{ editingTask ? t('kanban.editTask') : t('kanban.addTask') }}</h3>
         <button class="modal-close" @click="closeModal">&times;</button>
@@ -561,9 +570,15 @@ onMounted(() => {
         </button>
       </div>
     </div>
+<<<<<<< Updated upstream
   </div>
 
   <div v-if="showDeleteModal" class="modal-overlay" @click.self="cancelDelete">
+=======
+  </BaseModal>
+
+  <BaseModal v-model="showDeleteModal" size="sm" :show-close="false" @close="cancelDelete">
+>>>>>>> Stashed changes
     <div class="modal-content modal-small">
       <div class="modal-header">
         <h3>{{ t('kanban.deleteTask') }}</h3>
@@ -581,7 +596,11 @@ onMounted(() => {
         </button>
       </div>
     </div>
+<<<<<<< Updated upstream
   </div>
+=======
+  </BaseModal>
+>>>>>>> Stashed changes
 </template>
 
 <style scoped>
@@ -716,6 +735,7 @@ onMounted(() => {
   border-top: 1px solid var(--border-light);
   padding-top: 0.5rem;
 }
+<<<<<<< Updated upstream
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -728,6 +748,8 @@ onMounted(() => {
   align-items: center;
   justify-content: center;
 }
+=======
+>>>>>>> Stashed changes
 .modal-content {
   background: var(--card-bg);
   border-radius: 15px;
@@ -852,3 +874,7 @@ onMounted(() => {
   background: #c82333;
 }
 </style>
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
