@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
-import org.unimate.unimate.domain.enums.UserRole;
 import org.unimate.unimate.repository.FileRepository;
 import org.unimate.unimate.repository.FolderRepository;
 import org.unimate.unimate.repository.NoteRepository;
@@ -130,6 +129,33 @@ public class AuthorizationService {
       return false;
     }
     return authentication.getAuthorities().stream()
-        .anyMatch(authority -> UserRole.ROLE_ADMIN.name().equals(authority.getAuthority()));
+        .anyMatch(authority -> "ROLE_ADMIN".equals(authority.getAuthority()));
+  }
+
+  public boolean isChief() {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    if (authentication == null || !authentication.isAuthenticated()) {
+      return false;
+    }
+    return authentication.getAuthorities().stream()
+        .anyMatch(authority -> "ROLE_CHIEF".equals(authority.getAuthority()));
+  }
+
+  public boolean isStudent() {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    if (authentication == null || !authentication.isAuthenticated()) {
+      return false;
+    }
+    return authentication.getAuthorities().stream()
+        .anyMatch(authority -> "ROLE_STUDENT".equals(authority.getAuthority()));
+  }
+
+  public boolean isChiefOrStudent() {
+    return isChief() || isStudent();
+  }
+
+  public boolean isAuthenticated() {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    return authentication != null && authentication.isAuthenticated();
   }
 }

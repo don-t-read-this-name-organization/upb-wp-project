@@ -3,7 +3,7 @@ package org.unimate.unimate.api.security;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
-import org.unimate.unimate.domain.enums.UserRole;
+import org.unimate.unimate.domain.enums.RoleName;
 
 import java.security.Principal;
 import java.util.Collection;
@@ -13,7 +13,7 @@ import java.util.Collection;
 public class AuthenticatedUser implements Principal {
   private final Integer id;
   private final String email;
-  private final UserRole role;
+  private final RoleName role;
   private final Collection<? extends GrantedAuthority> authorities;
 
   @Override
