@@ -9,7 +9,7 @@ import java.util.Optional;
 
 @Repository
 public interface TimetableRepository extends JpaRepository<Timetable, Integer> {
-  Optional<Timetable> findByUserIdAndActive(Integer userId, boolean active);
+  Optional<Timetable> findByFacultyIdAndActive(Integer facultyId, boolean active);
 
-  List<Timetable> findByUserId(Integer userId);
+  List<Timetable> findByFacultyId(Integer facultyId);
 }
