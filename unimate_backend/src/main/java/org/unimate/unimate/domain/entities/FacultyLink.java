@@ -41,4 +41,8 @@ public class FacultyLink {
   @Column(name = "created_at")
   @CreationTimestamp
   LocalDateTime createdAt;
+
+  @Builder.Default
+  @Column(columnDefinition = "TINYINT(1)", nullable = false)
+  Boolean active = true;
 }

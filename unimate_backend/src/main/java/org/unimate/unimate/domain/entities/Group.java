@@ -13,7 +13,7 @@ import static lombok.AccessLevel.PRIVATE;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name = "`groups`",
+@Table(name = "student_groups",
     uniqueConstraints = {
         @UniqueConstraint(name = "uq_groups_name_faculty", columnNames = {"name", "faculty_id"}),
     })

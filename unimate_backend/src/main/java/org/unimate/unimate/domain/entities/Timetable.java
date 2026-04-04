@@ -25,8 +25,8 @@ public class Timetable {
   Integer id;
 
   @ManyToOne(optional = false, fetch = FetchType.LAZY)
-  @JoinColumn(name = "user_id", nullable = false)
-  User user;
+  @JoinColumn(name = "faculty_id", nullable = false)
+  Faculty faculty;
 
   @Column(name = "filename", nullable = false)
   String filename;
