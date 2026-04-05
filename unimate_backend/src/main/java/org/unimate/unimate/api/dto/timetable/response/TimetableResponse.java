@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 @Builder
 public record TimetableResponse(
     Integer id,
-    Integer userId,
+    Integer facultyId,
     String filename,
     LocalDateTime uploadedAt,
     Boolean active
@@ -16,7 +16,7 @@ public record TimetableResponse(
   public static TimetableResponse fromEntity(Timetable timetable) {
     return TimetableResponse.builder()
         .id(timetable.getId())
-        .userId(timetable.getUser().getId())
+        .facultyId(timetable.getFaculty().getId())
         .filename(timetable.getFilename())
         .uploadedAt(timetable.getUploadedAt())
         .active(timetable.getActive())

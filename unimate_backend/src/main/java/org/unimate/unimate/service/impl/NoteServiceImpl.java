@@ -8,6 +8,7 @@ import org.unimate.unimate.api.dto.note.NoteRequest;
 import org.unimate.unimate.api.dto.note.NoteResponse;
 import org.unimate.unimate.domain.entities.Note;
 import org.unimate.unimate.domain.entities.User;
+import org.unimate.unimate.exception.NotFoundException;
 import org.unimate.unimate.repository.NoteRepository;
 import org.unimate.unimate.repository.UserRepository;
 import org.unimate.unimate.service.NoteService;
@@ -53,7 +54,8 @@ public class NoteServiceImpl implements NoteService {
     @Override
     @Transactional
     public NoteResponse create(Integer userId, NoteRequest request) {
-        User user = userRepository.findById(userId).orElseThrow();
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException("User", userId));
         
         Note note = Note.builder()
                 .user(user)
@@ -71,7 +73,8 @@ public class NoteServiceImpl implements NoteService {
     @Override
     @Transactional
     public NoteResponse update(Integer id, NoteRequest request) {
-        Note note = noteRepository.findById(id).orElseThrow();
+        Note note = noteRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Note", id));
         
         note.setTitle(request.getTitle());
         note.setCollection(request.getCollection());

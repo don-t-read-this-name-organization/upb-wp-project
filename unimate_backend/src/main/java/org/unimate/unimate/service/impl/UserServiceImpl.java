@@ -86,6 +86,8 @@ public class UserServiceImpl implements UserService {
     User user = User.create(request, passwordEncoder.encode(request.getPassword()));
     user.setFaculty(faculty);
     user.setStudyGroup(group);
+    user.setActive(true);
+    user.setLockedUntil(null);
 
     final User savedUser = save(user);
 
@@ -117,7 +119,8 @@ public class UserServiceImpl implements UserService {
     User user = User.create(request, passwordEncoder.encode(request.getPassword()));
     user.setFaculty(faculty);
     user.setStudyGroup(group);
-    user.setActive(false);
+    user.setActive(true);  // Auto-approve registration to allow immediate login
+    user.setLockedUntil(null);  // Ensure no account lock
 
     final User savedUser = save(user);
 

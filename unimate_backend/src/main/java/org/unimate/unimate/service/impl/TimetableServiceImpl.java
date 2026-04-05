@@ -1,10 +1,13 @@
 package org.unimate.unimate.service.impl;
 
 import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.support.TransactionSynchronization;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import org.unimate.unimate.api.dto.timetable.response.TimetableResponse;
@@ -24,6 +27,7 @@ import java.util.UUID;
 
 import static lombok.AccessLevel.PRIVATE;
 
+@Slf4j
 @Service
 @FieldDefaults(level = PRIVATE)
 public class TimetableServiceImpl implements TimetableService {
@@ -38,11 +42,25 @@ public class TimetableServiceImpl implements TimetableService {
   public TimetableServiceImpl(
       TimetableRepository timetableRepository,
       UserRepository userRepository,
-      @Value("${upload.timetable-path:./uploads/timetables/}") String timetableUploadPath
+      @Value("${app.upload.timetable-path:${app.upload.path:./uploads/timetables/}}") String timetableUploadPath
   ) {
     this.timetableRepository = timetableRepository;
     this.userRepository = userRepository;
     this.timetableUploadPath = timetableUploadPath;
+  }
+
+  /**
+   * Get faculty ID from user ID
+   */
+  private Integer getFacultyIdFromUser(Integer userId) {
+    User user = userRepository.findById(userId)
+        .orElseThrow(() -> new NotFoundException("User", userId));
+    
+    if (user.getFaculty() == null) {
+      throw new ValidationException("User is not assigned to a faculty");
+    }
+    
+    return user.getFaculty().getId();
   }
 
   @Override
@@ -50,36 +68,47 @@ public class TimetableServiceImpl implements TimetableService {
   public TimetableResponse uploadTimetable(Integer userId, MultipartFile file) {
     validateFile(file);
 
-    User user = userRepository.findById(userId)
-        .orElseThrow(() -> new NotFoundException("User", userId));
+    Integer facultyId = getFacultyIdFromUser(userId);
 
-    timetableRepository.findByUserIdAndActive(userId, true).ifPresent(existing -> {
-      existing.setActive(false);
-      timetableRepository.save(existing);
-      deletePhysicalFile(existing.getFilePath());
-    });
+    // Deactivate previous timetable for this faculty
+    String previousFilePath = timetableRepository.findByFacultyIdAndActive(facultyId, true)
+        .map(existing -> {
+          existing.setActive(false);
+          timetableRepository.save(existing);
+          return existing.getFilePath();
+        })
+        .orElse(null);
+
+    Path absoluteFilePath = null;
 
     try {
-      Path userDir = Paths.get(timetableUploadPath, userId.toString());
-      if (!Files.exists(userDir)) {
-        Files.createDirectories(userDir);
+      // Create directory based on faculty ID
+      Path facultyDir = Paths.get(timetableUploadPath, facultyId.toString());
+      if (!Files.exists(facultyDir)) {
+        Files.createDirectories(facultyDir);
       }
 
       String originalFilename = file.getOriginalFilename() != null ? file.getOriginalFilename() : "timetable.pdf";
       String storedFilename = UUID.randomUUID() + ".pdf";
-      Path absoluteFilePath = userDir.resolve(storedFilename);
+      absoluteFilePath = facultyDir.resolve(storedFilename);
       Files.copy(file.getInputStream(), absoluteFilePath);
 
       Timetable timetable = Timetable.builder()
-          .user(user)
+          .faculty(userRepository.findById(userId).orElseThrow().getFaculty())
           .filename(originalFilename)
           .filePath(absoluteFilePath.toString())
           .active(true)
           .build();
 
       Timetable saved = timetableRepository.save(timetable);
+      log.info("Timetable uploaded for faculty {}: {}", facultyId, originalFilename);
+      
+      if (previousFilePath != null && !previousFilePath.isBlank()) {
+        registerDeleteAfterCommit(previousFilePath);
+      }
       return TimetableResponse.fromEntity(saved);
     } catch (IOException ex) {
+      deletePhysicalFile(absoluteFilePath);
       throw new ValidationException("Failed to upload timetable");
     }
   }
@@ -87,8 +116,10 @@ public class TimetableServiceImpl implements TimetableService {
   @Override
   @Transactional(readOnly = true)
   public Resource getTimetable(Integer userId) throws IOException {
-    Timetable timetable = timetableRepository.findByUserIdAndActive(userId, true)
-        .orElseThrow(() -> new NotFoundException("Timetable", "userId", userId));
+    Integer facultyId = getFacultyIdFromUser(userId);
+    
+    Timetable timetable = timetableRepository.findByFacultyIdAndActive(facultyId, true)
+        .orElseThrow(() -> new NotFoundException("Timetable", "facultyId", facultyId));
 
     Path path = Paths.get(timetable.getFilePath());
     Resource resource = new UrlResource(path.toUri());
@@ -101,20 +132,25 @@ public class TimetableServiceImpl implements TimetableService {
   @Override
   @Transactional(readOnly = true)
   public TimetableResponse getTimetableMetadata(Integer userId) {
-    Timetable timetable = timetableRepository.findByUserIdAndActive(userId, true)
-        .orElseThrow(() -> new NotFoundException("Timetable", "userId", userId));
+    Integer facultyId = getFacultyIdFromUser(userId);
+    
+    Timetable timetable = timetableRepository.findByFacultyIdAndActive(facultyId, true)
+        .orElseThrow(() -> new NotFoundException("Timetable", "facultyId", facultyId));
     return TimetableResponse.fromEntity(timetable);
   }
 
   @Override
   @Transactional
   public void deleteTimetable(Integer userId) {
-    Timetable timetable = timetableRepository.findByUserIdAndActive(userId, true)
-        .orElseThrow(() -> new NotFoundException("Timetable", "userId", userId));
+    Integer facultyId = getFacultyIdFromUser(userId);
+    
+    Timetable timetable = timetableRepository.findByFacultyIdAndActive(facultyId, true)
+        .orElseThrow(() -> new NotFoundException("Timetable", "facultyId", facultyId));
 
     timetable.setActive(false);
     timetableRepository.save(timetable);
     deletePhysicalFile(timetable.getFilePath());
+    log.info("Timetable deleted for faculty {}", facultyId);
   }
 
   private void validateFile(MultipartFile file) {
@@ -134,6 +170,13 @@ public class TimetableServiceImpl implements TimetableService {
     }
   }
 
+  private void deletePhysicalFile(Path absolutePath) {
+    if (absolutePath == null) {
+      return;
+    }
+    deletePhysicalFile(absolutePath.toString());
+  }
+
   private void deletePhysicalFile(String absolutePath) {
     try {
       if (absolutePath != null && !absolutePath.isBlank()) {
@@ -143,4 +186,19 @@ public class TimetableServiceImpl implements TimetableService {
       // Physical cleanup failure should not block metadata update.
     }
   }
+
+  private void registerDeleteAfterCommit(String absolutePath) {
+    if (!TransactionSynchronizationManager.isSynchronizationActive()) {
+      deletePhysicalFile(absolutePath);
+      return;
+    }
+
+    TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+      @Override
+      public void afterCommit() {
+        deletePhysicalFile(absolutePath);
+      }
+    });
+  }
 }
+
