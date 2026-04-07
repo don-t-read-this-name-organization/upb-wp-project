@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.core.io.Resource;
+import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +30,7 @@ public class TimetableController {
   TimetableService timetableService;
 
   @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-  @PreAuthorize("hasRole('USER')")
+  @PreAuthorize("hasRole('ADMIN')")
   public TimetableResponse uploadTimetable(
       @Valid @ModelAttribute TimetableRequest request,
       @AuthenticationPrincipal AuthenticatedUser currentUser
@@ -41,7 +42,6 @@ public class TimetableController {
   }
 
   @GetMapping
-  @PreAuthorize("hasRole('USER')")
   public ResponseEntity<Resource> getTimetable(
       @AuthenticationPrincipal AuthenticatedUser currentUser
   ) throws IOException {
@@ -51,15 +51,31 @@ public class TimetableController {
 
     TimetableResponse metadata = timetableService.getTimetableMetadata(currentUser.getId());
     Resource resource = timetableService.getTimetable(currentUser.getId());
+    
+    // Sanitize filename: remove special characters and use simple ASCII name
+    String sanitizedFilename = "timetable.pdf";
+    if (metadata.filename() != null && !metadata.filename().isEmpty()) {
+      // If filename exists, try to preserve it but ensure it's safe for download
+      String original = metadata.filename().replaceAll("[^a-zA-Z0-9._-]", "_");
+      if (original.endsWith(".pdf") || original.endsWith(".PDF")) {
+        sanitizedFilename = original;
+      } else {
+        sanitizedFilename = original + ".pdf";
+      }
+    }
+    
+    ContentDisposition contentDisposition = ContentDisposition.attachment()
+        .filename(sanitizedFilename)
+        .build();
 
     return ResponseEntity.ok()
         .contentType(MediaType.APPLICATION_PDF)
-        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + metadata.filename() + "\"")
+        .header(HttpHeaders.CONTENT_DISPOSITION, contentDisposition.toString())
         .body(resource);
   }
 
   @DeleteMapping
-  @PreAuthorize("hasRole('USER')")
+  @PreAuthorize("hasRole('ADMIN')")
   public ResponseEntity<Void> deleteTimetable(
       @AuthenticationPrincipal AuthenticatedUser currentUser
   ) {

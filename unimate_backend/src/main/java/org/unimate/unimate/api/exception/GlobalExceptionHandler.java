@@ -2,19 +2,14 @@ package org.unimate.unimate.api.exception;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.MDC;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.unimate.unimate.api.security.AuthenticatedUser;
-import org.unimate.unimate.api.security.RequestContextFilter;
 import org.unimate.unimate.exception.AlreadyExistsException;
 import org.unimate.unimate.exception.NotFoundException;
 import org.unimate.unimate.exception.ValidationException;
@@ -55,9 +50,8 @@ public class GlobalExceptionHandler {
   @ExceptionHandler(MethodArgumentNotValidException.class)
   public ResponseEntity<ErrorResponse> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpServletRequest request) {
     Map<String, String> fieldErrors = new LinkedHashMap<>();
-    for (FieldError fieldError : ex.getBindingResult().getFieldErrors()) {
-      fieldErrors.put(fieldError.getField(), fieldError.getDefaultMessage());
-    }
+    ex.getBindingResult().getFieldErrors()
+        .forEach(e -> fieldErrors.put(e.getField(), e.getDefaultMessage()));
     return buildResponse(ex, request, HttpStatus.BAD_REQUEST, "VALIDATION_ERROR", fieldErrors);
   }
 
@@ -73,11 +67,10 @@ public class GlobalExceptionHandler {
       String code,
       Map<String, String> fieldErrors
   ) {
-    enrichMdc(request);
     if (status.is5xxServerError()) {
-      log.error("Unhandled exception on [{} {}]", request.getMethod(), request.getRequestURI(), ex);
+      log.error("Error {} {} - {}", request.getMethod(), request.getRequestURI(), ex.getMessage(), ex);
     } else {
-      log.warn("Request failed with status {} on [{} {}]: {}", status.value(), request.getMethod(), request.getRequestURI(), ex.getMessage());
+      log.warn("Request failed: {} {} - {}", request.getMethod(), request.getRequestURI(), ex.getMessage());
     }
 
     ErrorResponse response = ErrorResponse.builder()
@@ -90,23 +83,9 @@ public class GlobalExceptionHandler {
     return ResponseEntity.status(status).body(response);
   }
 
-  private void enrichMdc(HttpServletRequest request) {
-    Object requestId = request.getAttribute(RequestContextFilter.REQUEST_ID_KEY);
-    if (requestId instanceof String id && !id.isBlank()) {
-      MDC.put(RequestContextFilter.REQUEST_ID_KEY, id);
-    }
-
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-    if (authentication != null && authentication.getPrincipal() instanceof AuthenticatedUser authenticatedUser) {
-      MDC.put(RequestContextFilter.USER_ID_KEY, String.valueOf(authenticatedUser.getId()));
-    }
-    MDC.put(RequestContextFilter.TIMESTAMP_KEY, Instant.now().toString());
-  }
-
   private String resolveMessage(HttpStatus status, Exception ex) {
-    if (status == HttpStatus.INTERNAL_SERVER_ERROR) {
-      return "An unexpected error occurred";
-    }
-    return ex.getMessage();
+    return status == HttpStatus.INTERNAL_SERVER_ERROR 
+        ? "An unexpected error occurred" 
+        : ex.getMessage();
   }
 }

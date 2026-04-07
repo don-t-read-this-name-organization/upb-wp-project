@@ -10,7 +10,7 @@ import org.unimate.unimate.api.dto.review.request.ReviewRequest;
 import org.unimate.unimate.api.dto.review.response.RatingStatsResponse;
 import org.unimate.unimate.api.dto.review.response.ReviewResponse;
 import org.unimate.unimate.api.security.AuthenticatedUser;
-import org.unimate.unimate.domain.enums.UserRole;
+import org.unimate.unimate.domain.enums.RoleName;
 import org.unimate.unimate.exception.ValidationException;
 import org.unimate.unimate.service.RatingCalculatorService;
 import org.unimate.unimate.service.ReviewService;
@@ -29,7 +29,6 @@ public class ReviewController {
   RatingCalculatorService ratingCalculatorService;
 
   @PostMapping
-  @PreAuthorize("hasRole('USER')")
   public ReviewResponse createReview(
       @Valid @RequestBody ReviewRequest request,
       @AuthenticationPrincipal AuthenticatedUser currentUser
@@ -58,7 +57,6 @@ public class ReviewController {
   }
 
   @DeleteMapping("/{id}")
-  @PreAuthorize("hasRole('ADMIN') or @authorizationService.ownsReview(#id)")
   public void deleteReview(
       @PathVariable Integer id,
       @AuthenticationPrincipal AuthenticatedUser currentUser
@@ -66,7 +64,7 @@ public class ReviewController {
     if (currentUser == null) {
       throw new ValidationException("User is not authenticated");
     }
-    if (currentUser.getRole() == UserRole.ROLE_ADMIN) {
+    if (currentUser.getRole() == RoleName.ADMIN) {
       reviewService.deleteReviewAsAdmin(id);
       return;
     }

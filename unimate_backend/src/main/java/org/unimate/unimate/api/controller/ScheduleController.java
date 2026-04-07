@@ -25,7 +25,7 @@ public class ScheduleController {
   ScheduleService scheduleService;
 
   @PostMapping
-  @PreAuthorize("hasRole('USER')")
+  @PreAuthorize("hasRole('CHIEF') || hasRole('ADMIN')")
   public ScheduleResponse create(
       @Valid @RequestBody ScheduleRequest request,
       @AuthenticationPrincipal AuthenticatedUser currentUser
@@ -37,7 +37,6 @@ public class ScheduleController {
   }
 
   @GetMapping
-  @PreAuthorize("hasRole('USER')")
   public List<ScheduleResponse> list(
       @AuthenticationPrincipal AuthenticatedUser currentUser
   ) {
@@ -48,7 +47,7 @@ public class ScheduleController {
   }
 
   @PutMapping("/{id}")
-  @PreAuthorize("hasRole('ADMIN') or @authorizationService.ownsSchedule(#id)")
+  @PreAuthorize("hasRole('CHIEF') || hasRole('ADMIN')")
   public ScheduleResponse update(
       @PathVariable Integer id,
       @Valid @RequestBody ScheduleRequest request
@@ -57,7 +56,7 @@ public class ScheduleController {
   }
 
   @DeleteMapping("/{id}")
-  @PreAuthorize("hasRole('ADMIN') or @authorizationService.ownsSchedule(#id)")
+  @PreAuthorize("hasRole('CHIEF') || hasRole('ADMIN')")
   public void delete(@PathVariable Integer id) {
     scheduleService.delete(id);
   }
