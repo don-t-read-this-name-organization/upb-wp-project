@@ -1,7 +1,7 @@
 databaseChangeLog:
   - changeSet:
       id: "25-add-user-security-columns"
-      author: "codex"
+      author: "demesup"
       changes:
         - addColumn:
             tableName: users

@@ -1,7 +1,7 @@
 databaseChangeLog:
   - changeSet:
       id: "23-create-timetables-table"
-      author: "codex"
+      author: "demesup"
       changes:
         - createTable:
             tableName: timetables

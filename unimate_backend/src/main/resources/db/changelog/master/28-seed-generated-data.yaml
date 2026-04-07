@@ -1,7 +1,7 @@
 databaseChangeLog:
   - changeSet:
       id: "28-seed-generated-data"
-      author: "codex"
+      author: "demesup"
       changes:
         - sql:
             splitStatements: true

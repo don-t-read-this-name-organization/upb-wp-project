@@ -1,0 +1,52 @@
+databaseChangeLog:
+  - changeSet:
+      id: "30-migrate-timetables-to-faculty"
+      author: "demesup"
+      changes:
+        # Drop old foreign key and index
+        - dropForeignKeyConstraint:
+            baseTableName: timetables
+            constraintName: fk_timetables_user
+        - dropIndex:
+            tableName: timetables
+            indexName: idx_timetables_user_active
+
+        # Drop old user_id column
+        - dropColumn:
+            tableName: timetables
+            columnName: user_id
+
+        # Add faculty_id column
+        - addColumn:
+            tableName: timetables
+            columns:
+              - column:
+                  name: faculty_id
+                  type: INT
+                  constraints:
+                    nullable: false
+                  afterColumn: id
+
+        # Create new index on faculty_id and active
+        - createIndex:
+            tableName: timetables
+            indexName: idx_timetables_faculty_active
+            columns:
+              - column:
+                  name: faculty_id
+              - column:
+                  name: active
+
+        # Add unique constraint on faculty_id (one timetable per faculty)
+        - addUniqueConstraint:
+            tableName: timetables
+            columnNames: faculty_id, active
+            constraintName: uq_timetables_faculty_active
+
+        # Add foreign key to faculties
+        - addForeignKeyConstraint:
+            baseTableName: timetables
+            baseColumnNames: faculty_id
+            referencedTableName: faculties
+            referencedColumnNames: id
+            constraintName: fk_timetables_faculty

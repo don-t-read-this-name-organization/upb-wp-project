@@ -4,7 +4,7 @@ databaseChangeLog:
       author: "frihetselsker"
       changes:
         - insert:
-            tableName: groups
+            tableName: student_groups
             columns:
               - column:
                   name: name
@@ -16,7 +16,7 @@ databaseChangeLog:
                   name: faculty_id
                   valueNumeric: 12
         - insert:
-            tableName: groups
+            tableName: student_groups
             columns:
               - column:
                   name: name
@@ -28,7 +28,7 @@ databaseChangeLog:
                   name: faculty_id
                   valueNumeric: 12
         - insert:
-            tableName: groups
+            tableName: student_groups
             columns:
               - column:
                   name: name
@@ -40,7 +40,7 @@ databaseChangeLog:
                   name: faculty_id
                   valueNumeric: 12
         - insert:
-            tableName: groups
+            tableName: student_groups
             columns:
               - column:
                   name: name
@@ -52,7 +52,7 @@ databaseChangeLog:
                   name: faculty_id
                   valueNumeric: 12
         - insert:
-            tableName: groups
+            tableName: student_groups
             columns:
               - column:
                   name: name
