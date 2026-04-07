@@ -3,6 +3,8 @@ package org.unimate.unimate.api.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.unimate.unimate.api.dto.news.request.NewsPieceRequest;
 import org.unimate.unimate.api.dto.news.response.NewsPieceResponse;
@@ -30,16 +32,19 @@ public class NewsController {
     }
 
     @GetMapping
+    @PreAuthorize("permitAll()")
     public List<NewsPieceResponse> list() {
         return newsService.findAll();
     }
 
     @GetMapping("/latest")
+    @PreAuthorize("permitAll()")
     public List<NewsPieceResponse> listLatest(@RequestParam(defaultValue = "10") int limit) {
         return newsService.findLatest(limit);
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("permitAll()")
     public NewsPieceResponse getById(@PathVariable Integer id) {
         return newsService.findById(id);
     }

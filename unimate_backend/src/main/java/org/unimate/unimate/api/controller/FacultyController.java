@@ -2,6 +2,7 @@ package org.unimate.unimate.api.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.unimate.unimate.api.dto.faculty.response.FacultyResponse;
 import org.unimate.unimate.domain.entities.Faculty;
@@ -20,6 +21,7 @@ public class FacultyController {
     FacultyService facultyService;
 
     @GetMapping
+    @PreAuthorize("permitAll()")
     public List<FacultyResponse> getAll(@RequestParam(required = false, defaultValue = "en") String lang) {
         return facultyService.findWithTranslation(lang).stream()
             .map(FacultyResponse::fromEntity)
@@ -27,6 +29,7 @@ public class FacultyController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("permitAll()")
     public FacultyResponse getById(@PathVariable Integer id, @RequestParam(required = false, defaultValue = "en") String lang) {
         return facultyService.findByIdWithTranslation(id, lang)
             .map(FacultyResponse::fromEntity)

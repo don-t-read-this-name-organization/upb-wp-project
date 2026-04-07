@@ -3,6 +3,8 @@ package org.unimate.unimate.api.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.unimate.unimate.api.dto.quote.request.QuoteRequest;
 import org.unimate.unimate.api.dto.quote.response.QuoteResponse;
@@ -29,11 +31,13 @@ public class QuoteController {
     }
 
     @GetMapping
+    @PreAuthorize("permitAll()")
     public List<QuoteResponse> list() {
         return quoteService.findAll().stream().map(QuoteResponse::fromEntity).toList();
     }
 
     @GetMapping("/random")
+    @PreAuthorize("permitAll()")
     public List<QuoteResponse> getRandomQuotes(@RequestParam(defaultValue = "1") int number) {
         return quoteService.findNRandomQuotes(number).stream().map(QuoteResponse::fromEntity).toList();
     }
@@ -54,6 +58,7 @@ public class QuoteController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("permitAll()")
     public QuoteResponse getById(@PathVariable Integer id) {
         return quoteService.findAll().stream()
                 .filter(q -> q.getId().equals(id))
