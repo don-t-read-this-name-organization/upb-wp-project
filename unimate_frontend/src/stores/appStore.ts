@@ -1,11 +1,6 @@
-import { defineStore } from 'pinia'
+﻿import { defineStore } from 'pinia'
 import { i18n } from '@/i18n'
 import { clearAuthTokens } from '@/utils/apiClient'
-
-const getInitialLanguage = () => {
-  const stored = localStorage.getItem('language')
-  return stored || 'en'
-}
 
 const getInitialLanguage = () => {
   const stored = localStorage.getItem('language')
@@ -52,10 +47,7 @@ export const useAppStore = defineStore('app', {
     logout() {
       this.user = null
       localStorage.removeItem('user')
-<<<<<<< Updated upstream
-=======
       clearAuthTokens()
->>>>>>> Stashed changes
       window.location.href = '/login'
     },
   },

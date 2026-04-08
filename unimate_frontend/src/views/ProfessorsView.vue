@@ -1,72 +1,15 @@
-<script setup lang="ts">
-<<<<<<< Updated upstream
-import { ref } from 'vue'
-import { useI18n } from 'vue-i18n'
-=======
+﻿<script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useAppStore } from '@/stores/appStore'
->>>>>>> Stashed changes
 import ProfessorCard from '@/components/ProfessorCard.vue'
 import BaseModal from '@/components/BaseModal.vue'
 
-<<<<<<< Updated upstream
-const { t } = useI18n()
-
-const decanatStaff = ref([
-  {
-    name: 'Name1',
-    title: 'Dean, FILS',
-    email: 'mail1@example.com',
-    phone: '+40 21 000 0001',
-    hours: 'Mon, Wed 14:00-16:00',
-    room: 'Bldg X, Rm 101',
-    color: '4a90e2',
-    initials: 'N1',
-  },
-  {
-    name: 'Name2',
-    title: 'Vice-Dean',
-    email: 'mail2@example.com',
-    phone: '+40 21 000 0002',
-    hours: 'Tue, Thu 10:00-12:00',
-    room: 'Bldg X, Rm 102',
-    color: '50c878',
-    initials: 'N2',
-  },
-])
-
-const teachingStaff = ref([
-  {
-    name: 'Name5',
-    title: 'Computer Science',
-    email: 'mail5@example.com',
-    hours: 'Wed 15:00-17:00',
-    room: 'FILS, Lab 201',
-    color: '6f42c1',
-    initials: 'P1',
-  },
-  {
-    name: 'Name6',
-    title: 'Mathematics',
-    email: 'mail6@example.com',
-    hours: 'Tue 10:00-12:00',
-    room: 'FILS, Rm 105',
-    color: '20c997',
-    initials: 'P2',
-  },
-])
-
-const scrollCarousel = (id: string, distance: number) => {
-  const el = document.getElementById(id)
-  if (el) el.scrollBy({ left: distance, behavior: 'smooth' })
-=======
 interface Professor {
   id: number
   name: string
   department: string | null
   faculty: string | null
->>>>>>> Stashed changes
 }
 
 interface RatingStats {
@@ -252,33 +195,6 @@ onMounted(fetchProfessors)
   <main class="main-content">
     <div class="prof-layout">
       <div class="carousels-container">
-<<<<<<< Updated upstream
-        <h3 class="section-title">🎓 {{ t('professors.deansOffice') }}</h3>
-        <div class="carousel-wrapper">
-          <button class="carousel-nav prev" @click="scrollCarousel('decanat-carousel', -300)">
-            <i class="fas fa-chevron-left"></i>
-          </button>
-          <div class="carousel" id="decanat-carousel">
-            <ProfessorCard v-for="prof in decanatStaff" :key="prof.name" :prof="prof" />
-          </div>
-          <button class="carousel-nav next" @click="scrollCarousel('decanat-carousel', 300)">
-            <i class="fas fa-chevron-right"></i>
-          </button>
-        </div>
-
-        <h3 class="section-title">{{ t('professors.professorsStaff') }}</h3>
-        <div class="carousel-wrapper">
-          <button class="carousel-nav prev" @click="scrollCarousel('prof-carousel', -300)">
-            <i class="fas fa-chevron-left"></i>
-          </button>
-          <div class="carousel" id="prof-carousel">
-            <ProfessorCard v-for="prof in teachingStaff" :key="prof.name" :prof="prof" />
-          </div>
-          <button class="carousel-nav next" @click="scrollCarousel('prof-carousel', 300)">
-            <i class="fas fa-chevron-right"></i>
-          </button>
-        </div>
-=======
         <div v-if="error" class="error-alert">{{ error }}</div>
         <div v-if="loading" class="loading">{{ t('common.loading') }}</div>
 
@@ -310,24 +226,15 @@ onMounted(fetchProfessors)
             </div>
           </div>
         </template>
->>>>>>> Stashed changes
       </div>
 
       <aside class="prof-sidebar">
         <div class="card">
-<<<<<<< Updated upstream
-          <!-- The Dean's Office vs. Deanery? -->
-=======
->>>>>>> Stashed changes
           <h3 class="card-title">{{ t('professors.secretariat') }}</h3>
 
           <div class="info-box">
             <h4><i class="fas fa-map-marker-alt"></i> {{ t('professors.location') }}</h4>
-<<<<<<< Updated upstream
-            <p>FILS Building, Politehnica University<br />313 Splaiul Independenței, Bucharest</p>
-=======
             <p>FILS Building, Politehnica University<br />313 Splaiul Independentei, Bucharest</p>
->>>>>>> Stashed changes
           </div>
 
           <div class="info-box">
@@ -430,28 +337,12 @@ onMounted(fetchProfessors)
 .carousel-wrapper {
   position: relative;
 }
-<<<<<<< Updated upstream
-=======
 
->>>>>>> Stashed changes
 .carousel {
   display: grid;
   grid-template-columns: repeat(6, minmax(160px, 1fr));
   gap: 1.5rem;
-<<<<<<< Updated upstream
-  overflow-x: auto;
-  scroll-behavior: smooth;
-  padding: 1rem 0.5rem;
-}
-.carousel::-webkit-scrollbar {
-  height: 6px;
-}
-.carousel::-webkit-scrollbar-thumb {
-  background: var(--primary-color);
-  border-radius: 3px;
-=======
   padding: 1rem 0.25rem;
->>>>>>> Stashed changes
 }
 
 .prof-wrap {
@@ -460,13 +351,6 @@ onMounted(fetchProfessors)
   gap: 0.5rem;
   align-items: stretch;
 }
-<<<<<<< Updated upstream
-.carousel-nav.prev {
-  left: -20px;
-}
-.carousel-nav.next {
-  right: -20px;
-=======
 
 .review-btn {
   font-size: 0.8rem;
@@ -482,7 +366,6 @@ onMounted(fetchProfessors)
 .rating-value {
   font-size: 0.8rem;
   color: var(--text-muted);
->>>>>>> Stashed changes
 }
 
 .info-box {
@@ -491,40 +374,12 @@ onMounted(fetchProfessors)
   padding: 1rem;
   margin-bottom: 1rem;
 }
-<<<<<<< Updated upstream
-=======
 
->>>>>>> Stashed changes
 .info-box h4 {
   color: var(--primary-color);
   margin-bottom: 0.5rem;
 }
 
-<<<<<<< Updated upstream
-.prof-card {
-  min-width: 220px;
-  background-color: var(--card-bg);
-  border-radius: var(--radius);
-  padding: 1.5rem;
-  text-align: center;
-  border: 1px solid var(--border-light);
-  box-shadow: var(--shadow-sm);
-  transition: var(--transition);
-}
-
-.prof-card:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow);
-}
-
-.prof-photo {
-  width: 88px;
-  height: 88px;
-  border-radius: 50%;
-  object-fit: cover;
-  margin-bottom: 1rem;
-  border: 2px solid var(--border-color);
-=======
 .reviews-list {
   display: grid;
   gap: 0.75rem;
@@ -580,7 +435,6 @@ onMounted(fetchProfessors)
 .error-text {
   color: #dc3545;
   margin-bottom: 0.5rem;
->>>>>>> Stashed changes
 }
 
 @media (max-width: 992px) {
@@ -588,8 +442,6 @@ onMounted(fetchProfessors)
     grid-template-columns: 1fr;
   }
 }
-<<<<<<< Updated upstream
-=======
 
 @media (max-width: 1600px) {
   .carousel {
@@ -620,5 +472,4 @@ onMounted(fetchProfessors)
     grid-template-columns: 1fr;
   }
 }
->>>>>>> Stashed changes
 </style>

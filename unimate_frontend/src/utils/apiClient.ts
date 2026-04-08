@@ -2,6 +2,11 @@ const ACCESS_TOKEN_KEY = 'accessToken'
 const REFRESH_TOKEN_KEY = 'refreshToken'
 const LEGACY_TOKEN_KEY = 'token'
 
+function looksLikeJwt(token: string): boolean {
+  // Basic shape check: header.payload.signature
+  return token.split('.').length === 3
+}
+
 function getCookie(name: string): string | null {
   const cookies = document.cookie ? document.cookie.split('; ') : []
   for (const cookie of cookies) {
@@ -14,7 +19,17 @@ function getCookie(name: string): string | null {
 }
 
 export function getAccessToken(): string | null {
-  return localStorage.getItem(ACCESS_TOKEN_KEY) || localStorage.getItem(LEGACY_TOKEN_KEY)
+  const accessToken = localStorage.getItem(ACCESS_TOKEN_KEY)
+  if (accessToken && looksLikeJwt(accessToken)) {
+    return accessToken
+  }
+
+  const legacyToken = localStorage.getItem(LEGACY_TOKEN_KEY)
+  if (legacyToken && looksLikeJwt(legacyToken)) {
+    return legacyToken
+  }
+
+  return null
 }
 
 export function getRefreshToken(): string | null {

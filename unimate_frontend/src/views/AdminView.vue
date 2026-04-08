@@ -1,12 +1,9 @@
-<script setup lang="ts">
+﻿<script setup lang="ts">
 import { ref, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useAppStore } from '@/stores/appStore'
-<<<<<<< Updated upstream
-=======
 import BaseModal from '@/components/BaseModal.vue'
->>>>>>> Stashed changes
 
 const router = useRouter()
 const { t } = useI18n()
@@ -185,10 +182,6 @@ const closeModal = () => {
 
 const handleSubmit = async () => {
   error.value = ''
-<<<<<<< Updated upstream
-  const token = localStorage.getItem('token')
-=======
->>>>>>> Stashed changes
   const url = editingUser.value ? `/api/users/${editingUser.value.id}` : '/api/users'
   const method = editingUser.value ? 'PUT' : 'POST'
 
@@ -197,10 +190,6 @@ const handleSubmit = async () => {
       method,
       headers: {
         'Content-Type': 'application/json',
-<<<<<<< Updated upstream
-        Authorization: `Basic ${token}`,
-=======
->>>>>>> Stashed changes
       },
       body: JSON.stringify(form.value),
     })
@@ -218,19 +207,9 @@ const handleSubmit = async () => {
 const deleteUser = async (user: User) => {
   showConfirm(t('common.confirm') + ` "${user.username}"?`, async () => {
     error.value = ''
-<<<<<<< Updated upstream
-    const token = localStorage.getItem('token')
     try {
       const response = await fetch(`/api/users/${user.id}`, {
         method: 'DELETE',
-        headers: {
-          Authorization: `Basic ${token}`,
-        },
-=======
-    try {
-      const response = await fetch(`/api/users/${user.id}`, {
-        method: 'DELETE',
->>>>>>> Stashed changes
       })
       if (!response.ok) throw new Error('Delete failed')
       await fetchUsers()
@@ -489,11 +468,7 @@ onMounted(() => {
       </div>
     </div>
 
-<<<<<<< Updated upstream
-    <div v-if="showModal" class="modal-overlay" @click.self="closeModal">
-=======
     <BaseModal v-model="showModal" size="md" :show-close="false" @close="closeModal">
->>>>>>> Stashed changes
       <div class="modal-content">
         <div class="modal-header">
           <h3>{{ editingUser ? t('admin.editUser') : t('admin.addNewUser') }}</h3>
@@ -567,15 +542,9 @@ onMounted(() => {
           </div>
         </form>
       </div>
-<<<<<<< Updated upstream
-    </div>
-
-    <div v-if="showConfirmModal" class="modal-overlay" @click.self="handleConfirmCancel">
-=======
     </BaseModal>
 
     <BaseModal v-model="showConfirmModal" size="sm" :show-close="false" @close="handleConfirmCancel">
->>>>>>> Stashed changes
       <div class="modal">
         <div class="modal-header">
           <h3><i class="fas fa-question-circle"></i> {{ t('common.confirm') }}</h3>
@@ -595,15 +564,9 @@ onMounted(() => {
           </button>
         </div>
       </div>
-<<<<<<< Updated upstream
-    </div>
-
-    <div v-if="showAlertModal" class="modal-overlay" @click.self="showAlertModal = false">
-=======
     </BaseModal>
 
     <BaseModal v-model="showAlertModal" size="sm" :show-close="false">
->>>>>>> Stashed changes
       <div class="modal">
         <div class="modal-header">
           <h3><i class="fas fa-info-circle"></i> {{ t('common.error') }}</h3>
@@ -620,11 +583,7 @@ onMounted(() => {
           </button>
         </div>
       </div>
-<<<<<<< Updated upstream
-    </div>
-=======
     </BaseModal>
->>>>>>> Stashed changes
   </main>
 </template>
 
@@ -835,22 +794,6 @@ onMounted(() => {
   margin-top: 0.25rem;
 }
 
-<<<<<<< Updated upstream
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-}
-
-=======
->>>>>>> Stashed changes
 .modal {
   background: var(--card-bg);
   border-radius: var(--radius);
@@ -1007,7 +950,4 @@ onMounted(() => {
 }
 
 </style>
-<<<<<<< Updated upstream
-=======
 
->>>>>>> Stashed changes

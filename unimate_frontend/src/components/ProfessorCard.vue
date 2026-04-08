@@ -1,22 +1,15 @@
-<script setup lang="ts">
+﻿<script setup lang="ts">
 import { ref, watch } from 'vue'
 
 const props = defineProps<{
   prof: {
     name: string
     title: string
-<<<<<<< Updated upstream
-    email: string
-    phone?: string
-    hours: string
-    room: string
-=======
     email?: string
     phone?: string
     hours?: string
     room?: string
     imageUrl?: string
->>>>>>> Stashed changes
     color: string
     initials: string
   }
@@ -79,29 +72,14 @@ function onImageError() {
 <template>
   <div class="prof-card">
     <img
-<<<<<<< Updated upstream
-      :src="`https://via.placeholder.com/100/${prof.color}/ffffff?text=${prof.initials}`"
-      class="prof-photo"
-      :alt="prof.name"
-=======
       :src="imageSrc"
       class="prof-photo"
       :alt="prof.name"
       @error="onImageError"
->>>>>>> Stashed changes
     />
     <div class="prof-name">{{ prof.name }}</div>
     <div class="prof-title">{{ prof.title }}</div>
     <div class="prof-contact">
-<<<<<<< Updated upstream
-      <a :href="`mailto:${prof.email}`"> <i class="fas fa-envelope"></i> {{ prof.email }} </a>
-      <a v-if="prof.phone" :href="`tel:${prof.phone.replace(/\s/g, '')}`">
-        <i class="fas fa-phone"></i> {{ prof.phone }}
-      </a>
-      <div class="office-hours">
-        🕐 {{ prof.hours }}<br />
-        📍 {{ prof.room }}
-=======
       <a v-if="prof.email" :href="`mailto:${prof.email}`"> <i class="fas fa-envelope"></i> {{ prof.email }} </a>
       <a v-if="prof.phone" :href="`tel:${prof.phone.replace(/\s/g, '')}`">
         <i class="fas fa-phone"></i> {{ prof.phone }}
@@ -109,7 +87,6 @@ function onImageError() {
       <div v-if="prof.hours || prof.room" class="office-hours">
         <span v-if="prof.hours">Hours: {{ prof.hours }}</span><br v-if="prof.hours && prof.room" />
         <span v-if="prof.room">Room: {{ prof.room }}</span>
->>>>>>> Stashed changes
       </div>
     </div>
   </div>

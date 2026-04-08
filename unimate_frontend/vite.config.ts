@@ -18,11 +18,11 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'http://localhost:8888',
+        target: process.env.VITE_API_SERVER || 'http://localhost:8888',
         changeOrigin: true,
       },
       '/uploads': {
-        target: 'http://localhost:8888',
+        target: process.env.VITE_API_SERVER || 'http://localhost:8888',
         changeOrigin: true,
       }
     }
