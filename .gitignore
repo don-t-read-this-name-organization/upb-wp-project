@@ -1,7 +1,47 @@
-node_modules
+# Environment variables
+.env
+.env.local
+.env.*.local
+unimate_backend/.env
+unimate_backend/.env.local
+unimate_frontend/.env
+unimate_frontend/.env.local
 
-# Logs
-unimate_frontend/logs
+# IDE
+.idea/
+.vscode/*
+!.vscode/extensions.json
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# OS
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+env/
+ENV/
+
+# Frontend (Vue/Vite)
+unimate_frontend/node_modules/
+unimate_frontend/dist/
+unimate_frontend/dist-ssr/
+unimate_frontend/coverage/
+unimate_frontend/*.local
+unimate_frontend/*.tsbuildinfo
+unimate_frontend/.eslintcache
+unimate_frontend/logs/
 unimate_frontend/*.log
 unimate_frontend/npm-debug.log*
 unimate_frontend/yarn-debug.log*
@@ -9,41 +49,21 @@ unimate_frontend/yarn-error.log*
 unimate_frontend/pnpm-debug.log*
 unimate_frontend/lerna-debug.log*
 
-unimate_frontend/node_modules
-unimate_frontend/.DS_Store
-unimate_frontend/dist
-unimate_frontend/dist-ssr
-unimate_frontend/coverage
-unimate_frontend/*.local
-
-# Editor directories and files
-unimate_frontend/.vscode/*
-!unimate_frontend/.vscode/extensions.json
-unimate_frontend/.idea
-unimate_frontend/*.suo
-unimate_frontend/*.ntvs*
-unimate_frontend/*.njsproj
-unimate_frontend/*.sln
-unimate_frontend/*.sw?
-
-unimate_frontend/*.tsbuildinfo
-
-unimate_frontend/.eslintcache
-
-# Cypress
+# Frontend: Cypress & Testing
 unimate_frontend/cypress/videos/
 unimate_frontend/cypress/screenshots/
-
-# Vitest
 unimate_frontend/__screenshots__/
 
-# Vite
+# Frontend: Vite
 unimate_frontend/*.timestamp-*-*.mjs
-# Maven / Spring Boot
+
+# Backend (Maven/Spring Boot)
 unimate_backend/target/
-
+unimate_backend/.mvn/
 unimate_backend/*.iml
+unimate_backend/node_modules/
+unimate_backend/logs/
 
-# Logs
+# General logs
 *.log
 
