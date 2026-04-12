@@ -74,7 +74,7 @@ async function refreshAccessToken(rawFetch: typeof window.fetch): Promise<string
   if (!refreshPromise) {
     refreshPromise = (async () => {
       try {
-        const response = await rawFetch('/api/auth/refresh', {
+        const response = await rawFetch('/api/auth/refresh-token', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ refreshToken }),
@@ -132,7 +132,7 @@ export function setupApiClient(): void {
     const response = await rawFetch(input, requestInit)
     if (
       response.status === 401 &&
-      requestUrl !== '/api/auth/refresh' &&
+      requestUrl !== '/api/auth/refresh-token' &&
       !headers.has('X-Auth-Retried') &&
       getRefreshToken()
     ) {

@@ -28,6 +28,7 @@ public class FileController {
     final FileService fileService;
 
     @GetMapping
+    @PreAuthorize("hasRole('ADMIN') or @authorizationService.isCurrentUser(#userId)")
     public ResponseEntity<List<FileResponse>> getFiles(
             @RequestParam Integer userId,
             @RequestParam(required = false) String fileType,
@@ -42,6 +43,7 @@ public class FileController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN') or @authorizationService.ownsFile(#id)")
     public ResponseEntity<FileResponse> getFile(@PathVariable Integer id) {
         FileResponse file = fileService.findById(id);
         if (file == null) {
@@ -51,6 +53,7 @@ public class FileController {
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN') or @authorizationService.isCurrentUser(#userId)")
     public ResponseEntity<FileResponse> uploadFile(
             @RequestParam Integer userId,
             @RequestParam("file") MultipartFile file,
@@ -70,6 +73,7 @@ public class FileController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN') or @authorizationService.ownsFile(#id)")
     public ResponseEntity<FileResponse> updateFile(
             @PathVariable Integer id,
             @RequestBody FileRequest request) {
@@ -83,6 +87,7 @@ public class FileController {
     }
 
     @GetMapping("/{id}/download")
+    @PreAuthorize("hasRole('ADMIN') or @authorizationService.ownsFile(#id)")
     public ResponseEntity<Resource> downloadFile(@PathVariable Integer id) throws IOException {
         FileResponse file = fileService.findById(id);
         if (file == null) {
@@ -101,12 +106,14 @@ public class FileController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN') or @authorizationService.ownsFile(#id)")
     public ResponseEntity<Void> deleteFile(@PathVariable Integer id) {
         fileService.delete(id);
         return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/by-filename")
+    @PreAuthorize("hasRole('ADMIN') or @authorizationService.isCurrentUser(#userId)")
     public ResponseEntity<Void> deleteFileByFilename(
             @RequestParam Integer userId,
             @RequestParam String filename) {

@@ -3,6 +3,7 @@ package org.unimate.unimate.api.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -44,51 +45,68 @@ public class UserController {
 
 
   @GetMapping("/{id}")
+  @PreAuthorize("hasRole('ADMIN') or @authorizationService.isCurrentUser(#id)")
   public UserResponse getById(@PathVariable Integer id) {
     return userService.findById(id).map(UserResponse::fromEntity)
         .orElseThrow(() -> new NotFoundException("User", id));
   }
 
   @GetMapping
+  @PreAuthorize("hasRole('ADMIN')")
   public List<UserResponse> list() {
     return userService.findAll().stream().map(UserResponse::fromEntity).toList();
   }
 
   @PutMapping("/{id}")
+  @PreAuthorize("hasRole('ADMIN') or @authorizationService.isCurrentUser(#id)")
   public UserResponse update(
       @PathVariable Integer id,
       @RequestBody UserRequest request,
       @AuthenticationPrincipal AuthenticatedUser currentUser
   ) {
+    if (currentUser == null) {
+      throw new ValidationException("User is not authenticated");
+    }
+
+    boolean isAdmin = currentUser.getRole() == RoleName.ADMIN;
+    if (!isAdmin && !currentUser.getId().equals(id)) {
+      throw new AccessDeniedException("You can only update your own user");
+    }
+
     User user = userService.findById(id).orElseThrow(() -> new NotFoundException("User", id));
-    if (currentUser != null && currentUser.getRole() != RoleName.ADMIN) {
+    if (!isAdmin) {
       request.setRole(user.getRole());
     }
     return userService.update(user, request);
   }
 
   @DeleteMapping("/{id}")
+  @PreAuthorize("hasRole('ADMIN')")
   public void delete(@PathVariable Integer id) {
     User user = userService.findById(id).orElseThrow(() -> new NotFoundException("User", id));
     userService.delete(user);
   }
 
   @GetMapping("/pending")
+  @PreAuthorize("hasRole('ADMIN')")
   public List<UserResponse> listPending() {
     return userService.findPendingUsers().stream().map(UserResponse::fromEntity).toList();
   }
 
   @PostMapping("/{id}/approve")
+  @PreAuthorize("hasRole('ADMIN')")
   public UserResponse approve(@PathVariable Integer id) {
     return userService.approveUser(id);
   }
 
   @PostMapping("/{id}/reject")
+  @PreAuthorize("hasRole('ADMIN')")
   public void reject(@PathVariable Integer id) {
     userService.rejectUser(id);
   }
 
   @PostMapping("/{id}/change-password")
+  @PreAuthorize("hasRole('ADMIN') or @authorizationService.isCurrentUser(#id)")
   public ResponseEntity<?> changePassword(@PathVariable Integer id, @RequestBody Map<String, String> request) {
     try {
       String oldPassword = request.get("oldPassword");

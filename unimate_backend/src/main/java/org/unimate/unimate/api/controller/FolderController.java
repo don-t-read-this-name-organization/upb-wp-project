@@ -21,6 +21,7 @@ public class FolderController {
     }
 
     @GetMapping
+    @PreAuthorize("hasRole('ADMIN') or @authorizationService.isCurrentUser(#userId)")
     public ResponseEntity<List<FolderResponse>> getFolders(
             @RequestParam Integer userId,
             @RequestParam(required = false) Integer parentId) {
@@ -35,6 +36,7 @@ public class FolderController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN') or (@authorizationService.isCurrentUser(#userId) and @authorizationService.ownsFolder(#id))")
     public ResponseEntity<FolderResponse> getFolder(@PathVariable Integer id, @RequestParam Integer userId) {
         FolderResponse folder = folderService.findById(id, userId);
         if (folder == null) {
@@ -44,6 +46,7 @@ public class FolderController {
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN') or @authorizationService.isCurrentUser(#userId)")
     public ResponseEntity<FolderResponse> createFolder(
             @RequestParam Integer userId,
             @RequestBody FolderRequest request) {
@@ -52,6 +55,7 @@ public class FolderController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN') or (@authorizationService.isCurrentUser(#userId) and @authorizationService.ownsFolder(#id))")
     public ResponseEntity<FolderResponse> updateFolder(
             @PathVariable Integer id,
             @RequestParam Integer userId,
@@ -61,6 +65,7 @@ public class FolderController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN') or (@authorizationService.isCurrentUser(#userId) and @authorizationService.ownsFolder(#id))")
     public ResponseEntity<Void> deleteFolder(@PathVariable Integer id, @RequestParam Integer userId) {
         folderService.delete(id, userId);
         return ResponseEntity.noContent().build();

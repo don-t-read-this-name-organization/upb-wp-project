@@ -18,13 +18,11 @@ const router = createRouter({
       path: '/links',
       name: 'links',
       component: () => import('../views/LinksView.vue'),
-      meta: { requiresAuth: true },
     },
     {
       path: '/professors',
       name: 'professors',
       component: () => import('../views/ProfessorsView.vue'),
-      meta: { requiresAuth: true },
     },
     {
       path: '/kanban',
@@ -97,13 +95,13 @@ router.beforeEach((to, from, next) => {
     next('/admin')
   } else if (to.meta.requiresAdmin) {
     if (!isAdmin) {
-      next('/')
+      next(isLoggedIn ? '/' : '/login')
     } else {
       next()
     }
   } else if (to.meta.requiresAuth) {
-    if (!isLoggedIn || isAdmin) {
-      next('/')
+    if (!isLoggedIn) {
+      next('/login')
     } else {
       next()
     }

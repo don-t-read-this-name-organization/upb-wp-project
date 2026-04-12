@@ -40,6 +40,7 @@ public class ProfessorController {
   }
 
   @PostMapping
+  @PreAuthorize("hasRole('ADMIN')")
   public ProfessorResponse create(@Valid @RequestBody ProfessorRequest request) {
     return ProfessorResponse.fromEntity(
         professorService.create(
@@ -51,6 +52,7 @@ public class ProfessorController {
   }
 
   @PutMapping("/{id}")
+  @PreAuthorize("hasRole('ADMIN')")
   public ProfessorResponse update(@PathVariable Integer id, @Valid @RequestBody ProfessorRequest request) {
     return ProfessorResponse.fromEntity(
         professorService.update(
@@ -63,6 +65,7 @@ public class ProfessorController {
   }
 
   @DeleteMapping("/{id}")
+  @PreAuthorize("hasRole('ADMIN')")
   public void delete(@PathVariable Integer id) {
     professorService.delete(id);
   }

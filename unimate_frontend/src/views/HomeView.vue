@@ -1,4 +1,4 @@
-﻿<script setup lang="ts">
+<script setup lang="ts">
 import { ref, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
@@ -189,7 +189,7 @@ const nextMap = () => {
 
     <div v-if="showQuotes" class="bottom-panel" :class="{ collapsed: isPanelCollapsed }">
       <button class="panel-toggle" @click="togglePanel" aria-label="Toggle panel">
-        <span class="arrow">{{ isPanelCollapsed ? 'в–ј' : 'в–І' }}</span>
+        <span class="arrow">{{ isPanelCollapsed ? '▼' : '▲' }}</span>
         <span>{{ t('weatherQuote') }}</span>
       </button>
       <div class="panel-content">
@@ -528,4 +528,3 @@ const nextMap = () => {
   color: var(--primary-color);
 }
 </style>
-

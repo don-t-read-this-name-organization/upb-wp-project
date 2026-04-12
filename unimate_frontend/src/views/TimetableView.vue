@@ -1,4 +1,4 @@
-﻿<script setup lang="ts">
+<script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useAppStore } from '@/stores/appStore'
@@ -279,7 +279,7 @@ onMounted(() => {
         <div class="header-actions">
           <span class="group-badge">{{ t('timetable.group') }}: {{ group }}</span>
           <button v-if="store.isChief || store.isAdmin" class="btn btn-secondary" @click="openCreateModal">
-            <i class="fas fa-plus"></i> {{ t('kanban.addTask') }}
+            <i class="fas fa-plus"></i> {{ t('timetable.addEntry') }}
           </button>
         </div>
       </div>
@@ -317,7 +317,7 @@ onMounted(() => {
           <tbody v-else>
             <tr>
               <td :colspan="dayKeys.length + 1" class="empty-row">
-                {{ loading ? t('common.loading') : t('notes.noNotes') }}
+                {{ loading ? t('common.loading') : t('timetable.noEntries') }}
               </td>
             </tr>
           </tbody>

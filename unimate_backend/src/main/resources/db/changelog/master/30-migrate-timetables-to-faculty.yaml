@@ -11,23 +11,34 @@ databaseChangeLog:
             tableName: timetables
             indexName: idx_timetables_user_active
 
-        # Drop old user_id column
-        - dropColumn:
-            tableName: timetables
-            columnName: user_id
-
-        # Add faculty_id column
+        # Add faculty_id column (nullable initially for data migration)
         - addColumn:
             tableName: timetables
             columns:
               - column:
                   name: faculty_id
                   type: INT
-                  constraints:
-                    nullable: false
                   afterColumn: id
 
-        # Create new index on faculty_id and active
+        # Backfill from previous owner (user -> faculty) before enforcing NOT NULL
+        - sql:
+            sql: |
+              UPDATE timetables t
+              JOIN users u ON u.id = t.user_id
+              SET t.faculty_id = u.faculty_id
+              WHERE t.faculty_id IS NULL;
+
+        - addNotNullConstraint:
+            tableName: timetables
+            columnName: faculty_id
+            columnDataType: INT
+
+        # Drop old user_id column after migration
+        - dropColumn:
+            tableName: timetables
+            columnName: user_id
+
+        # Create non-unique lookup index
         - createIndex:
             tableName: timetables
             indexName: idx_timetables_faculty_active
@@ -37,11 +48,20 @@ databaseChangeLog:
               - column:
                   name: active
 
-        # Add unique constraint on faculty_id (one timetable per faculty)
-        - addUniqueConstraint:
+        # MySQL-compatible "partial unique index" equivalent:
+        # enforce uniqueness only for active rows via generated nullable column.
+        - sql:
+            sql: |
+              ALTER TABLE timetables
+              ADD COLUMN active_faculty_id INT
+              GENERATED ALWAYS AS (CASE WHEN active = 1 THEN faculty_id ELSE NULL END) STORED;
+        - createIndex:
             tableName: timetables
-            columnNames: faculty_id, active
-            constraintName: uq_timetables_faculty_active
+            indexName: uq_timetables_active_faculty
+            unique: true
+            columns:
+              - column:
+                  name: active_faculty_id
 
         # Add foreign key to faculties
         - addForeignKeyConstraint:

@@ -3,7 +3,6 @@ package org.unimate.unimate.api.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.unimate.unimate.api.dto.quote.request.QuoteRequest;
@@ -26,6 +25,7 @@ public class QuoteController {
     QuoteService quoteService;
 
     @PostMapping
+    @PreAuthorize("isAuthenticated()")
     public QuoteResponse create(@RequestBody QuoteRequest request) {
         return quoteService.createPending(request);
     }
@@ -43,16 +43,19 @@ public class QuoteController {
     }
 
     @GetMapping("/pending")
+    @PreAuthorize("hasRole('ADMIN')")
     public List<QuoteResponse> getPendingQuotes() {
         return quoteService.findAllPending().stream().map(QuoteResponse::fromEntity).toList();
     }
 
     @PostMapping("/{id}/approve")
+    @PreAuthorize("hasRole('ADMIN')")
     public QuoteResponse approve(@PathVariable Integer id) {
         return quoteService.approve(id);
     }
 
     @PostMapping("/{id}/reject")
+    @PreAuthorize("hasRole('ADMIN')")
     public void reject(@PathVariable Integer id) {
         quoteService.reject(id);
     }
@@ -68,6 +71,7 @@ public class QuoteController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public QuoteResponse update(@PathVariable Integer id, @RequestBody QuoteRequest request) {
         Quote quote = quoteService.findAll().stream()
                 .filter(q -> q.getId().equals(id))
@@ -77,6 +81,7 @@ public class QuoteController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public void delete(@PathVariable Integer id) {
         Quote quote = quoteService.findAll().stream()
                 .filter(q -> q.getId().equals(id))

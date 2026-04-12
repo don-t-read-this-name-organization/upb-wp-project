@@ -149,7 +149,7 @@ public class TimetableServiceImpl implements TimetableService {
 
     timetable.setActive(false);
     timetableRepository.save(timetable);
-    deletePhysicalFile(timetable.getFilePath());
+    registerDeleteAfterCommit(timetable.getFilePath());
     log.info("Timetable deleted for faculty {}", facultyId);
   }
 

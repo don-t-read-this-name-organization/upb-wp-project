@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted, computed, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { MdEditor } from 'md-editor-v3'
@@ -47,18 +47,24 @@ const languageIndex = computed(() => {
   return languages.indexOf(selectedLanguage.value)
 })
 
-function getTranslation(lang: string) {
-  const existing = form.value.translations.find((translation) => translation.language === lang)
-  if (existing) {
-    return existing
+function ensureTranslation(lang: string) {
+  const exists = form.value.translations.some((translation) => translation.language === lang)
+  if (!exists) {
+    form.value.translations.push({ language: lang, title: '', body: '' })
   }
-
-  const created = { language: lang, title: '', body: '' }
-  form.value.translations.push(created)
-  return created
 }
 
-const selectedTranslation = computed(() => getTranslation(selectedLanguage.value))
+const selectedTranslation = computed(() => {
+  const translation = form.value.translations.find((item) => item.language === selectedLanguage.value)
+  if (!translation) {
+    throw new Error(`Missing translation for language: ${selectedLanguage.value}`)
+  }
+  return translation
+})
+
+watch(selectedLanguage, (lang) => {
+  ensureTranslation(lang)
+}, { immediate: true })
 
 const filteredNews = computed(() => {
   if (!searchQuery.value) return news.value

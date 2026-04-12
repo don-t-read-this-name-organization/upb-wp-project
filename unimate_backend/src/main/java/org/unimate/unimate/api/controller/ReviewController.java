@@ -29,6 +29,7 @@ public class ReviewController {
   RatingCalculatorService ratingCalculatorService;
 
   @PostMapping
+  @PreAuthorize("isAuthenticated()")
   public ReviewResponse createReview(
       @Valid @RequestBody ReviewRequest request,
       @AuthenticationPrincipal AuthenticatedUser currentUser
@@ -57,6 +58,7 @@ public class ReviewController {
   }
 
   @DeleteMapping("/{id}")
+  @PreAuthorize("hasRole('ADMIN') or @authorizationService.ownsReview(#id)")
   public void deleteReview(
       @PathVariable Integer id,
       @AuthenticationPrincipal AuthenticatedUser currentUser

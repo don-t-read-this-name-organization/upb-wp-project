@@ -42,6 +42,7 @@ public class TimetableController {
   }
 
   @GetMapping
+  @PreAuthorize("isAuthenticated()")
   public ResponseEntity<Resource> getTimetable(
       @AuthenticationPrincipal AuthenticatedUser currentUser
   ) throws IOException {

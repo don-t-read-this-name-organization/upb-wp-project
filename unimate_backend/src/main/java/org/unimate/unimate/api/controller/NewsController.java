@@ -3,7 +3,6 @@ package org.unimate.unimate.api.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.unimate.unimate.api.dto.news.request.NewsPieceRequest;
@@ -27,6 +26,7 @@ public class NewsController {
     NewsPieceRepository newsPieceRepository;
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public NewsPieceResponse create(@RequestBody NewsPieceRequest request) {
         return newsService.create(request);
     }
@@ -50,6 +50,7 @@ public class NewsController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public NewsPieceResponse update(@PathVariable Integer id, @RequestBody NewsPieceRequest request) {
         NewsPiece newsPiece = newsPieceRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("News not found"));
@@ -57,6 +58,7 @@ public class NewsController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public void delete(@PathVariable Integer id) {
         NewsPiece newsPiece = newsPieceRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("News not found"));

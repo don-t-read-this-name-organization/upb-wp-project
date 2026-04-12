@@ -41,6 +41,7 @@ public class NoteController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN') or @authorizationService.ownsNote(#id)")
     public ResponseEntity<NoteResponse> getNote(@PathVariable Integer id) {
         NoteResponse note = noteService.findById(id);
         if (note == null) {
@@ -62,12 +63,14 @@ public class NoteController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN') or @authorizationService.ownsNote(#id)")
     public ResponseEntity<NoteResponse> updateNote(@PathVariable Integer id, @RequestBody NoteRequest request) {
         NoteResponse note = noteService.update(id, request);
         return ResponseEntity.ok(note);
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN') or @authorizationService.ownsNote(#id)")
     public ResponseEntity<Void> deleteNote(@PathVariable Integer id) {
         noteService.delete(id);
         return ResponseEntity.ok().build();

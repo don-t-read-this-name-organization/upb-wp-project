@@ -1,4 +1,4 @@
-﻿<script setup lang="ts">
+<script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
 import draggable from 'vuedraggable'
 import { useAppStore } from '@/stores/appStore'
@@ -367,10 +367,10 @@ onMounted(() => {
                   <span class="task-priority"
                     >{{
                       priorityToLabel(element.priority) === 'high'
-                        ? 'рџ”ґ'
+                        ? '🔴'
                         : priorityToLabel(element.priority) === 'medium'
-                          ? 'рџџЎ'
-                          : 'рџџў'
+                          ? '🟡'
+                          : '🟢'
                     }}
                     {{ t(`kanban.${priorityToLabel(element.priority)}`) }}</span
                   >
@@ -411,10 +411,10 @@ onMounted(() => {
                   <span class="task-priority"
                     >{{
                       priorityToLabel(element.priority) === 'high'
-                        ? 'рџ”ґ'
+                        ? '🔴'
                         : priorityToLabel(element.priority) === 'medium'
-                          ? 'рџџЎ'
-                          : 'рџџў'
+                          ? '🟡'
+                          : '🟢'
                     }}
                     {{ t(`kanban.${priorityToLabel(element.priority)}`) }}</span
                   >
@@ -455,10 +455,10 @@ onMounted(() => {
                   <span class="task-priority"
                     >{{
                       priorityToLabel(element.priority) === 'high'
-                        ? 'рџ”ґ'
+                        ? '🔴'
                         : priorityToLabel(element.priority) === 'medium'
-                          ? 'рџџЎ'
-                          : 'рџџў'
+                          ? '🟡'
+                          : '🟢'
                     }}
                     {{ t(`kanban.${priorityToLabel(element.priority)}`) }}</span
                   >
@@ -841,4 +841,3 @@ onMounted(() => {
   background: #c82333;
 }
 </style>
-
