@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { getAccessToken } from '@/utils/apiClient'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -89,7 +90,7 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   const userStr = localStorage.getItem('user')
   const user = userStr ? JSON.parse(userStr) : null
-  const isLoggedIn = !!user
+  const isLoggedIn = !!user && !!getAccessToken()
   const isAdmin = user?.role === 'ADMIN'
 
   if (isAdmin && to.path === '/') {

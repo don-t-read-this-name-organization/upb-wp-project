@@ -20,7 +20,7 @@ databaseChangeLog:
                   value: admin@unimate.ro
               - column:
                   name: password_hash
-                  value: admin123
+                  value: "$2a$10$WN87ibQJLTqg7QKD7oJ.ou0LKGAcJb4xvt9qLTOqhH4X0Vs3p8Ghi"
               - column:
                   name: role
                   value: ADMIN
@@ -44,7 +44,7 @@ databaseChangeLog:
                   value: student@unimate.ro
               - column:
                   name: password_hash
-                  value: student123
+                  value: "$2a$10$TZf98xKXvYvdvCFaEjQ4W.CZsW4ZXMK5OvqNZvEEPVv8HXjx96utu"
               - column:
                   name: role
                   value: STUDENT
@@ -74,7 +74,7 @@ databaseChangeLog:
                   value: sef@unimate.ro
               - column:
                   name: password_hash
-                  value: sef123
+                  value: "$2a$10$vH0pGfZEEaHjWBPaU3eCJ.aYchqUFVnZj6hNnNw/cKTvZOQr8DEKa"
               - column:
                   name: faculty_id
                   valueNumeric: 12

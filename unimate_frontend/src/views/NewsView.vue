@@ -47,6 +47,19 @@ const languageIndex = computed(() => {
   return languages.indexOf(selectedLanguage.value)
 })
 
+function getTranslation(lang: string) {
+  const existing = form.value.translations.find((translation) => translation.language === lang)
+  if (existing) {
+    return existing
+  }
+
+  const created = { language: lang, title: '', body: '' }
+  form.value.translations.push(created)
+  return created
+}
+
+const selectedTranslation = computed(() => getTranslation(selectedLanguage.value))
+
 const filteredNews = computed(() => {
   if (!searchQuery.value) return news.value
   const query = searchQuery.value.toLowerCase()
@@ -105,7 +118,8 @@ async function handleDrop(lang: string, dt: DataTransfer | null) {
   if (!dt) return
   const files = dt.files
   if (!files?.length) return
-  const file = files[0]
+  const file = files.item(0)
+  if (!file) return
   if (!isImage(file)) return
 
   const url = await uploadFile(file)
@@ -332,7 +346,7 @@ onMounted(fetchNews)
             <div class="form-group">
               <label :for="`title-${selectedLanguage}`">Title</label>
               <input
-                v-model="form.translations[languageIndex].title"
+                v-model="selectedTranslation.title"
                 type="text"
                 :id="`title-${selectedLanguage}`"
                 class="form-control"
@@ -346,7 +360,7 @@ onMounted(fetchNews)
                 <span class="hint-formats">Supports: images, markdown, formulas ($...$)</span>
               </div>
               <MdEditor
-                v-model="form.translations[languageIndex].body"
+                v-model="selectedTranslation.body"
                 :editor-id="`body-${selectedLanguage}`"
                 language="en-US"
                 :toolbars-exclude="['github']"

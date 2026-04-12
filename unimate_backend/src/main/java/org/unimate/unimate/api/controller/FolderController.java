@@ -1,6 +1,7 @@
 package org.unimate.unimate.api.controller;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.unimate.unimate.api.dto.folder.request.FolderRequest;
 import org.unimate.unimate.api.dto.folder.response.FolderResponse;

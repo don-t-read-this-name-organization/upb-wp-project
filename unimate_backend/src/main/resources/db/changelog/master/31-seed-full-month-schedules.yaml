@@ -1,0 +1,134 @@
+databaseChangeLog:
+  - changeSet:
+      id: "31-seed-full-month-schedules"
+      author: "demesup"
+      changes:
+        - sql:
+            splitStatements: true
+            stripComments: true
+            sql: |
+              -- Seed full month schedules (4 weeks) for all active users with groups
+              
+              -- Week 1 - Monday (Week 1)
+              INSERT INTO schedules (user_id, course_name, day_of_week, start_time, end_time, location, active)
+              SELECT u.id, 'Mathematics I', 'MONDAY', '08:00:00', '10:00:00', 'A101', TRUE
+              FROM users u
+              WHERE u.active = TRUE AND u.group_id IS NOT NULL
+              AND NOT EXISTS (SELECT 1 FROM schedules s WHERE s.user_id = u.id AND s.course_name = 'Mathematics I' AND s.day_of_week = 'MONDAY' AND s.start_time = '08:00:00');
+              
+              INSERT INTO schedules (user_id, course_name, day_of_week, start_time, end_time, location, active)
+              SELECT u.id, 'Physics I', 'TUESDAY', '10:00:00', '12:00:00', 'B202', TRUE
+              FROM users u
+              WHERE u.active = TRUE AND u.group_id IS NOT NULL
+              AND NOT EXISTS (SELECT 1 FROM schedules s WHERE s.user_id = u.id AND s.course_name = 'Physics I' AND s.day_of_week = 'TUESDAY' AND s.start_time = '10:00:00');
+              
+              INSERT INTO schedules (user_id, course_name, day_of_week, start_time, end_time, location, active)
+              SELECT u.id, 'Programming I', 'WEDNESDAY', '12:00:00', '14:00:00', 'C303', TRUE
+              FROM users u
+              WHERE u.active = TRUE AND u.group_id IS NOT NULL
+              AND NOT EXISTS (SELECT 1 FROM schedules s WHERE s.user_id = u.id AND s.course_name = 'Programming I' AND s.day_of_week = 'WEDNESDAY' AND s.start_time = '12:00:00');
+              
+              INSERT INTO schedules (user_id, course_name, day_of_week, start_time, end_time, location, active)
+              SELECT u.id, 'Electronics I', 'THURSDAY', '14:00:00', '16:00:00', 'D404', TRUE
+              FROM users u
+              WHERE u.active = TRUE AND u.group_id IS NOT NULL
+              AND NOT EXISTS (SELECT 1 FROM schedules s WHERE s.user_id = u.id AND s.course_name = 'Electronics I' AND s.day_of_week = 'THURSDAY' AND s.start_time = '14:00:00');
+              
+              INSERT INTO schedules (user_id, course_name, day_of_week, start_time, end_time, location, active)
+              SELECT u.id, 'English I', 'FRIDAY', '08:00:00', '10:00:00', 'E505', TRUE
+              FROM users u
+              WHERE u.active = TRUE AND u.group_id IS NOT NULL
+              AND NOT EXISTS (SELECT 1 FROM schedules s WHERE s.user_id = u.id AND s.course_name = 'English I' AND s.day_of_week = 'FRIDAY' AND s.start_time = '08:00:00');
+              
+              -- Week 2 - Rotation of courses
+              INSERT INTO schedules (user_id, course_name, day_of_week, start_time, end_time, location, active)
+              SELECT u.id, 'Mathematics II', 'MONDAY', '10:30:00', '12:30:00', 'A102', TRUE
+              FROM users u
+              WHERE u.active = TRUE AND u.group_id IS NOT NULL
+              AND NOT EXISTS (SELECT 1 FROM schedules s WHERE s.user_id = u.id AND s.course_name = 'Mathematics II' AND s.day_of_week = 'MONDAY' AND s.start_time = '10:30:00');
+              
+              INSERT INTO schedules (user_id, course_name, day_of_week, start_time, end_time, location, active)
+              SELECT u.id, 'Physics II', 'TUESDAY', '13:00:00', '15:00:00', 'B203', TRUE
+              FROM users u
+              WHERE u.active = TRUE AND u.group_id IS NOT NULL
+              AND NOT EXISTS (SELECT 1 FROM schedules s WHERE s.user_id = u.id AND s.course_name = 'Physics II' AND s.day_of_week = 'TUESDAY' AND s.start_time = '13:00:00');
+              
+              INSERT INTO schedules (user_id, course_name, day_of_week, start_time, end_time, location, active)
+              SELECT u.id, 'Programming II', 'WEDNESDAY', '14:30:00', '16:30:00', 'C304', TRUE
+              FROM users u
+              WHERE u.active = TRUE AND u.group_id IS NOT NULL
+              AND NOT EXISTS (SELECT 1 FROM schedules s WHERE s.user_id = u.id AND s.course_name = 'Programming II' AND s.day_of_week = 'WEDNESDAY' AND s.start_time = '14:30:00');
+              
+              INSERT INTO schedules (user_id, course_name, day_of_week, start_time, end_time, location, active)
+              SELECT u.id, 'Electronics II', 'THURSDAY', '16:00:00', '18:00:00', 'D405', TRUE
+              FROM users u
+              WHERE u.active = TRUE AND u.group_id IS NOT NULL
+              AND NOT EXISTS (SELECT 1 FROM schedules s WHERE s.user_id = u.id AND s.course_name = 'Electronics II' AND s.day_of_week = 'THURSDAY' AND s.start_time = '16:00:00');
+              
+              INSERT INTO schedules (user_id, course_name, day_of_week, start_time, end_time, location, active)
+              SELECT u.id, 'English II', 'FRIDAY', '10:30:00', '12:30:00', 'E506', TRUE
+              FROM users u
+              WHERE u.active = TRUE AND u.group_id IS NOT NULL
+              AND NOT EXISTS (SELECT 1 FROM schedules s WHERE s.user_id = u.id AND s.course_name = 'English II' AND s.day_of_week = 'FRIDAY' AND s.start_time = '10:30:00');
+              
+              -- Week 3 - Another rotation
+              INSERT INTO schedules (user_id, course_name, day_of_week, start_time, end_time, location, active)
+              SELECT u.id, 'Database Systems', 'MONDAY', '13:00:00', '15:00:00', 'A103', TRUE
+              FROM users u
+              WHERE u.active = TRUE AND u.group_id IS NOT NULL
+              AND NOT EXISTS (SELECT 1 FROM schedules s WHERE s.user_id = u.id AND s.course_name = 'Database Systems' AND s.day_of_week = 'MONDAY' AND s.start_time = '13:00:00');
+              
+              INSERT INTO schedules (user_id, course_name, day_of_week, start_time, end_time, location, active)
+              SELECT u.id, 'Algorithms', 'TUESDAY', '08:00:00', '10:00:00', 'B204', TRUE
+              FROM users u
+              WHERE u.active = TRUE AND u.group_id IS NOT NULL
+              AND NOT EXISTS (SELECT 1 FROM schedules s WHERE s.user_id = u.id AND s.course_name = 'Algorithms' AND s.day_of_week = 'TUESDAY' AND s.start_time = '08:00:00');
+              
+              INSERT INTO schedules (user_id, course_name, day_of_week, start_time, end_time, location, active)
+              SELECT u.id, 'Chemistry', 'WEDNESDAY', '10:00:00', '12:00:00', 'C305', TRUE
+              FROM users u
+              WHERE u.active = TRUE AND u.group_id IS NOT NULL
+              AND NOT EXISTS (SELECT 1 FROM schedules s WHERE s.user_id = u.id AND s.course_name = 'Chemistry' AND s.day_of_week = 'WEDNESDAY' AND s.start_time = '10:00:00');
+              
+              INSERT INTO schedules (user_id, course_name, day_of_week, start_time, end_time, location, active)
+              SELECT u.id, 'Signal Processing', 'THURSDAY', '10:00:00', '12:00:00', 'D406', TRUE
+              FROM users u
+              WHERE u.active = TRUE AND u.group_id IS NOT NULL
+              AND NOT EXISTS (SELECT 1 FROM schedules s WHERE s.user_id = u.id AND s.course_name = 'Signal Processing' AND s.day_of_week = 'THURSDAY' AND s.start_time = '10:00:00');
+              
+              INSERT INTO schedules (user_id, course_name, day_of_week, start_time, end_time, location, active)
+              SELECT u.id, 'German', 'FRIDAY', '13:00:00', '15:00:00', 'E507', TRUE
+              FROM users u
+              WHERE u.active = TRUE AND u.group_id IS NOT NULL
+              AND NOT EXISTS (SELECT 1 FROM schedules s WHERE s.user_id = u.id AND s.course_name = 'German' AND s.day_of_week = 'FRIDAY' AND s.start_time = '13:00:00');
+              
+              -- Week 4 - Final rotation
+              INSERT INTO schedules (user_id, course_name, day_of_week, start_time, end_time, location, active)
+              SELECT u.id, 'Microprocessors', 'MONDAY', '14:30:00', '16:30:00', 'A104', TRUE
+              FROM users u
+              WHERE u.active = TRUE AND u.group_id IS NOT NULL
+              AND NOT EXISTS (SELECT 1 FROM schedules s WHERE s.user_id = u.id AND s.course_name = 'Microprocessors' AND s.day_of_week = 'MONDAY' AND s.start_time = '14:30:00');
+              
+              INSERT INTO schedules (user_id, course_name, day_of_week, start_time, end_time, location, active)
+              SELECT u.id, 'Cryptography', 'TUESDAY', '14:00:00', '16:00:00', 'B205', TRUE
+              FROM users u
+              WHERE u.active = TRUE AND u.group_id IS NOT NULL
+              AND NOT EXISTS (SELECT 1 FROM schedules s WHERE s.user_id = u.id AND s.course_name = 'Cryptography' AND s.day_of_week = 'TUESDAY' AND s.start_time = '14:00:00');
+              
+              INSERT INTO schedules (user_id, course_name, day_of_week, start_time, end_time, location, active)
+              SELECT u.id, 'Web Development', 'WEDNESDAY', '08:00:00', '10:00:00', 'C306', TRUE
+              FROM users u
+              WHERE u.active = TRUE AND u.group_id IS NOT NULL
+              AND NOT EXISTS (SELECT 1 FROM schedules s WHERE s.user_id = u.id AND s.course_name = 'Web Development' AND s.day_of_week = 'WEDNESDAY' AND s.start_time = '08:00:00');
+              
+              INSERT INTO schedules (user_id, course_name, day_of_week, start_time, end_time, location, active)
+              SELECT u.id, 'Networking', 'THURSDAY', '12:00:00', '14:00:00', 'D407', TRUE
+              FROM users u
+              WHERE u.active = TRUE AND u.group_id IS NOT NULL
+              AND NOT EXISTS (SELECT 1 FROM schedules s WHERE s.user_id = u.id AND s.course_name = 'Networking' AND s.day_of_week = 'THURSDAY' AND s.start_time = '12:00:00');
+              
+              INSERT INTO schedules (user_id, course_name, day_of_week, start_time, end_time, location, active)
+              SELECT u.id, 'French', 'FRIDAY', '14:00:00', '16:00:00', 'E508', TRUE
+              FROM users u
+              WHERE u.active = TRUE AND u.group_id IS NOT NULL
+              AND NOT EXISTS (SELECT 1 FROM schedules s WHERE s.user_id = u.id AND s.course_name = 'French' AND s.day_of_week = 'FRIDAY' AND s.start_time = '14:00:00');

@@ -4,7 +4,7 @@ databaseChangeLog:
       author: "frihetselsker"
       changes:
         - createTable:
-            tableName: groups
+            tableName: student_groups
             columns:
               - column:
                   name: id
@@ -36,10 +36,10 @@ databaseChangeLog:
                     nullable: false
         - addUniqueConstraint:
             columnNames: name, faculty_id
-            tableName: groups
+            tableName: student_groups
             constraintName: uq_groups_name_faculty
         - addForeignKeyConstraint:
-            baseTableName: groups
+            baseTableName: student_groups
             baseColumnNames: faculty_id
             referencedTableName: faculties
             referencedColumnNames: id

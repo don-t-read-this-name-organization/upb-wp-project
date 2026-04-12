@@ -1,8 +1,9 @@
-<script setup lang="ts">
+﻿<script setup lang="ts">
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAppStore } from '@/stores/appStore'
 import { useI18n } from 'vue-i18n'
+import { setAuthTokens } from '@/utils/apiClient'
 
 const router = useRouter()
 const store = useAppStore()
@@ -23,11 +24,14 @@ const handleLogin = async () => {
       body: JSON.stringify({ email: email.value, password: password.value }),
     })
 
-    const data = await response.json()
+    const data = await response.json().catch(() => null)
 
-    if (response.ok) {
-      const token = btoa(`${email.value}:${password.value}`)
-      localStorage.setItem('token', token)
+    if (response.ok && data?.user) {
+      if (data.accessToken) {
+        setAuthTokens(data.accessToken, data.refreshToken)
+      } else if (data.token) {
+        setAuthTokens(data.token)
+      }
       store.user = {
         name: data.user.username,
         email: data.user.email,
@@ -41,7 +45,7 @@ const handleLogin = async () => {
       localStorage.setItem('user', JSON.stringify(store.user))
       router.push('/')
     } else {
-      error.value = data.error || t('login.failed')
+      error.value = data?.message || data?.error || t('login.failed')
     }
   } catch {
     error.value = t('login.connectionError')

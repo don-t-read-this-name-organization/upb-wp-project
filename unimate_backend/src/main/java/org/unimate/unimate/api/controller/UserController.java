@@ -3,11 +3,16 @@ package org.unimate.unimate.api.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.unimate.unimate.api.dto.user.request.UserRequest;
 import org.unimate.unimate.api.dto.user.response.UserResponse;
+import org.unimate.unimate.api.security.AuthenticatedUser;
 import org.unimate.unimate.domain.entities.User;
+import org.unimate.unimate.domain.enums.RoleName;
 import org.unimate.unimate.exception.NotFoundException;
 import org.unimate.unimate.exception.ValidationException;
 import org.unimate.unimate.service.UserService;
@@ -32,12 +37,12 @@ public class UserController {
   }
 
   @PostMapping
+  @Secured({"ROLE_ADMIN"})
   public UserResponse create(@RequestBody UserRequest request) {
     return userService.create(request);
   }
 
 
-  // use @Secured({"ROLE_NAME""}) to limit the access
   @GetMapping("/{id}")
   public UserResponse getById(@PathVariable Integer id) {
     return userService.findById(id).map(UserResponse::fromEntity)
@@ -50,8 +55,15 @@ public class UserController {
   }
 
   @PutMapping("/{id}")
-  public UserResponse update(@PathVariable Integer id, @RequestBody UserRequest request) {
+  public UserResponse update(
+      @PathVariable Integer id,
+      @RequestBody UserRequest request,
+      @AuthenticationPrincipal AuthenticatedUser currentUser
+  ) {
     User user = userService.findById(id).orElseThrow(() -> new NotFoundException("User", id));
+    if (currentUser != null && currentUser.getRole() != RoleName.ADMIN) {
+      request.setRole(user.getRole());
+    }
     return userService.update(user, request);
   }
 

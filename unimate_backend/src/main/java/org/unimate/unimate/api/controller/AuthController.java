@@ -3,10 +3,17 @@ package org.unimate.unimate.api.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.*;
+import org.unimate.unimate.api.dto.auth.AuthResponse;
+import org.unimate.unimate.api.dto.auth.LoginRequest;
 import org.unimate.unimate.api.dto.user.response.UserResponse;
+import org.unimate.unimate.api.security.JwtTokenProvider;
 import org.unimate.unimate.domain.entities.User;
 import org.unimate.unimate.service.UserService;
 
@@ -21,30 +28,79 @@ import static lombok.AccessLevel.PRIVATE;
 @FieldDefaults(level = PRIVATE, makeFinal = true)
 public class AuthController {
     UserService userService;
-    PasswordEncoder passwordEncoder;
+    AuthenticationManager authenticationManager;
+    JwtTokenProvider jwtTokenProvider;
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody Map<String, String> credentials) {
-        String email = credentials.get("email");
-        String password = credentials.get("password");
-
-        if (email == null || password == null) {
-            return ResponseEntity.badRequest().body(Map.of("error", "Email and password are required"));
+    public ResponseEntity<?> login(@RequestBody LoginRequest request) {
+        if (!isValid(request.getEmail()) || !isValid(request.getPassword())) {
+            return error(HttpStatus.BAD_REQUEST, "Email and password are required");
         }
 
-        // demesup: please fix this
-        return userService.findByEmail(email)
-            .filter(user -> {
-                String storedHash = user.getPasswordHash();
-                if (storedHash != null && storedHash.startsWith("$2")) {
-                    return passwordEncoder.matches(password, storedHash);
-                }
-                return storedHash != null && storedHash.equals(password);
-            })
-            .map(user -> ResponseEntity.ok(Map.of(
-                "user", UserResponse.fromEntity(user),
-                "token", "demo-token-" + user.getId()
-            )))
-            .orElseGet(() -> ResponseEntity.status(401).body(Map.of("error", "Invalid credentials")));
+        try {
+            Authentication auth = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
+            );
+            User user = (User) auth.getPrincipal();
+
+            if (!user.getActive()) {
+                return error(HttpStatus.UNAUTHORIZED, "User account is inactive");
+            }
+
+            AuthResponse response = AuthResponse.of(
+                UserResponse.fromEntity(user),
+                jwtTokenProvider.generateToken(user),
+                jwtTokenProvider.generateRefreshToken(user)
+            );
+            return ResponseEntity.ok(response);
+
+        } catch (AuthenticationException ex) {
+            return error(HttpStatus.UNAUTHORIZED, "Invalid email or password");
+        } catch (Exception ex) {
+            log.error("Login error: {}", ex.getMessage(), ex);
+            return error(HttpStatus.INTERNAL_SERVER_ERROR, "Authentication failed");
+        }
+    }
+
+    @PostMapping("/refresh-token")
+    public ResponseEntity<?> refreshToken(@RequestBody Map<String, String> request) {
+        String token = request.get("refreshToken");
+        if (!isValid(token)) {
+            return error(HttpStatus.BAD_REQUEST, "Refresh token is required");
+        }
+
+        if (!jwtTokenProvider.validateToken(token)) {
+            return error(HttpStatus.UNAUTHORIZED, "Invalid refresh token");
+        }
+
+        Integer userId = jwtTokenProvider.getUserIdFromToken(token);
+        if (userId == null) {
+            return error(HttpStatus.UNAUTHORIZED, "Invalid refresh token");
+        }
+
+        var user = userService.findById(userId);
+        if (user.isEmpty() || !user.get().getActive()) {
+            return error(HttpStatus.UNAUTHORIZED, "User not found");
+        }
+
+        return ResponseEntity.ok(Map.of(
+            "accessToken", jwtTokenProvider.generateToken(user.get()),
+            "refreshToken", token,
+            "token", jwtTokenProvider.generateToken(user.get())
+        ));
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout() {
+        return ResponseEntity.ok(Map.of("message", "Logout successful"));
+    }
+
+    private boolean isValid(String value) {
+        return value != null && !value.isBlank();
+    }
+
+    private ResponseEntity<?> error(HttpStatus status, String message) {
+        return ResponseEntity.status(status).body(Map.of("error", message));
     }
 }
+

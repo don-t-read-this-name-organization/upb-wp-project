@@ -1,9 +1,10 @@
-<script setup lang="ts">
+﻿<script setup lang="ts">
 import { ref, onMounted, computed, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useAppStore } from '@/stores/appStore'
 import { parseMarkdown } from '@/utils/markdown'
 import { MdEditor } from 'md-editor-v3'
+import BaseModal from '@/components/BaseModal.vue'
 import 'md-editor-v3/lib/style.css'
 
 const { t } = useI18n()
@@ -80,9 +81,9 @@ async function fetchNotes() {
 
   loading.value = true
   try {
-    let url = `/api/notes?userId=${userId}`
+    let url = '/api/notes'
     if (searchQuery.value.trim()) {
-      url += `&search=${encodeURIComponent(searchQuery.value.trim())}`
+      url += `?search=${encodeURIComponent(searchQuery.value.trim())}`
     }
     const response = await fetch(url)
     if (response.ok) {
@@ -357,7 +358,7 @@ watch(
       </div>
     </div>
 
-    <div v-if="showEditModal" class="modal-overlay" @click.self="closeEditModal">
+    <BaseModal v-model="showEditModal" size="xl" :show-close="false" @close="closeEditModal">
       <div class="modal edit-modal">
         <div class="modal-header">
           <h3>{{ editingNote ? t('notes.editNote') : t('notes.newNote') }}</h3>
@@ -409,9 +410,9 @@ watch(
           </button>
         </div>
       </div>
-    </div>
+    </BaseModal>
 
-    <div v-if="showFullModal && viewingNote" class="modal-overlay" @click.self="closeFullModal">
+    <BaseModal v-if="viewingNote" v-model="showFullModal" size="xl" :show-close="false" @close="closeFullModal">
       <div class="modal full-modal">
         <div class="modal-header">
           <h3>{{ viewingNote.title }}</h3>
@@ -423,9 +424,9 @@ watch(
           <div class="markdown-rendered" v-html="parseMarkdown(viewingNote.content)"></div>
         </div>
       </div>
-    </div>
+    </BaseModal>
 
-    <div v-if="showConfirmModal" class="modal-overlay" @click.self="handleConfirmCancel">
+    <BaseModal v-model="showConfirmModal" size="sm" :show-close="false" @close="handleConfirmCancel">
       <div class="modal">
         <div class="modal-header">
           <h3><i class="fas fa-question-circle"></i> {{ t('common.confirm') }}</h3>
@@ -445,7 +446,7 @@ watch(
           </button>
         </div>
       </div>
-    </div>
+    </BaseModal>
   </div>
 </template>
 
@@ -571,19 +572,6 @@ watch(
 .loading {
   text-align: center;
   padding: 2rem;
-}
-
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
 }
 
 .modal {
@@ -719,3 +707,4 @@ watch(
   width: 250px;
 }
 </style>
+

@@ -1,0 +1,106 @@
+package org.unimate.unimate.api.security;
+
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
+import org.springframework.stereotype.Component;
+import org.springframework.web.filter.OncePerRequestFilter;
+import org.unimate.unimate.domain.entities.User;
+import org.unimate.unimate.domain.enums.RoleName;
+import org.unimate.unimate.repository.UserRepository;
+
+import java.io.IOException;
+import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
+
+@Slf4j
+@Component
+@RequiredArgsConstructor
+public class JwtAuthenticationFilter extends OncePerRequestFilter {
+
+  private static final String TOKEN_PREFIX = "Bearer ";
+  private static final String AUTHORIZATION_HEADER = HttpHeaders.AUTHORIZATION;
+
+  private final JwtTokenProvider jwtTokenProvider;
+  private final UserRepository userRepository;
+
+  @Override
+  protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+      throws ServletException, IOException {
+    try {
+      String token = extractTokenFromRequest(request);
+      if (token != null && jwtTokenProvider.validateToken(token)) {
+        Integer userId = jwtTokenProvider.getUserIdFromToken(token);
+        if (userId != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+          userRepository.findById(userId)
+              .filter(User::getActive)
+              .ifPresentOrElse(
+                  user -> setupSecurityContext(user, request),
+                  () -> log.warn("Inactive or missing user: {}", userId)
+              );
+        }
+      }
+    } catch (Exception ex) {
+      log.error("JWT authentication error: {}", ex.getMessage(), ex);
+    }
+
+    filterChain.doFilter(request, response);
+  }
+
+  private void setupSecurityContext(User user, HttpServletRequest request) {
+    Collection<? extends GrantedAuthority> authorities = getAuthorities(user.getRole());
+    AuthenticatedUser principal = new AuthenticatedUser(
+        user.getId(),
+        user.getEmail(),
+        user.getRole(),
+        authorities
+    );
+
+    UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+        principal,
+        null,
+        authorities
+    );
+    authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+    SecurityContextHolder.getContext().setAuthentication(authentication);
+  }
+
+  private Collection<? extends GrantedAuthority> getAuthorities(RoleName roleName) {
+    List<GrantedAuthority> authorities = List.of(
+        new SimpleGrantedAuthority("ROLE_" + roleName.name())
+    );
+    return authorities;
+  }
+
+  private String extractTokenFromRequest(HttpServletRequest request) {
+    String authHeader = request.getHeader(AUTHORIZATION_HEADER);
+    
+    if (authHeader == null || authHeader.isEmpty()) {
+      return null;
+    }
+    
+    if (!authHeader.startsWith(TOKEN_PREFIX)) {
+      log.debug("Authorization header does not start with Bearer prefix");
+      return null;
+    }
+    
+    String token = authHeader.substring(TOKEN_PREFIX.length()).trim();
+    
+    if (token.isEmpty()) {
+      log.debug("Token is empty after prefix removal");
+      return null;
+    }
+    
+    return token;
+  }
+}

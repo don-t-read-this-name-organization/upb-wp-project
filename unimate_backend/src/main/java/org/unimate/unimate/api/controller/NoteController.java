@@ -3,9 +3,13 @@ package org.unimate.unimate.api.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.unimate.unimate.api.dto.note.NoteRequest;
 import org.unimate.unimate.api.dto.note.NoteResponse;
+import org.unimate.unimate.api.security.AuthenticatedUser;
+import org.unimate.unimate.exception.ValidationException;
 import org.unimate.unimate.service.NoteService;
 
 import java.util.List;
@@ -22,9 +26,14 @@ public class NoteController {
     final NoteService noteService;
 
     @GetMapping
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<List<NoteResponse>> getNotes(
-            @RequestParam Integer userId,
+            @AuthenticationPrincipal AuthenticatedUser currentUser,
             @RequestParam(required = false) String search) {
+        if (currentUser == null) {
+            throw new ValidationException("User is not authenticated");
+        }
+        Integer userId = currentUser.getId();
         if (search != null && !search.isEmpty()) {
             return ResponseEntity.ok(noteService.searchByUserId(userId, search));
         }
@@ -41,8 +50,14 @@ public class NoteController {
     }
 
     @PostMapping
-    public ResponseEntity<NoteResponse> createNote(@RequestBody NoteRequest request) {
-        NoteResponse note = noteService.create(request.getUserId(), request);
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<NoteResponse> createNote(
+            @RequestBody NoteRequest request,
+            @AuthenticationPrincipal AuthenticatedUser currentUser) {
+        if (currentUser == null) {
+            throw new ValidationException("User is not authenticated");
+        }
+        NoteResponse note = noteService.create(currentUser.getId(), request);
         return ResponseEntity.ok(note);
     }
 

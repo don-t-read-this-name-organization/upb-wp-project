@@ -3,6 +3,7 @@ package org.unimate.unimate.api.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.unimate.unimate.api.dto.faculty.FacultyLinkWithTranslation;
 import org.unimate.unimate.service.FacultyLinkService;
@@ -19,6 +20,7 @@ public class FacultyLinkController {
     final FacultyLinkService facultyLinkService;
 
     @GetMapping("/{facultyId}")
+    @PreAuthorize("permitAll()")
     public ResponseEntity<List<FacultyLinkWithTranslation>> getFacultyLinks(
             @PathVariable Integer facultyId,
             @RequestParam(defaultValue = "en") String lang) {

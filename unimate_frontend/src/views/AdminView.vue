@@ -1,8 +1,9 @@
-<script setup lang="ts">
+﻿<script setup lang="ts">
 import { ref, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useAppStore } from '@/stores/appStore'
+import BaseModal from '@/components/BaseModal.vue'
 
 const router = useRouter()
 const { t } = useI18n()
@@ -181,7 +182,6 @@ const closeModal = () => {
 
 const handleSubmit = async () => {
   error.value = ''
-  const token = localStorage.getItem('token')
   const url = editingUser.value ? `/api/users/${editingUser.value.id}` : '/api/users'
   const method = editingUser.value ? 'PUT' : 'POST'
 
@@ -190,7 +190,6 @@ const handleSubmit = async () => {
       method,
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Basic ${token}`,
       },
       body: JSON.stringify(form.value),
     })
@@ -208,13 +207,9 @@ const handleSubmit = async () => {
 const deleteUser = async (user: User) => {
   showConfirm(t('common.confirm') + ` "${user.username}"?`, async () => {
     error.value = ''
-    const token = localStorage.getItem('token')
     try {
       const response = await fetch(`/api/users/${user.id}`, {
         method: 'DELETE',
-        headers: {
-          Authorization: `Basic ${token}`,
-        },
       })
       if (!response.ok) throw new Error('Delete failed')
       await fetchUsers()
@@ -473,7 +468,7 @@ onMounted(() => {
       </div>
     </div>
 
-    <div v-if="showModal" class="modal-overlay" @click.self="closeModal">
+    <BaseModal v-model="showModal" size="md" :show-close="false" @close="closeModal">
       <div class="modal-content">
         <div class="modal-header">
           <h3>{{ editingUser ? t('admin.editUser') : t('admin.addNewUser') }}</h3>
@@ -547,9 +542,9 @@ onMounted(() => {
           </div>
         </form>
       </div>
-    </div>
+    </BaseModal>
 
-    <div v-if="showConfirmModal" class="modal-overlay" @click.self="handleConfirmCancel">
+    <BaseModal v-model="showConfirmModal" size="sm" :show-close="false" @close="handleConfirmCancel">
       <div class="modal">
         <div class="modal-header">
           <h3><i class="fas fa-question-circle"></i> {{ t('common.confirm') }}</h3>
@@ -569,9 +564,9 @@ onMounted(() => {
           </button>
         </div>
       </div>
-    </div>
+    </BaseModal>
 
-    <div v-if="showAlertModal" class="modal-overlay" @click.self="showAlertModal = false">
+    <BaseModal v-model="showAlertModal" size="sm" :show-close="false">
       <div class="modal">
         <div class="modal-header">
           <h3><i class="fas fa-info-circle"></i> {{ t('common.error') }}</h3>
@@ -588,7 +583,7 @@ onMounted(() => {
           </button>
         </div>
       </div>
-    </div>
+    </BaseModal>
   </main>
 </template>
 
@@ -799,19 +794,6 @@ onMounted(() => {
   margin-top: 0.25rem;
 }
 
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-}
-
 .modal {
   background: var(--card-bg);
   border-radius: var(--radius);
@@ -968,3 +950,4 @@ onMounted(() => {
 }
 
 </style>
+

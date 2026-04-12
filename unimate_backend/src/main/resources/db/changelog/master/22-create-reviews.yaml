@@ -1,0 +1,58 @@
+databaseChangeLog:
+  - changeSet:
+      id: "22-create-reviews-table"
+      author: "demesup"
+      changes:
+        - createTable:
+            tableName: reviews
+            columns:
+              - column:
+                  name: id
+                  type: INT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: professor_id
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: rating
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: comment
+                  type: VARCHAR(1000)
+              - column:
+                  name: created_at
+                  type: TIMESTAMP
+              - column:
+                  name: active
+                  type: BOOLEAN
+                  defaultValueBoolean: true
+                  constraints:
+                    nullable: false
+        - addUniqueConstraint:
+            tableName: reviews
+            columnNames: user_id, professor_id
+            constraintName: uq_reviews_user_professor
+        - addForeignKeyConstraint:
+            baseTableName: reviews
+            baseColumnNames: professor_id
+            referencedTableName: professors
+            referencedColumnNames: id
+            constraintName: fk_reviews_professor
+        - addForeignKeyConstraint:
+            baseTableName: reviews
+            baseColumnNames: user_id
+            referencedTableName: users
+            referencedColumnNames: id
+            constraintName: fk_reviews_user
