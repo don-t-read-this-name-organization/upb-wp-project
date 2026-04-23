@@ -14,6 +14,10 @@ public interface UserService {
 
   Optional<User> findById(Integer id);
 
+  Optional<User> findByIdIncludingInactive(Integer id);
+
+  List<User> findAllIncludingInactive();
+
   User save(User user);
 
   @Transactional

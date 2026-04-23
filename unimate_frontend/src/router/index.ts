@@ -41,6 +41,11 @@ const router = createRouter({
       component: () => import('../views/RegisterView.vue'),
     },
     {
+      path: '/getting-started',
+      name: 'getting-started',
+      component: () => import('../views/GettingStartedView.vue'),
+    },
+    {
       path: '/admin',
       name: 'admin',
       component: () => import('../views/AdminView.vue'),
@@ -89,7 +94,7 @@ router.beforeEach((to, from, next) => {
   const userStr = localStorage.getItem('user')
   const user = userStr ? JSON.parse(userStr) : null
   const isLoggedIn = !!user && !!getAccessToken()
-  const isAdmin = user?.role === 'ADMIN'
+  const isAdmin = user?.role === 'ADMIN' || user?.role === 'SUPERADMIN'
 
   if (isAdmin && to.path === '/') {
     next('/admin')

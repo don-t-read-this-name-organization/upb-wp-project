@@ -1,0 +1,20 @@
+databaseChangeLog:
+  - changeSet:
+      id: "32-add-professor-contact-info"
+      author: "migration"
+      changes:
+        - addColumn:
+            tableName: professors
+            columns:
+              - column:
+                  name: phone
+                  type: VARCHAR(20)
+              - column:
+                  name: email
+                  type: VARCHAR(255)
+              - column:
+                  name: office_location
+                  type: VARCHAR(255)
+              - column:
+                  name: office_hours
+                  type: TEXT

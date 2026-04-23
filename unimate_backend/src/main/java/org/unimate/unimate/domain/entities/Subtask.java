@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 
@@ -12,7 +13,7 @@ import static lombok.AccessLevel.PRIVATE;
 @Entity
 @Getter
 @Setter
-@ToString
+@ToString(exclude = "task")
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -38,4 +39,8 @@ public class Subtask {
   @Column(name = "created_at")
   @CreationTimestamp
   LocalDateTime createdAt;
+
+  @Column(name = "updated_at")
+  @UpdateTimestamp
+  LocalDateTime updatedAt;
 }

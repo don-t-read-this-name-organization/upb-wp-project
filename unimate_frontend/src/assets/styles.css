@@ -731,3 +731,52 @@ body {
     padding: 1.25rem;
   }
 }
+
+/* Contact Info Styling */
+.contact-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  justify-content: center;
+}
+
+.contact-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.contact-info .info-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.contact-info .info-item:last-child {
+  border-bottom: none;
+}
+
+.contact-info strong {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 140px;
+  color: var(--text-muted);
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+.contact-info a {
+  color: var(--primary-color);
+  text-decoration: none;
+  transition: var(--transition);
+  word-break: break-word;
+}
+
+.contact-info a:hover {
+  color: var(--primary-hover);
+  text-decoration: underline;
+}

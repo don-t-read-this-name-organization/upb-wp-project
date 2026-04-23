@@ -101,6 +101,10 @@ const handleLogin = async () => {
           <i class="fas fa-user-plus"></i>
           {{ t('login.registerLink') }}
         </router-link>
+        <router-link to="/getting-started" class="help-link">
+          <i class="fas fa-compass"></i>
+          {{ t('menu.gettingStarted') }}
+        </router-link>
       </div>
 
       <div class="demo-accounts-divider">
@@ -172,6 +176,22 @@ const handleLogin = async () => {
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
+}
+
+.help-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  margin-top: 0.75rem;
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+
+.help-link:hover {
+  color: var(--text-color);
 }
 
 @keyframes fadeIn {

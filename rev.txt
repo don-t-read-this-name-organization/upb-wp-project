@@ -1,0 +1,2072 @@
+[
+  {
+    "url": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/comments/3060222456",
+    "pull_request_review_id": 4084940656,
+    "id": 3060222456,
+    "node_id": "PRRC_kwDORX82Fs62Z0n4",
+    "diff_hunk": "@@ -1,73 +1,272 @@\n-<script setup lang=\"ts\">\n+﻿<script setup lang=\"ts\">",
+    "path": "unimate_frontend/src/views/TimetableView.vue",
+    "commit_id": "5143ae8bfff9eda3dabb15d2452ca162b9d28c32",
+    "original_commit_id": "1e55945f436eb6be5c6232b291baeff5a34bc362",
+    "user": {
+      "login": "Copilot",
+      "id": 175728472,
+      "node_id": "BOT_kgDOCnlnWA",
+      "avatar_url": "https://avatars.githubusercontent.com/in/946600?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/Copilot",
+      "html_url": "https://github.com/apps/copilot-pull-request-reviewer",
+      "followers_url": "https://api.github.com/users/Copilot/followers",
+      "following_url": "https://api.github.com/users/Copilot/following{/other_user}",
+      "gists_url": "https://api.github.com/users/Copilot/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/Copilot/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/Copilot/subscriptions",
+      "organizations_url": "https://api.github.com/users/Copilot/orgs",
+      "repos_url": "https://api.github.com/users/Copilot/repos",
+      "events_url": "https://api.github.com/users/Copilot/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/Copilot/received_events",
+      "type": "Bot",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "body": "The file starts with a UTF-8 BOM (invisible character before `<script>`). This often causes lint/formatting issues and noisy diffs. Please remove the BOM from the file.",
+    "created_at": "2026-04-09T19:35:02Z",
+    "updated_at": "2026-04-09T19:35:11Z",
+    "html_url": "https://github.com/don-t-read-this-name-organization/upb-wp-project/pull/17#discussion_r3060222456",
+    "pull_request_url": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/17",
+    "_links": {
+      "self": {
+        "href": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/comments/3060222456"
+      },
+      "html": {
+        "href": "https://github.com/don-t-read-this-name-organization/upb-wp-project/pull/17#discussion_r3060222456"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/17"
+      }
+    },
+    "reactions": {
+      "url": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/comments/3060222456/reactions",
+      "total_count": 0,
+      "+1": 0,
+      "-1": 0,
+      "laugh": 0,
+      "hooray": 0,
+      "confused": 0,
+      "heart": 0,
+      "rocket": 0,
+      "eyes": 0
+    },
+    "start_line": null,
+    "original_start_line": null,
+    "start_side": null,
+    "line": 1,
+    "original_line": 1,
+    "side": "RIGHT",
+    "author_association": "NONE",
+    "original_position": 2,
+    "position": 2,
+    "subject_type": "line"
+  },
+  {
+    "url": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/comments/3060222479",
+    "pull_request_review_id": 4084940656,
+    "id": 3060222479,
+    "node_id": "PRRC_kwDORX82Fs62Z0oP",
+    "diff_hunk": "@@ -77,51 +276,116 @@ const dayKeys = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday']\n         <h2 class=\"card-title card-title-no-margin\">\n           <i class=\"fas fa-calendar-week\"></i> {{ t('timetable.weeklyTimetable') }}\n         </h2>\n-        <span class=\"group-badge\">{{ t('timetable.group') }}: {{ group }}</span>\n+        <div class=\"header-actions\">\n+          <span class=\"group-badge\">{{ t('timetable.group') }}: {{ group }}</span>\n+          <button v-if=\"store.isChief || store.isAdmin\" class=\"btn btn-secondary\" @click=\"openCreateModal\">\n+            <i class=\"fas fa-plus\"></i> {{ t('kanban.addTask') }}\n+          </button>",
+    "path": "unimate_frontend/src/views/TimetableView.vue",
+    "commit_id": "5143ae8bfff9eda3dabb15d2452ca162b9d28c32",
+    "original_commit_id": "1e55945f436eb6be5c6232b291baeff5a34bc362",
+    "user": {
+      "login": "Copilot",
+      "id": 175728472,
+      "node_id": "BOT_kgDOCnlnWA",
+      "avatar_url": "https://avatars.githubusercontent.com/in/946600?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/Copilot",
+      "html_url": "https://github.com/apps/copilot-pull-request-reviewer",
+      "followers_url": "https://api.github.com/users/Copilot/followers",
+      "following_url": "https://api.github.com/users/Copilot/following{/other_user}",
+      "gists_url": "https://api.github.com/users/Copilot/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/Copilot/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/Copilot/subscriptions",
+      "organizations_url": "https://api.github.com/users/Copilot/orgs",
+      "repos_url": "https://api.github.com/users/Copilot/repos",
+      "events_url": "https://api.github.com/users/Copilot/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/Copilot/received_events",
+      "type": "Bot",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "body": "Button label is using the Kanban translation key (`kanban.addTask`) inside the timetable header. This will render the wrong text in most locales. Use a timetable-specific i18n key (e.g., `timetable.addEntry`) instead.",
+    "created_at": "2026-04-09T19:35:02Z",
+    "updated_at": "2026-04-09T19:35:11Z",
+    "html_url": "https://github.com/don-t-read-this-name-organization/upb-wp-project/pull/17#discussion_r3060222479",
+    "pull_request_url": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/17",
+    "_links": {
+      "self": {
+        "href": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/comments/3060222479"
+      },
+      "html": {
+        "href": "https://github.com/don-t-read-this-name-organization/upb-wp-project/pull/17#discussion_r3060222479"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/17"
+      }
+    },
+    "reactions": {
+      "url": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/comments/3060222479/reactions",
+      "total_count": 0,
+      "+1": 0,
+      "-1": 0,
+      "laugh": 0,
+      "hooray": 0,
+      "confused": 0,
+      "heart": 0,
+      "rocket": 0,
+      "eyes": 0
+    },
+    "start_line": 281,
+    "original_start_line": 281,
+    "start_side": "RIGHT",
+    "line": 283,
+    "original_line": 283,
+    "side": "RIGHT",
+    "author_association": "NONE",
+    "original_position": 349,
+    "position": 349,
+    "subject_type": "line"
+  },
+  {
+    "url": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/comments/3060222493",
+    "pull_request_review_id": 4084940656,
+    "id": 3060222493,
+    "node_id": "PRRC_kwDORX82Fs62Z0od",
+    "diff_hunk": "@@ -77,51 +276,116 @@ const dayKeys = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday']\n         <h2 class=\"card-title card-title-no-margin\">\n           <i class=\"fas fa-calendar-week\"></i> {{ t('timetable.weeklyTimetable') }}\n         </h2>\n-        <span class=\"group-badge\">{{ t('timetable.group') }}: {{ group }}</span>\n+        <div class=\"header-actions\">\n+          <span class=\"group-badge\">{{ t('timetable.group') }}: {{ group }}</span>\n+          <button v-if=\"store.isChief || store.isAdmin\" class=\"btn btn-secondary\" @click=\"openCreateModal\">\n+            <i class=\"fas fa-plus\"></i> {{ t('kanban.addTask') }}\n+          </button>\n+        </div>\n       </div>\n \n+      <div v-if=\"error\" class=\"error-alert\">{{ error }}</div>\n+\n       <div class=\"timetable-wrapper\">\n         <table class=\"timetable-table\">\n           <thead>\n             <tr>\n               <th>{{ t('timetable.time') }}</th>\n-              <th v-for=\"day in dayKeys\" :key=\"day\">{{ t(`timetable.days.${day}`) }}</th>\n+              <th v-for=\"day in dayKeys\" :key=\"day\">{{ t(`timetable.days.${dayLabelKey[day]}`) }}</th>\n             </tr>\n           </thead>\n-          <tbody>\n-            <tr v-for=\"slot in timeSlots\" :key=\"slot\">\n+          <tbody v-if=\"!loading && uniqueSlots.length > 0\">\n+            <tr v-for=\"slot in uniqueSlots\" :key=\"slot\">\n               <td class=\"time-cell\">{{ slot }}</td>\n-              <td v-for=\"day in days\" :key=\"day\">\n-                <div v-if=\"timetable[slot]?.[day]\" class=\"course-cell\">\n-                  <strong>{{ timetable[slot]?.[day]?.name }}</strong>\n-                  <small>{{ timetable[slot]?.[day]?.type }} - {{ timetable[slot]?.[day]?.room }}</small>\n+              <td v-for=\"day in dayKeys\" :key=\"`${slot}-${day}`\">\n+                <div v-if=\"tableMatrix[slot]?.[day]\" class=\"course-cell\">\n+                  <strong>{{ tableMatrix[slot][day]?.courseName }}</strong>\n+                  <small>{{ tableMatrix[slot][day]?.location }}</small>\n+                  <div v-if=\"store.isChief || store.isAdmin\" class=\"entry-actions\">\n+                    <button class=\"btn-icon\" @click=\"openEditModal(tableMatrix[slot][day]!)\">\n+                      <i class=\"fas fa-edit\"></i>\n+                    </button>\n+                    <button class=\"btn-icon danger\" @click=\"deleteScheduleEntry(tableMatrix[slot][day]!.id)\">\n+                      <i class=\"fas fa-trash\"></i>\n+                    </button>\n+                  </div>\n                 </div>\n-                <span v-else class=\"empty-cell\">—</span>\n+                <span v-else class=\"empty-cell\">-</span>\n+              </td>\n+            </tr>\n+          </tbody>\n+          <tbody v-else>\n+            <tr>\n+              <td :colspan=\"dayKeys.length + 1\" class=\"empty-row\">\n+                {{ loading ? t('common.loading') : t('notes.noNotes') }}\n               </td>",
+    "path": "unimate_frontend/src/views/TimetableView.vue",
+    "commit_id": "5143ae8bfff9eda3dabb15d2452ca162b9d28c32",
+    "original_commit_id": "1e55945f436eb6be5c6232b291baeff5a34bc362",
+    "user": {
+      "login": "Copilot",
+      "id": 175728472,
+      "node_id": "BOT_kgDOCnlnWA",
+      "avatar_url": "https://avatars.githubusercontent.com/in/946600?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/Copilot",
+      "html_url": "https://github.com/apps/copilot-pull-request-reviewer",
+      "followers_url": "https://api.github.com/users/Copilot/followers",
+      "following_url": "https://api.github.com/users/Copilot/following{/other_user}",
+      "gists_url": "https://api.github.com/users/Copilot/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/Copilot/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/Copilot/subscriptions",
+      "organizations_url": "https://api.github.com/users/Copilot/orgs",
+      "repos_url": "https://api.github.com/users/Copilot/repos",
+      "events_url": "https://api.github.com/users/Copilot/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/Copilot/received_events",
+      "type": "Bot",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "body": "Empty-state text falls back to `t('notes.noNotes')`, which is unrelated to timetable and will show an incorrect message. Add/use a timetable-specific empty-state translation key.",
+    "created_at": "2026-04-09T19:35:02Z",
+    "updated_at": "2026-04-09T19:35:11Z",
+    "html_url": "https://github.com/don-t-read-this-name-organization/upb-wp-project/pull/17#discussion_r3060222493",
+    "pull_request_url": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/17",
+    "_links": {
+      "self": {
+        "href": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/comments/3060222493"
+      },
+      "html": {
+        "href": "https://github.com/don-t-read-this-name-organization/upb-wp-project/pull/17#discussion_r3060222493"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/17"
+      }
+    },
+    "reactions": {
+      "url": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/comments/3060222493/reactions",
+      "total_count": 0,
+      "+1": 0,
+      "-1": 0,
+      "laugh": 0,
+      "hooray": 0,
+      "confused": 0,
+      "heart": 0,
+      "rocket": 0,
+      "eyes": 0
+    },
+    "start_line": 319,
+    "original_start_line": 319,
+    "start_side": "RIGHT",
+    "line": 321,
+    "original_line": 321,
+    "side": "RIGHT",
+    "author_association": "NONE",
+    "original_position": 395,
+    "position": 395,
+    "subject_type": "line"
+  },
+  {
+    "url": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/comments/3060222513",
+    "pull_request_review_id": 4084940656,
+    "id": 3060222513,
+    "node_id": "PRRC_kwDORX82Fs62Z0ox",
+    "diff_hunk": "@@ -1,99 +1,240 @@\n-<script setup lang=\"ts\">\n-import { ref } from 'vue'\n+﻿<script setup lang=\"ts\">",
+    "path": "unimate_frontend/src/views/ProfessorsView.vue",
+    "commit_id": "5143ae8bfff9eda3dabb15d2452ca162b9d28c32",
+    "original_commit_id": "1e55945f436eb6be5c6232b291baeff5a34bc362",
+    "user": {
+      "login": "Copilot",
+      "id": 175728472,
+      "node_id": "BOT_kgDOCnlnWA",
+      "avatar_url": "https://avatars.githubusercontent.com/in/946600?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/Copilot",
+      "html_url": "https://github.com/apps/copilot-pull-request-reviewer",
+      "followers_url": "https://api.github.com/users/Copilot/followers",
+      "following_url": "https://api.github.com/users/Copilot/following{/other_user}",
+      "gists_url": "https://api.github.com/users/Copilot/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/Copilot/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/Copilot/subscriptions",
+      "organizations_url": "https://api.github.com/users/Copilot/orgs",
+      "repos_url": "https://api.github.com/users/Copilot/repos",
+      "events_url": "https://api.github.com/users/Copilot/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/Copilot/received_events",
+      "type": "Bot",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "body": "The file starts with a UTF-8 BOM (invisible character before `<script>`). This often causes lint/formatting issues and noisy diffs. Please remove the BOM from the file.",
+    "created_at": "2026-04-09T19:35:03Z",
+    "updated_at": "2026-04-09T19:35:11Z",
+    "html_url": "https://github.com/don-t-read-this-name-organization/upb-wp-project/pull/17#discussion_r3060222513",
+    "pull_request_url": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/17",
+    "_links": {
+      "self": {
+        "href": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/comments/3060222513"
+      },
+      "html": {
+        "href": "https://github.com/don-t-read-this-name-organization/upb-wp-project/pull/17#discussion_r3060222513"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/17"
+      }
+    },
+    "reactions": {
+      "url": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/comments/3060222513/reactions",
+      "total_count": 0,
+      "+1": 0,
+      "-1": 0,
+      "laugh": 0,
+      "hooray": 0,
+      "confused": 0,
+      "heart": 0,
+      "rocket": 0,
+      "eyes": 0
+    },
+    "start_line": null,
+    "original_start_line": null,
+    "start_side": null,
+    "line": 1,
+    "original_line": 1,
+    "side": "RIGHT",
+    "author_association": "NONE",
+    "original_position": 3,
+    "position": 3,
+    "subject_type": "line"
+  },
+  {
+    "url": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/comments/3060222531",
+    "pull_request_review_id": 4084940656,
+    "id": 3060222531,
+    "node_id": "PRRC_kwDORX82Fs62Z0pD",
+    "diff_hunk": "@@ -366,10 +367,10 @@ onMounted(() => {\n                   <span class=\"task-priority\"\n                     >{{\n                       priorityToLabel(element.priority) === 'high'\n-                        ? '🔴'\n+                        ? 'рџ”ґ'\n                         : priorityToLabel(element.priority) === 'medium'\n-                          ? '🟡'\n-                          : '🟢'\n+                          ? 'рџџЎ'\n+                          : 'рџџў'\n                     }}",
+    "path": "unimate_frontend/src/views/KanbanView.vue",
+    "commit_id": "5143ae8bfff9eda3dabb15d2452ca162b9d28c32",
+    "original_commit_id": "1e55945f436eb6be5c6232b291baeff5a34bc362",
+    "user": {
+      "login": "Copilot",
+      "id": 175728472,
+      "node_id": "BOT_kgDOCnlnWA",
+      "avatar_url": "https://avatars.githubusercontent.com/in/946600?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/Copilot",
+      "html_url": "https://github.com/apps/copilot-pull-request-reviewer",
+      "followers_url": "https://api.github.com/users/Copilot/followers",
+      "following_url": "https://api.github.com/users/Copilot/following{/other_user}",
+      "gists_url": "https://api.github.com/users/Copilot/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/Copilot/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/Copilot/subscriptions",
+      "organizations_url": "https://api.github.com/users/Copilot/orgs",
+      "repos_url": "https://api.github.com/users/Copilot/repos",
+      "events_url": "https://api.github.com/users/Copilot/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/Copilot/received_events",
+      "type": "Bot",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "body": "The priority indicators are mojibake strings (`рџ”ґ`, `рџџЎ`, `рџџў`) instead of the intended emoji. This will render as garbage characters in the UI. Replace with the correct Unicode characters (or use icon components / Unicode escapes).",
+    "created_at": "2026-04-09T19:35:03Z",
+    "updated_at": "2026-04-09T19:35:11Z",
+    "html_url": "https://github.com/don-t-read-this-name-organization/upb-wp-project/pull/17#discussion_r3060222531",
+    "pull_request_url": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/17",
+    "_links": {
+      "self": {
+        "href": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/comments/3060222531"
+      },
+      "html": {
+        "href": "https://github.com/don-t-read-this-name-organization/upb-wp-project/pull/17#discussion_r3060222531"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/17"
+      }
+    },
+    "reactions": {
+      "url": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/comments/3060222531/reactions",
+      "total_count": 0,
+      "+1": 0,
+      "-1": 0,
+      "laugh": 0,
+      "hooray": 0,
+      "confused": 0,
+      "heart": 0,
+      "rocket": 0,
+      "eyes": 0
+    },
+    "start_line": 367,
+    "original_start_line": 367,
+    "start_side": "RIGHT",
+    "line": 374,
+    "original_line": 374,
+    "side": "RIGHT",
+    "author_association": "NONE",
+    "original_position": 22,
+    "position": 22,
+    "subject_type": "line"
+  },
+  {
+    "url": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/comments/3060222549",
+    "pull_request_review_id": 4084940656,
+    "id": 3060222549,
+    "node_id": "PRRC_kwDORX82Fs62Z0pV",
+    "diff_hunk": "@@ -166,7 +189,7 @@ const nextMap = () => {\n \n     <div v-if=\"showQuotes\" class=\"bottom-panel\" :class=\"{ collapsed: isPanelCollapsed }\">\n       <button class=\"panel-toggle\" @click=\"togglePanel\" aria-label=\"Toggle panel\">\n-        <span class=\"arrow\">{{ isPanelCollapsed ? '▼' : '▲' }}</span>\n+        <span class=\"arrow\">{{ isPanelCollapsed ? 'в–ј' : 'в–І' }}</span>\n         <span>{{ t('weatherQuote') }}</span>",
+    "path": "unimate_frontend/src/views/HomeView.vue",
+    "commit_id": "5143ae8bfff9eda3dabb15d2452ca162b9d28c32",
+    "original_commit_id": "1e55945f436eb6be5c6232b291baeff5a34bc362",
+    "user": {
+      "login": "Copilot",
+      "id": 175728472,
+      "node_id": "BOT_kgDOCnlnWA",
+      "avatar_url": "https://avatars.githubusercontent.com/in/946600?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/Copilot",
+      "html_url": "https://github.com/apps/copilot-pull-request-reviewer",
+      "followers_url": "https://api.github.com/users/Copilot/followers",
+      "following_url": "https://api.github.com/users/Copilot/following{/other_user}",
+      "gists_url": "https://api.github.com/users/Copilot/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/Copilot/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/Copilot/subscriptions",
+      "organizations_url": "https://api.github.com/users/Copilot/orgs",
+      "repos_url": "https://api.github.com/users/Copilot/repos",
+      "events_url": "https://api.github.com/users/Copilot/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/Copilot/received_events",
+      "type": "Bot",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "body": "The collapse/expand arrow is mojibake (`в–ј` / `в–І`) instead of the intended glyphs. This will display incorrectly. Replace with the correct characters (e.g., `▼` / `▲`) or use an icon font.",
+    "created_at": "2026-04-09T19:35:03Z",
+    "updated_at": "2026-04-09T19:35:11Z",
+    "html_url": "https://github.com/don-t-read-this-name-organization/upb-wp-project/pull/17#discussion_r3060222549",
+    "pull_request_url": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/17",
+    "_links": {
+      "self": {
+        "href": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/comments/3060222549"
+      },
+      "html": {
+        "href": "https://github.com/don-t-read-this-name-organization/upb-wp-project/pull/17#discussion_r3060222549"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/17"
+      }
+    },
+    "reactions": {
+      "url": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/comments/3060222549/reactions",
+      "total_count": 0,
+      "+1": 0,
+      "-1": 0,
+      "laugh": 0,
+      "hooray": 0,
+      "confused": 0,
+      "heart": 0,
+      "rocket": 0,
+      "eyes": 0
+    },
+    "start_line": 191,
+    "original_start_line": 191,
+    "start_side": "RIGHT",
+    "line": 193,
+    "original_line": 193,
+    "side": "RIGHT",
+    "author_association": "NONE",
+    "original_position": 97,
+    "position": 97,
+    "subject_type": "line"
+  },
+  {
+    "url": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/comments/3060222570",
+    "pull_request_review_id": 4084940656,
+    "id": 3060222570,
+    "node_id": "PRRC_kwDORX82Fs62Z0pq",
+    "diff_hunk": "@@ -47,6 +47,19 @@ const languageIndex = computed(() => {\n   return languages.indexOf(selectedLanguage.value)\n })\n \n+function getTranslation(lang: string) {\n+  const existing = form.value.translations.find((translation) => translation.language === lang)\n+  if (existing) {\n+    return existing\n+  }\n+\n+  const created = { language: lang, title: '', body: '' }\n+  form.value.translations.push(created)\n+  return created\n+}\n+\n+const selectedTranslation = computed(() => getTranslation(selectedLanguage.value))\n+",
+    "path": "unimate_frontend/src/views/NewsView.vue",
+    "commit_id": "5143ae8bfff9eda3dabb15d2452ca162b9d28c32",
+    "original_commit_id": "1e55945f436eb6be5c6232b291baeff5a34bc362",
+    "user": {
+      "login": "Copilot",
+      "id": 175728472,
+      "node_id": "BOT_kgDOCnlnWA",
+      "avatar_url": "https://avatars.githubusercontent.com/in/946600?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/Copilot",
+      "html_url": "https://github.com/apps/copilot-pull-request-reviewer",
+      "followers_url": "https://api.github.com/users/Copilot/followers",
+      "following_url": "https://api.github.com/users/Copilot/following{/other_user}",
+      "gists_url": "https://api.github.com/users/Copilot/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/Copilot/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/Copilot/subscriptions",
+      "organizations_url": "https://api.github.com/users/Copilot/orgs",
+      "repos_url": "https://api.github.com/users/Copilot/repos",
+      "events_url": "https://api.github.com/users/Copilot/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/Copilot/received_events",
+      "type": "Bot",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "body": "`getTranslation()` mutates reactive state (`form.value.translations.push(...)`) and is called from a computed (`selectedTranslation`). Computed getters should be pure; this side effect can cause unexpected re-render loops and makes state changes harder to reason about. Create missing translations in an explicit action (e.g., when opening the modal or in a `watch(selectedLanguage, ...)`) and keep the computed as a pure lookup.",
+    "created_at": "2026-04-09T19:35:03Z",
+    "updated_at": "2026-04-09T19:35:11Z",
+    "html_url": "https://github.com/don-t-read-this-name-organization/upb-wp-project/pull/17#discussion_r3060222570",
+    "pull_request_url": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/17",
+    "_links": {
+      "self": {
+        "href": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/comments/3060222570"
+      },
+      "html": {
+        "href": "https://github.com/don-t-read-this-name-organization/upb-wp-project/pull/17#discussion_r3060222570"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/17"
+      }
+    },
+    "reactions": {
+      "url": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/comments/3060222570/reactions",
+      "total_count": 0,
+      "+1": 0,
+      "-1": 0,
+      "laugh": 0,
+      "hooray": 0,
+      "confused": 0,
+      "heart": 0,
+      "rocket": 0,
+      "eyes": 0
+    },
+    "start_line": 50,
+    "original_start_line": 50,
+    "start_side": "RIGHT",
+    "line": 62,
+    "original_line": 62,
+    "side": "RIGHT",
+    "author_association": "NONE",
+    "original_position": 16,
+    "position": 16,
+    "subject_type": "line"
+  },
+  {
+    "url": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/comments/3060222596",
+    "pull_request_review_id": 4084940656,
+    "id": 3060222596,
+    "node_id": "PRRC_kwDORX82Fs62Z0qE",
+    "diff_hunk": "@@ -0,0 +1,152 @@\n+const ACCESS_TOKEN_KEY = 'accessToken'\n+const REFRESH_TOKEN_KEY = 'refreshToken'\n+const LEGACY_TOKEN_KEY = 'token'\n+\n+function looksLikeJwt(token: string): boolean {\n+  // Basic shape check: header.payload.signature\n+  return token.split('.').length === 3\n+}\n+\n+function getCookie(name: string): string | null {\n+  const cookies = document.cookie ? document.cookie.split('; ') : []\n+  for (const cookie of cookies) {\n+    const [key, ...parts] = cookie.split('=')\n+    if (key === name) {\n+      return decodeURIComponent(parts.join('='))\n+    }\n+  }\n+  return null\n+}\n+\n+export function getAccessToken(): string | null {\n+  const accessToken = localStorage.getItem(ACCESS_TOKEN_KEY)\n+  if (accessToken && looksLikeJwt(accessToken)) {\n+    return accessToken\n+  }\n+\n+  const legacyToken = localStorage.getItem(LEGACY_TOKEN_KEY)\n+  if (legacyToken && looksLikeJwt(legacyToken)) {\n+    return legacyToken\n+  }\n+\n+  return null\n+}\n+\n+export function getRefreshToken(): string | null {\n+  return localStorage.getItem(REFRESH_TOKEN_KEY)\n+}\n+\n+export function setAuthTokens(accessToken: string, refreshToken?: string): void {\n+  localStorage.setItem(ACCESS_TOKEN_KEY, accessToken)\n+  localStorage.setItem(LEGACY_TOKEN_KEY, accessToken)\n+  if (refreshToken) {\n+    localStorage.setItem(REFRESH_TOKEN_KEY, refreshToken)\n+  }\n+}\n+\n+export function clearAuthTokens(): void {\n+  localStorage.removeItem(ACCESS_TOKEN_KEY)\n+  localStorage.removeItem(REFRESH_TOKEN_KEY)\n+  localStorage.removeItem(LEGACY_TOKEN_KEY)\n+}\n+\n+function isApiRequest(input: RequestInfo | URL): boolean {\n+  const raw = typeof input === 'string' ? input : input instanceof URL ? input.toString() : input.url\n+  const url = new URL(raw, window.location.origin)\n+  return url.pathname.startsWith('/api/')\n+}\n+\n+function shouldAttachCsrf(method: string, url: string): boolean {\n+  const upper = method.toUpperCase()\n+  if (upper === 'GET' || upper === 'HEAD' || upper === 'OPTIONS') {\n+    return false\n+  }\n+  return !url.startsWith('/api/auth/')\n+}\n+\n+let refreshPromise: Promise<string | null> | null = null\n+\n+async function refreshAccessToken(rawFetch: typeof window.fetch): Promise<string | null> {\n+  const refreshToken = getRefreshToken()\n+  if (!refreshToken) {\n+    return null\n+  }\n+  if (!refreshPromise) {\n+    refreshPromise = (async () => {\n+      try {\n+        const response = await rawFetch('/api/auth/refresh', {\n+          method: 'POST',",
+    "path": "unimate_frontend/src/utils/apiClient.ts",
+    "commit_id": "5143ae8bfff9eda3dabb15d2452ca162b9d28c32",
+    "original_commit_id": "1e55945f436eb6be5c6232b291baeff5a34bc362",
+    "user": {
+      "login": "Copilot",
+      "id": 175728472,
+      "node_id": "BOT_kgDOCnlnWA",
+      "avatar_url": "https://avatars.githubusercontent.com/in/946600?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/Copilot",
+      "html_url": "https://github.com/apps/copilot-pull-request-reviewer",
+      "followers_url": "https://api.github.com/users/Copilot/followers",
+      "following_url": "https://api.github.com/users/Copilot/following{/other_user}",
+      "gists_url": "https://api.github.com/users/Copilot/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/Copilot/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/Copilot/subscriptions",
+      "organizations_url": "https://api.github.com/users/Copilot/orgs",
+      "repos_url": "https://api.github.com/users/Copilot/repos",
+      "events_url": "https://api.github.com/users/Copilot/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/Copilot/received_events",
+      "type": "Bot",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "body": "The refresh endpoint path is inconsistent with the backend (`AuthController` exposes `POST /api/auth/refresh-token`). This client calls `/api/auth/refresh`, and the retry guard also checks `requestUrl !== '/api/auth/refresh'`, so token refresh will never work and 401s will clear tokens unnecessarily. Update both places to use `/api/auth/refresh-token` (and align the guard accordingly).",
+    "created_at": "2026-04-09T19:35:04Z",
+    "updated_at": "2026-04-09T19:35:11Z",
+    "html_url": "https://github.com/don-t-read-this-name-organization/upb-wp-project/pull/17#discussion_r3060222596",
+    "pull_request_url": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/17",
+    "_links": {
+      "self": {
+        "href": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/comments/3060222596"
+      },
+      "html": {
+        "href": "https://github.com/don-t-read-this-name-organization/upb-wp-project/pull/17#discussion_r3060222596"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/17"
+      }
+    },
+    "reactions": {
+      "url": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/comments/3060222596/reactions",
+      "total_count": 0,
+      "+1": 0,
+      "-1": 0,
+      "laugh": 0,
+      "hooray": 0,
+      "confused": 0,
+      "heart": 0,
+      "rocket": 0,
+      "eyes": 0
+    },
+    "start_line": 69,
+    "original_start_line": 69,
+    "start_side": "RIGHT",
+    "line": 78,
+    "original_line": 78,
+    "side": "RIGHT",
+    "author_association": "NONE",
+    "original_position": 78,
+    "position": 78,
+    "subject_type": "line"
+  },
+  {
+    "url": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/comments/3060222619",
+    "pull_request_review_id": 4084940656,
+    "id": 3060222619,
+    "node_id": "PRRC_kwDORX82Fs62Z0qb",
+    "diff_hunk": "@@ -0,0 +1,152 @@\n+const ACCESS_TOKEN_KEY = 'accessToken'\n+const REFRESH_TOKEN_KEY = 'refreshToken'\n+const LEGACY_TOKEN_KEY = 'token'\n+\n+function looksLikeJwt(token: string): boolean {\n+  // Basic shape check: header.payload.signature\n+  return token.split('.').length === 3\n+}\n+\n+function getCookie(name: string): string | null {\n+  const cookies = document.cookie ? document.cookie.split('; ') : []\n+  for (const cookie of cookies) {\n+    const [key, ...parts] = cookie.split('=')\n+    if (key === name) {\n+      return decodeURIComponent(parts.join('='))\n+    }\n+  }\n+  return null\n+}\n+\n+export function getAccessToken(): string | null {\n+  const accessToken = localStorage.getItem(ACCESS_TOKEN_KEY)\n+  if (accessToken && looksLikeJwt(accessToken)) {\n+    return accessToken\n+  }\n+\n+  const legacyToken = localStorage.getItem(LEGACY_TOKEN_KEY)\n+  if (legacyToken && looksLikeJwt(legacyToken)) {\n+    return legacyToken\n+  }\n+\n+  return null\n+}\n+\n+export function getRefreshToken(): string | null {\n+  return localStorage.getItem(REFRESH_TOKEN_KEY)\n+}\n+\n+export function setAuthTokens(accessToken: string, refreshToken?: string): void {\n+  localStorage.setItem(ACCESS_TOKEN_KEY, accessToken)\n+  localStorage.setItem(LEGACY_TOKEN_KEY, accessToken)\n+  if (refreshToken) {\n+    localStorage.setItem(REFRESH_TOKEN_KEY, refreshToken)\n+  }\n+}\n+\n+export function clearAuthTokens(): void {\n+  localStorage.removeItem(ACCESS_TOKEN_KEY)\n+  localStorage.removeItem(REFRESH_TOKEN_KEY)\n+  localStorage.removeItem(LEGACY_TOKEN_KEY)\n+}\n+\n+function isApiRequest(input: RequestInfo | URL): boolean {\n+  const raw = typeof input === 'string' ? input : input instanceof URL ? input.toString() : input.url\n+  const url = new URL(raw, window.location.origin)\n+  return url.pathname.startsWith('/api/')\n+}\n+\n+function shouldAttachCsrf(method: string, url: string): boolean {\n+  const upper = method.toUpperCase()\n+  if (upper === 'GET' || upper === 'HEAD' || upper === 'OPTIONS') {\n+    return false\n+  }\n+  return !url.startsWith('/api/auth/')\n+}\n+\n+let refreshPromise: Promise<string | null> | null = null\n+\n+async function refreshAccessToken(rawFetch: typeof window.fetch): Promise<string | null> {\n+  const refreshToken = getRefreshToken()\n+  if (!refreshToken) {\n+    return null\n+  }\n+  if (!refreshPromise) {\n+    refreshPromise = (async () => {\n+      try {\n+        const response = await rawFetch('/api/auth/refresh', {\n+          method: 'POST',\n+          headers: { 'Content-Type': 'application/json' },\n+          body: JSON.stringify({ refreshToken }),\n+          credentials: 'same-origin',\n+        })\n+        if (!response.ok) {\n+          return null\n+        }\n+        const data = await response.json()\n+        if (!data?.accessToken) {\n+          return null\n+        }\n+        setAuthTokens(data.accessToken, data.refreshToken)\n+        return data.accessToken as string\n+      } catch {\n+        return null\n+      } finally {\n+        refreshPromise = null\n+      }\n+    })()\n+  }\n+  return refreshPromise\n+}\n+\n+export function setupApiClient(): void {\n+  const rawFetch = window.fetch.bind(window)\n+\n+  window.fetch = async (input: RequestInfo | URL, init?: RequestInit): Promise<Response> => {\n+    if (!isApiRequest(input)) {\n+      return rawFetch(input, init)\n+    }\n+\n+    const requestUrl =\n+      typeof input === 'string' ? new URL(input, window.location.origin).pathname : input instanceof URL ? input.pathname : new URL(input.url, window.location.origin).pathname\n+    const method = (init?.method || (input instanceof Request ? input.method : 'GET')).toUpperCase()\n+    const headers = new Headers(init?.headers || (input instanceof Request ? input.headers : undefined))\n+\n+    const accessToken = getAccessToken()\n+    if (accessToken) {\n+      headers.set('Authorization', `Bearer ${accessToken}`)\n+    }\n+    if (shouldAttachCsrf(method, requestUrl)) {\n+      const csrfToken = getCookie('XSRF-TOKEN')\n+      if (csrfToken) {\n+        headers.set('X-CSRF-TOKEN', csrfToken)\n+      }\n+    }\n+\n+    const requestInit: RequestInit = {\n+      ...init,\n+      headers,\n+      credentials: init?.credentials || 'same-origin',\n+    }\n+\n+    const response = await rawFetch(input, requestInit)\n+    if (\n+      response.status === 401 &&\n+      requestUrl !== '/api/auth/refresh' &&\n+      !headers.has('X-Auth-Retried') &&\n+      getRefreshToken()\n+    ) {",
+    "path": "unimate_frontend/src/utils/apiClient.ts",
+    "commit_id": "5143ae8bfff9eda3dabb15d2452ca162b9d28c32",
+    "original_commit_id": "1e55945f436eb6be5c6232b291baeff5a34bc362",
+    "user": {
+      "login": "Copilot",
+      "id": 175728472,
+      "node_id": "BOT_kgDOCnlnWA",
+      "avatar_url": "https://avatars.githubusercontent.com/in/946600?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/Copilot",
+      "html_url": "https://github.com/apps/copilot-pull-request-reviewer",
+      "followers_url": "https://api.github.com/users/Copilot/followers",
+      "following_url": "https://api.github.com/users/Copilot/following{/other_user}",
+      "gists_url": "https://api.github.com/users/Copilot/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/Copilot/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/Copilot/subscriptions",
+      "organizations_url": "https://api.github.com/users/Copilot/orgs",
+      "repos_url": "https://api.github.com/users/Copilot/repos",
+      "events_url": "https://api.github.com/users/Copilot/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/Copilot/received_events",
+      "type": "Bot",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "body": "Related to refresh handling: the 401 retry guard excludes `'/api/auth/refresh'`, but the backend route is `'/api/auth/refresh-token'`. Without updating this, refresh calls can be retried recursively or normal API calls won’t trigger refresh correctly (depending on the final endpoint). Align this guard with the actual refresh URL.",
+    "created_at": "2026-04-09T19:35:04Z",
+    "updated_at": "2026-04-09T19:35:11Z",
+    "html_url": "https://github.com/don-t-read-this-name-organization/upb-wp-project/pull/17#discussion_r3060222619",
+    "pull_request_url": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/17",
+    "_links": {
+      "self": {
+        "href": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/comments/3060222619"
+      },
+      "html": {
+        "href": "https://github.com/don-t-read-this-name-organization/upb-wp-project/pull/17#discussion_r3060222619"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/17"
+      }
+    },
+    "reactions": {
+      "url": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/comments/3060222619/reactions",
+      "total_count": 0,
+      "+1": 0,
+      "-1": 0,
+      "laugh": 0,
+      "hooray": 0,
+      "confused": 0,
+      "heart": 0,
+      "rocket": 0,
+      "eyes": 0
+    },
+    "start_line": 132,
+    "original_start_line": 132,
+    "start_side": "RIGHT",
+    "line": 138,
+    "original_line": 138,
+    "side": "RIGHT",
+    "author_association": "NONE",
+    "original_position": 138,
+    "position": 138,
+    "subject_type": "line"
+  },
+  {
+    "url": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/comments/3060222646",
+    "pull_request_review_id": 4084940656,
+    "id": 3060222646,
+    "node_id": "PRRC_kwDORX82Fs62Z0q2",
+    "diff_hunk": "@@ -21,30 +28,79 @@\n @FieldDefaults(level = PRIVATE, makeFinal = true)\n public class AuthController {\n     UserService userService;\n-    PasswordEncoder passwordEncoder;\n+    AuthenticationManager authenticationManager;\n+    JwtTokenProvider jwtTokenProvider;\n \n     @PostMapping(\"/login\")\n-    public ResponseEntity<?> login(@RequestBody Map<String, String> credentials) {\n-        String email = credentials.get(\"email\");\n-        String password = credentials.get(\"password\");\n+    public ResponseEntity<?> login(@RequestBody LoginRequest request) {\n+        if (!isValid(request.getEmail()) || !isValid(request.getPassword())) {\n+            return error(HttpStatus.BAD_REQUEST, \"Email and password are required\");\n+        }\n+\n+        try {\n+            Authentication auth = authenticationManager.authenticate(\n+                new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())\n+            );",
+    "path": "unimate_backend/src/main/java/org/unimate/unimate/api/controller/AuthController.java",
+    "commit_id": "5143ae8bfff9eda3dabb15d2452ca162b9d28c32",
+    "original_commit_id": "1e55945f436eb6be5c6232b291baeff5a34bc362",
+    "user": {
+      "login": "Copilot",
+      "id": 175728472,
+      "node_id": "BOT_kgDOCnlnWA",
+      "avatar_url": "https://avatars.githubusercontent.com/in/946600?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/Copilot",
+      "html_url": "https://github.com/apps/copilot-pull-request-reviewer",
+      "followers_url": "https://api.github.com/users/Copilot/followers",
+      "following_url": "https://api.github.com/users/Copilot/following{/other_user}",
+      "gists_url": "https://api.github.com/users/Copilot/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/Copilot/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/Copilot/subscriptions",
+      "organizations_url": "https://api.github.com/users/Copilot/orgs",
+      "repos_url": "https://api.github.com/users/Copilot/repos",
+      "events_url": "https://api.github.com/users/Copilot/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/Copilot/received_events",
+      "type": "Bot",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "body": "`AuthController` imports `org.unimate.unimate.api.dto.auth.LoginRequest` and uses `request.getEmail()/getPassword()`, but the `LoginRequest` added in this PR is a Java record in `org.unimate.unimate.api.dto.auth.request` (accessors are `email()` / `password()`). As written, this won’t compile. Fix the import and accessor usage to match the record (or move the record to the imported package).",
+    "created_at": "2026-04-09T19:35:04Z",
+    "updated_at": "2026-04-09T19:35:11Z",
+    "html_url": "https://github.com/don-t-read-this-name-organization/upb-wp-project/pull/17#discussion_r3060222646",
+    "pull_request_url": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/17",
+    "_links": {
+      "self": {
+        "href": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/comments/3060222646"
+      },
+      "html": {
+        "href": "https://github.com/don-t-read-this-name-organization/upb-wp-project/pull/17#discussion_r3060222646"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/17"
+      }
+    },
+    "reactions": {
+      "url": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/comments/3060222646/reactions",
+      "total_count": 0,
+      "+1": 0,
+      "-1": 0,
+      "laugh": 0,
+      "hooray": 0,
+      "confused": 0,
+      "heart": 0,
+      "rocket": 0,
+      "eyes": 0
+    },
+    "start_line": 13,
+    "original_start_line": 13,
+    "start_side": "RIGHT",
+    "line": 43,
+    "original_line": 43,
+    "side": "RIGHT",
+    "author_association": "NONE",
+    "original_position": 39,
+    "position": 39,
+    "subject_type": "line"
+  },
+  {
+    "url": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/comments/3060222670",
+    "pull_request_review_id": 4084940656,
+    "id": 3060222670,
+    "node_id": "PRRC_kwDORX82Fs62Z0rO",
+    "diff_hunk": "@@ -21,30 +28,79 @@\n @FieldDefaults(level = PRIVATE, makeFinal = true)\n public class AuthController {\n     UserService userService;\n-    PasswordEncoder passwordEncoder;\n+    AuthenticationManager authenticationManager;\n+    JwtTokenProvider jwtTokenProvider;\n \n     @PostMapping(\"/login\")\n-    public ResponseEntity<?> login(@RequestBody Map<String, String> credentials) {\n-        String email = credentials.get(\"email\");\n-        String password = credentials.get(\"password\");\n+    public ResponseEntity<?> login(@RequestBody LoginRequest request) {\n+        if (!isValid(request.getEmail()) || !isValid(request.getPassword())) {\n+            return error(HttpStatus.BAD_REQUEST, \"Email and password are required\");\n+        }\n+\n+        try {\n+            Authentication auth = authenticationManager.authenticate(\n+                new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())\n+            );\n+            User user = (User) auth.getPrincipal();\n+\n+            if (!user.getActive()) {\n+                return error(HttpStatus.UNAUTHORIZED, \"User account is inactive\");\n+            }\n+\n+            AuthResponse response = AuthResponse.of(\n+                UserResponse.fromEntity(user),\n+                jwtTokenProvider.generateToken(user),\n+                jwtTokenProvider.generateRefreshToken(user)\n+            );\n+            return ResponseEntity.ok(response);",
+    "path": "unimate_backend/src/main/java/org/unimate/unimate/api/controller/AuthController.java",
+    "commit_id": "5143ae8bfff9eda3dabb15d2452ca162b9d28c32",
+    "original_commit_id": "1e55945f436eb6be5c6232b291baeff5a34bc362",
+    "user": {
+      "login": "Copilot",
+      "id": 175728472,
+      "node_id": "BOT_kgDOCnlnWA",
+      "avatar_url": "https://avatars.githubusercontent.com/in/946600?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/Copilot",
+      "html_url": "https://github.com/apps/copilot-pull-request-reviewer",
+      "followers_url": "https://api.github.com/users/Copilot/followers",
+      "following_url": "https://api.github.com/users/Copilot/following{/other_user}",
+      "gists_url": "https://api.github.com/users/Copilot/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/Copilot/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/Copilot/subscriptions",
+      "organizations_url": "https://api.github.com/users/Copilot/orgs",
+      "repos_url": "https://api.github.com/users/Copilot/repos",
+      "events_url": "https://api.github.com/users/Copilot/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/Copilot/received_events",
+      "type": "Bot",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "body": "`AuthController` references `org.unimate.unimate.api.dto.auth.AuthResponse`, but there is no `AuthResponse` type in the codebase (only `AuthTokenResponse` exists in `...dto.auth.response`). This will fail compilation and also makes the frontend response shape unclear. Either add the missing DTO or switch to the existing `AuthTokenResponse` (and keep field names consistent with the frontend).",
+    "created_at": "2026-04-09T19:35:04Z",
+    "updated_at": "2026-04-09T19:35:11Z",
+    "html_url": "https://github.com/don-t-read-this-name-organization/upb-wp-project/pull/17#discussion_r3060222670",
+    "pull_request_url": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/17",
+    "_links": {
+      "self": {
+        "href": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/comments/3060222670"
+      },
+      "html": {
+        "href": "https://github.com/don-t-read-this-name-organization/upb-wp-project/pull/17#discussion_r3060222670"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/17"
+      }
+    },
+    "reactions": {
+      "url": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/comments/3060222670/reactions",
+      "total_count": 0,
+      "+1": 0,
+      "-1": 0,
+      "laugh": 0,
+      "hooray": 0,
+      "confused": 0,
+      "heart": 0,
+      "rocket": 0,
+      "eyes": 0
+    },
+    "start_line": 13,
+    "original_start_line": 13,
+    "start_side": "RIGHT",
+    "line": 55,
+    "original_line": 55,
+    "side": "RIGHT",
+    "author_association": "NONE",
+    "original_position": 51,
+    "position": 51,
+    "subject_type": "line"
+  },
+  {
+    "url": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/comments/3060222697",
+    "pull_request_review_id": 4084940656,
+    "id": 3060222697,
+    "node_id": "PRRC_kwDORX82Fs62Z0rp",
+    "diff_hunk": "@@ -50,8 +55,15 @@ public List<UserResponse> list() {\n   }\r\n \r\n   @PutMapping(\"/{id}\")\r\n-  public UserResponse update(@PathVariable Integer id, @RequestBody UserRequest request) {\r\n+  public UserResponse update(\r\n+      @PathVariable Integer id,\r\n+      @RequestBody UserRequest request,\r\n+      @AuthenticationPrincipal AuthenticatedUser currentUser\r\n+  ) {\r\n     User user = userService.findById(id).orElseThrow(() -> new NotFoundException(\"User\", id));\r\n+    if (currentUser != null && currentUser.getRole() != RoleName.ADMIN) {\r\n+      request.setRole(user.getRole());\r\n+    }\r\n     return userService.update(user, request);\r",
+    "path": "unimate_backend/src/main/java/org/unimate/unimate/api/controller/UserController.java",
+    "commit_id": "5143ae8bfff9eda3dabb15d2452ca162b9d28c32",
+    "original_commit_id": "1e55945f436eb6be5c6232b291baeff5a34bc362",
+    "user": {
+      "login": "Copilot",
+      "id": 175728472,
+      "node_id": "BOT_kgDOCnlnWA",
+      "avatar_url": "https://avatars.githubusercontent.com/in/946600?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/Copilot",
+      "html_url": "https://github.com/apps/copilot-pull-request-reviewer",
+      "followers_url": "https://api.github.com/users/Copilot/followers",
+      "following_url": "https://api.github.com/users/Copilot/following{/other_user}",
+      "gists_url": "https://api.github.com/users/Copilot/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/Copilot/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/Copilot/subscriptions",
+      "organizations_url": "https://api.github.com/users/Copilot/orgs",
+      "repos_url": "https://api.github.com/users/Copilot/repos",
+      "events_url": "https://api.github.com/users/Copilot/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/Copilot/received_events",
+      "type": "Bot",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "body": "`PUT /api/users/{id}` only prevents non-admins from changing the role, but still allows updating other fields for any user ID. Add an explicit access check (admin or same user) before calling `userService.update(...)`.",
+    "created_at": "2026-04-09T19:35:05Z",
+    "updated_at": "2026-04-09T19:35:11Z",
+    "html_url": "https://github.com/don-t-read-this-name-organization/upb-wp-project/pull/17#discussion_r3060222697",
+    "pull_request_url": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/17",
+    "_links": {
+      "self": {
+        "href": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/comments/3060222697"
+      },
+      "html": {
+        "href": "https://github.com/don-t-read-this-name-organization/upb-wp-project/pull/17#discussion_r3060222697"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/17"
+      }
+    },
+    "reactions": {
+      "url": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/comments/3060222697/reactions",
+      "total_count": 0,
+      "+1": 0,
+      "-1": 0,
+      "laugh": 0,
+      "hooray": 0,
+      "confused": 0,
+      "heart": 0,
+      "rocket": 0,
+      "eyes": 0
+    },
+    "start_line": 63,
+    "original_start_line": 63,
+    "start_side": "RIGHT",
+    "line": 67,
+    "original_line": 67,
+    "side": "RIGHT",
+    "author_association": "NONE",
+    "original_position": 45,
+    "position": 45,
+    "subject_type": "line"
+  },
+  {
+    "url": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/comments/3060222727",
+    "pull_request_review_id": 4084940656,
+    "id": 3060222727,
+    "node_id": "PRRC_kwDORX82Fs62Z0sH",
+    "diff_hunk": "@@ -0,0 +1,69 @@\n+package org.unimate.unimate.api.controller;\n+\n+import jakarta.validation.Valid;\n+import lombok.RequiredArgsConstructor;\n+import lombok.experimental.FieldDefaults;\n+import org.springframework.security.access.annotation.Secured;\n+import org.springframework.security.access.prepost.PreAuthorize;\n+import org.springframework.web.bind.annotation.*;\n+import org.unimate.unimate.api.dto.professor.request.ProfessorRequest;\n+import org.unimate.unimate.api.dto.professor.response.ProfessorResponse;\n+import org.unimate.unimate.exception.NotFoundException;\n+import org.unimate.unimate.service.ProfessorService;\n+\n+import java.util.List;\n+\n+import static lombok.AccessLevel.PRIVATE;\n+\n+@RestController\n+@RequestMapping(\"/api/professors\")\n+@RequiredArgsConstructor\n+@FieldDefaults(level = PRIVATE, makeFinal = true)\n+public class ProfessorController {\n+\n+  ProfessorService professorService;\n+\n+  @GetMapping\n+  @PreAuthorize(\"permitAll()\")\n+  public List<ProfessorResponse> list() {\n+    return professorService.findAllActive().stream()\n+        .map(ProfessorResponse::fromEntity)\n+        .toList();\n+  }\n+\n+  @GetMapping(\"/{id}\")\n+  @PreAuthorize(\"permitAll()\")\n+  public ProfessorResponse getById(@PathVariable Integer id) {\n+    return professorService.findById(id)\n+        .map(ProfessorResponse::fromEntity)\n+        .orElseThrow(() -> new NotFoundException(\"Professor\", id));\n+  }\n+\n+  @PostMapping\n+  public ProfessorResponse create(@Valid @RequestBody ProfessorRequest request) {\n+    return ProfessorResponse.fromEntity(",
+    "path": "unimate_backend/src/main/java/org/unimate/unimate/api/controller/ProfessorController.java",
+    "commit_id": "5143ae8bfff9eda3dabb15d2452ca162b9d28c32",
+    "original_commit_id": "1e55945f436eb6be5c6232b291baeff5a34bc362",
+    "user": {
+      "login": "Copilot",
+      "id": 175728472,
+      "node_id": "BOT_kgDOCnlnWA",
+      "avatar_url": "https://avatars.githubusercontent.com/in/946600?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/Copilot",
+      "html_url": "https://github.com/apps/copilot-pull-request-reviewer",
+      "followers_url": "https://api.github.com/users/Copilot/followers",
+      "following_url": "https://api.github.com/users/Copilot/following{/other_user}",
+      "gists_url": "https://api.github.com/users/Copilot/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/Copilot/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/Copilot/subscriptions",
+      "organizations_url": "https://api.github.com/users/Copilot/orgs",
+      "repos_url": "https://api.github.com/users/Copilot/repos",
+      "events_url": "https://api.github.com/users/Copilot/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/Copilot/received_events",
+      "type": "Bot",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "body": "`POST /api/professors` has no authorization guard. With `/api/**` now authenticated, any logged-in user can create professors. Add `@PreAuthorize(\"hasRole('ADMIN')\")` (or similar) to restrict writes to admins.",
+    "created_at": "2026-04-09T19:35:05Z",
+    "updated_at": "2026-04-09T19:35:11Z",
+    "html_url": "https://github.com/don-t-read-this-name-organization/upb-wp-project/pull/17#discussion_r3060222727",
+    "pull_request_url": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/17",
+    "_links": {
+      "self": {
+        "href": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/comments/3060222727"
+      },
+      "html": {
+        "href": "https://github.com/don-t-read-this-name-organization/upb-wp-project/pull/17#discussion_r3060222727"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/17"
+      }
+    },
+    "reactions": {
+      "url": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/comments/3060222727/reactions",
+      "total_count": 0,
+      "+1": 0,
+      "-1": 0,
+      "laugh": 0,
+      "hooray": 0,
+      "confused": 0,
+      "heart": 0,
+      "rocket": 0,
+      "eyes": 0
+    },
+    "start_line": 42,
+    "original_start_line": 42,
+    "start_side": "RIGHT",
+    "line": 44,
+    "original_line": 44,
+    "side": "RIGHT",
+    "author_association": "NONE",
+    "original_position": 44,
+    "position": 44,
+    "subject_type": "line"
+  },
+  {
+    "url": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/comments/3060222749",
+    "pull_request_review_id": 4084940656,
+    "id": 3060222749,
+    "node_id": "PRRC_kwDORX82Fs62Z0sd",
+    "diff_hunk": "@@ -0,0 +1,69 @@\n+package org.unimate.unimate.api.controller;\n+\n+import jakarta.validation.Valid;\n+import lombok.RequiredArgsConstructor;\n+import lombok.experimental.FieldDefaults;\n+import org.springframework.security.access.annotation.Secured;\n+import org.springframework.security.access.prepost.PreAuthorize;\n+import org.springframework.web.bind.annotation.*;\n+import org.unimate.unimate.api.dto.professor.request.ProfessorRequest;\n+import org.unimate.unimate.api.dto.professor.response.ProfessorResponse;\n+import org.unimate.unimate.exception.NotFoundException;\n+import org.unimate.unimate.service.ProfessorService;\n+\n+import java.util.List;\n+\n+import static lombok.AccessLevel.PRIVATE;\n+\n+@RestController\n+@RequestMapping(\"/api/professors\")\n+@RequiredArgsConstructor\n+@FieldDefaults(level = PRIVATE, makeFinal = true)\n+public class ProfessorController {\n+\n+  ProfessorService professorService;\n+\n+  @GetMapping\n+  @PreAuthorize(\"permitAll()\")\n+  public List<ProfessorResponse> list() {\n+    return professorService.findAllActive().stream()\n+        .map(ProfessorResponse::fromEntity)\n+        .toList();\n+  }\n+\n+  @GetMapping(\"/{id}\")\n+  @PreAuthorize(\"permitAll()\")\n+  public ProfessorResponse getById(@PathVariable Integer id) {\n+    return professorService.findById(id)\n+        .map(ProfessorResponse::fromEntity)\n+        .orElseThrow(() -> new NotFoundException(\"Professor\", id));\n+  }\n+\n+  @PostMapping\n+  public ProfessorResponse create(@Valid @RequestBody ProfessorRequest request) {\n+    return ProfessorResponse.fromEntity(\n+        professorService.create(\n+            request.name().trim(),\n+            request.department() != null ? request.department().trim() : null,\n+            request.faculty() != null ? request.faculty().trim() : null\n+        )\n+    );\n+  }\n+\n+  @PutMapping(\"/{id}\")\n+  public ProfessorResponse update(@PathVariable Integer id, @Valid @RequestBody ProfessorRequest request) {\n+    return ProfessorResponse.fromEntity(",
+    "path": "unimate_backend/src/main/java/org/unimate/unimate/api/controller/ProfessorController.java",
+    "commit_id": "5143ae8bfff9eda3dabb15d2452ca162b9d28c32",
+    "original_commit_id": "1e55945f436eb6be5c6232b291baeff5a34bc362",
+    "user": {
+      "login": "Copilot",
+      "id": 175728472,
+      "node_id": "BOT_kgDOCnlnWA",
+      "avatar_url": "https://avatars.githubusercontent.com/in/946600?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/Copilot",
+      "html_url": "https://github.com/apps/copilot-pull-request-reviewer",
+      "followers_url": "https://api.github.com/users/Copilot/followers",
+      "following_url": "https://api.github.com/users/Copilot/following{/other_user}",
+      "gists_url": "https://api.github.com/users/Copilot/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/Copilot/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/Copilot/subscriptions",
+      "organizations_url": "https://api.github.com/users/Copilot/orgs",
+      "repos_url": "https://api.github.com/users/Copilot/repos",
+      "events_url": "https://api.github.com/users/Copilot/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/Copilot/received_events",
+      "type": "Bot",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "body": "`PUT /api/professors/{id}` has no authorization guard. Any authenticated user can update professor data. Add admin-only authorization (e.g., `@PreAuthorize(\"hasRole('ADMIN')\")`).",
+    "created_at": "2026-04-09T19:35:05Z",
+    "updated_at": "2026-04-09T19:35:11Z",
+    "html_url": "https://github.com/don-t-read-this-name-organization/upb-wp-project/pull/17#discussion_r3060222749",
+    "pull_request_url": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/17",
+    "_links": {
+      "self": {
+        "href": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/comments/3060222749"
+      },
+      "html": {
+        "href": "https://github.com/don-t-read-this-name-organization/upb-wp-project/pull/17#discussion_r3060222749"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/17"
+      }
+    },
+    "reactions": {
+      "url": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/comments/3060222749/reactions",
+      "total_count": 0,
+      "+1": 0,
+      "-1": 0,
+      "laugh": 0,
+      "hooray": 0,
+      "confused": 0,
+      "heart": 0,
+      "rocket": 0,
+      "eyes": 0
+    },
+    "start_line": 53,
+    "original_start_line": 53,
+    "start_side": "RIGHT",
+    "line": 55,
+    "original_line": 55,
+    "side": "RIGHT",
+    "author_association": "NONE",
+    "original_position": 55,
+    "position": 55,
+    "subject_type": "line"
+  },
+  {
+    "url": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/comments/3060222775",
+    "pull_request_review_id": 4084940656,
+    "id": 3060222775,
+    "node_id": "PRRC_kwDORX82Fs62Z0s3",
+    "diff_hunk": "@@ -0,0 +1,69 @@\n+package org.unimate.unimate.api.controller;\n+\n+import jakarta.validation.Valid;\n+import lombok.RequiredArgsConstructor;\n+import lombok.experimental.FieldDefaults;\n+import org.springframework.security.access.annotation.Secured;\n+import org.springframework.security.access.prepost.PreAuthorize;\n+import org.springframework.web.bind.annotation.*;\n+import org.unimate.unimate.api.dto.professor.request.ProfessorRequest;\n+import org.unimate.unimate.api.dto.professor.response.ProfessorResponse;\n+import org.unimate.unimate.exception.NotFoundException;\n+import org.unimate.unimate.service.ProfessorService;\n+\n+import java.util.List;\n+\n+import static lombok.AccessLevel.PRIVATE;\n+\n+@RestController\n+@RequestMapping(\"/api/professors\")\n+@RequiredArgsConstructor\n+@FieldDefaults(level = PRIVATE, makeFinal = true)\n+public class ProfessorController {\n+\n+  ProfessorService professorService;\n+\n+  @GetMapping\n+  @PreAuthorize(\"permitAll()\")\n+  public List<ProfessorResponse> list() {\n+    return professorService.findAllActive().stream()\n+        .map(ProfessorResponse::fromEntity)\n+        .toList();\n+  }\n+\n+  @GetMapping(\"/{id}\")\n+  @PreAuthorize(\"permitAll()\")\n+  public ProfessorResponse getById(@PathVariable Integer id) {\n+    return professorService.findById(id)\n+        .map(ProfessorResponse::fromEntity)\n+        .orElseThrow(() -> new NotFoundException(\"Professor\", id));\n+  }\n+\n+  @PostMapping\n+  public ProfessorResponse create(@Valid @RequestBody ProfessorRequest request) {\n+    return ProfessorResponse.fromEntity(\n+        professorService.create(\n+            request.name().trim(),\n+            request.department() != null ? request.department().trim() : null,\n+            request.faculty() != null ? request.faculty().trim() : null\n+        )\n+    );\n+  }\n+\n+  @PutMapping(\"/{id}\")\n+  public ProfessorResponse update(@PathVariable Integer id, @Valid @RequestBody ProfessorRequest request) {\n+    return ProfessorResponse.fromEntity(\n+        professorService.update(\n+            id,\n+            request.name().trim(),\n+            request.department() != null ? request.department().trim() : null,\n+            request.faculty() != null ? request.faculty().trim() : null\n+        )\n+    );\n+  }\n+\n+  @DeleteMapping(\"/{id}\")\n+  public void delete(@PathVariable Integer id) {\n+    professorService.delete(id);\n+  }",
+    "path": "unimate_backend/src/main/java/org/unimate/unimate/api/controller/ProfessorController.java",
+    "commit_id": "5143ae8bfff9eda3dabb15d2452ca162b9d28c32",
+    "original_commit_id": "1e55945f436eb6be5c6232b291baeff5a34bc362",
+    "user": {
+      "login": "Copilot",
+      "id": 175728472,
+      "node_id": "BOT_kgDOCnlnWA",
+      "avatar_url": "https://avatars.githubusercontent.com/in/946600?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/Copilot",
+      "html_url": "https://github.com/apps/copilot-pull-request-reviewer",
+      "followers_url": "https://api.github.com/users/Copilot/followers",
+      "following_url": "https://api.github.com/users/Copilot/following{/other_user}",
+      "gists_url": "https://api.github.com/users/Copilot/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/Copilot/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/Copilot/subscriptions",
+      "organizations_url": "https://api.github.com/users/Copilot/orgs",
+      "repos_url": "https://api.github.com/users/Copilot/repos",
+      "events_url": "https://api.github.com/users/Copilot/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/Copilot/received_events",
+      "type": "Bot",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "body": "`DELETE /api/professors/{id}` has no authorization guard. Any authenticated user can delete professors. Add admin-only authorization (e.g., `@PreAuthorize(\"hasRole('ADMIN')\")`).",
+    "created_at": "2026-04-09T19:35:05Z",
+    "updated_at": "2026-04-09T19:35:11Z",
+    "html_url": "https://github.com/don-t-read-this-name-organization/upb-wp-project/pull/17#discussion_r3060222775",
+    "pull_request_url": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/17",
+    "_links": {
+      "self": {
+        "href": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/comments/3060222775"
+      },
+      "html": {
+        "href": "https://github.com/don-t-read-this-name-organization/upb-wp-project/pull/17#discussion_r3060222775"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/17"
+      }
+    },
+    "reactions": {
+      "url": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/comments/3060222775/reactions",
+      "total_count": 0,
+      "+1": 0,
+      "-1": 0,
+      "laugh": 0,
+      "hooray": 0,
+      "confused": 0,
+      "heart": 0,
+      "rocket": 0,
+      "eyes": 0
+    },
+    "start_line": 65,
+    "original_start_line": 65,
+    "start_side": "RIGHT",
+    "line": 68,
+    "original_line": 68,
+    "side": "RIGHT",
+    "author_association": "NONE",
+    "original_position": 68,
+    "position": 68,
+    "subject_type": "line"
+  },
+  {
+    "url": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/comments/3060222798",
+    "pull_request_review_id": 4084940656,
+    "id": 3060222798,
+    "node_id": "PRRC_kwDORX82Fs62Z0tO",
+    "diff_hunk": "@@ -0,0 +1,63 @@\n+package org.unimate.unimate.api.controller;\n+\n+import jakarta.validation.Valid;\n+import lombok.RequiredArgsConstructor;\n+import lombok.experimental.FieldDefaults;\n+import org.springframework.security.access.prepost.PreAuthorize;\n+import org.springframework.security.core.annotation.AuthenticationPrincipal;\n+import org.springframework.web.bind.annotation.*;\n+import org.unimate.unimate.api.dto.schedule.request.ScheduleRequest;\n+import org.unimate.unimate.api.dto.schedule.response.ScheduleResponse;\n+import org.unimate.unimate.api.security.AuthenticatedUser;\n+import org.unimate.unimate.exception.ValidationException;\n+import org.unimate.unimate.service.ScheduleService;\n+\n+import java.util.List;\n+\n+import static lombok.AccessLevel.PRIVATE;\n+\n+@RestController\n+@RequestMapping(\"/api/schedule\")\n+@RequiredArgsConstructor\n+@FieldDefaults(level = PRIVATE, makeFinal = true)\n+public class ScheduleController {\n+\n+  ScheduleService scheduleService;\n+\n+  @PostMapping\n+  @PreAuthorize(\"hasRole('CHIEF') || hasRole('ADMIN')\")\n+  public ScheduleResponse create(\n+      @Valid @RequestBody ScheduleRequest request,\n+      @AuthenticationPrincipal AuthenticatedUser currentUser\n+  ) {\n+    if (currentUser == null) {\n+      throw new ValidationException(\"User is not authenticated\");\n+    }\n+    return scheduleService.create(currentUser.getId(), request);\n+  }\n+\n+  @GetMapping\n+  public List<ScheduleResponse> list(\n+      @AuthenticationPrincipal AuthenticatedUser currentUser\n+  ) {\n+    if (currentUser == null) {\n+      throw new ValidationException(\"User is not authenticated\");\n+    }\n+    return scheduleService.getUserSchedule(currentUser.getId());\n+  }\n+\n+  @PutMapping(\"/{id}\")\n+  @PreAuthorize(\"hasRole('CHIEF') || hasRole('ADMIN')\")\n+  public ScheduleResponse update(\n+      @PathVariable Integer id,\n+      @Valid @RequestBody ScheduleRequest request",
+    "path": "unimate_backend/src/main/java/org/unimate/unimate/api/controller/ScheduleController.java",
+    "commit_id": "5143ae8bfff9eda3dabb15d2452ca162b9d28c32",
+    "original_commit_id": "1e55945f436eb6be5c6232b291baeff5a34bc362",
+    "user": {
+      "login": "Copilot",
+      "id": 175728472,
+      "node_id": "BOT_kgDOCnlnWA",
+      "avatar_url": "https://avatars.githubusercontent.com/in/946600?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/Copilot",
+      "html_url": "https://github.com/apps/copilot-pull-request-reviewer",
+      "followers_url": "https://api.github.com/users/Copilot/followers",
+      "following_url": "https://api.github.com/users/Copilot/following{/other_user}",
+      "gists_url": "https://api.github.com/users/Copilot/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/Copilot/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/Copilot/subscriptions",
+      "organizations_url": "https://api.github.com/users/Copilot/orgs",
+      "repos_url": "https://api.github.com/users/Copilot/repos",
+      "events_url": "https://api.github.com/users/Copilot/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/Copilot/received_events",
+      "type": "Bot",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "body": "`PUT /api/schedule/{id}` is only guarded by role (CHIEF/ADMIN) and does not verify that the schedule belongs to the current user. Since `ScheduleService.update()` doesn’t enforce ownership, a CHIEF could update another user’s schedule by ID. Add an ownership check (e.g., via `AuthorizationService`) or pass the current user into the service.",
+    "created_at": "2026-04-09T19:35:06Z",
+    "updated_at": "2026-04-09T19:35:11Z",
+    "html_url": "https://github.com/don-t-read-this-name-organization/upb-wp-project/pull/17#discussion_r3060222798",
+    "pull_request_url": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/17",
+    "_links": {
+      "self": {
+        "href": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/comments/3060222798"
+      },
+      "html": {
+        "href": "https://github.com/don-t-read-this-name-organization/upb-wp-project/pull/17#discussion_r3060222798"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/17"
+      }
+    },
+    "reactions": {
+      "url": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/comments/3060222798/reactions",
+      "total_count": 0,
+      "+1": 0,
+      "-1": 0,
+      "laugh": 0,
+      "hooray": 0,
+      "confused": 0,
+      "heart": 0,
+      "rocket": 0,
+      "eyes": 0
+    },
+    "start_line": 49,
+    "original_start_line": 49,
+    "start_side": "RIGHT",
+    "line": 53,
+    "original_line": 53,
+    "side": "RIGHT",
+    "author_association": "NONE",
+    "original_position": 53,
+    "position": 53,
+    "subject_type": "line"
+  },
+  {
+    "url": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/comments/3060222819",
+    "pull_request_review_id": 4084940656,
+    "id": 3060222819,
+    "node_id": "PRRC_kwDORX82Fs62Z0tj",
+    "diff_hunk": "@@ -0,0 +1,63 @@\n+package org.unimate.unimate.api.controller;\n+\n+import jakarta.validation.Valid;\n+import lombok.RequiredArgsConstructor;\n+import lombok.experimental.FieldDefaults;\n+import org.springframework.security.access.prepost.PreAuthorize;\n+import org.springframework.security.core.annotation.AuthenticationPrincipal;\n+import org.springframework.web.bind.annotation.*;\n+import org.unimate.unimate.api.dto.schedule.request.ScheduleRequest;\n+import org.unimate.unimate.api.dto.schedule.response.ScheduleResponse;\n+import org.unimate.unimate.api.security.AuthenticatedUser;\n+import org.unimate.unimate.exception.ValidationException;\n+import org.unimate.unimate.service.ScheduleService;\n+\n+import java.util.List;\n+\n+import static lombok.AccessLevel.PRIVATE;\n+\n+@RestController\n+@RequestMapping(\"/api/schedule\")\n+@RequiredArgsConstructor\n+@FieldDefaults(level = PRIVATE, makeFinal = true)\n+public class ScheduleController {\n+\n+  ScheduleService scheduleService;\n+\n+  @PostMapping\n+  @PreAuthorize(\"hasRole('CHIEF') || hasRole('ADMIN')\")\n+  public ScheduleResponse create(\n+      @Valid @RequestBody ScheduleRequest request,\n+      @AuthenticationPrincipal AuthenticatedUser currentUser\n+  ) {\n+    if (currentUser == null) {\n+      throw new ValidationException(\"User is not authenticated\");\n+    }\n+    return scheduleService.create(currentUser.getId(), request);\n+  }\n+\n+  @GetMapping\n+  public List<ScheduleResponse> list(\n+      @AuthenticationPrincipal AuthenticatedUser currentUser\n+  ) {\n+    if (currentUser == null) {\n+      throw new ValidationException(\"User is not authenticated\");\n+    }\n+    return scheduleService.getUserSchedule(currentUser.getId());\n+  }\n+\n+  @PutMapping(\"/{id}\")\n+  @PreAuthorize(\"hasRole('CHIEF') || hasRole('ADMIN')\")\n+  public ScheduleResponse update(\n+      @PathVariable Integer id,\n+      @Valid @RequestBody ScheduleRequest request\n+  ) {\n+    return scheduleService.update(id, request);\n+  }\n+\n+  @DeleteMapping(\"/{id}\")\n+  @PreAuthorize(\"hasRole('CHIEF') || hasRole('ADMIN')\")\n+  public void delete(@PathVariable Integer id) {\n+    scheduleService.delete(id);\n+  }",
+    "path": "unimate_backend/src/main/java/org/unimate/unimate/api/controller/ScheduleController.java",
+    "commit_id": "5143ae8bfff9eda3dabb15d2452ca162b9d28c32",
+    "original_commit_id": "1e55945f436eb6be5c6232b291baeff5a34bc362",
+    "user": {
+      "login": "Copilot",
+      "id": 175728472,
+      "node_id": "BOT_kgDOCnlnWA",
+      "avatar_url": "https://avatars.githubusercontent.com/in/946600?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/Copilot",
+      "html_url": "https://github.com/apps/copilot-pull-request-reviewer",
+      "followers_url": "https://api.github.com/users/Copilot/followers",
+      "following_url": "https://api.github.com/users/Copilot/following{/other_user}",
+      "gists_url": "https://api.github.com/users/Copilot/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/Copilot/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/Copilot/subscriptions",
+      "organizations_url": "https://api.github.com/users/Copilot/orgs",
+      "repos_url": "https://api.github.com/users/Copilot/repos",
+      "events_url": "https://api.github.com/users/Copilot/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/Copilot/received_events",
+      "type": "Bot",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "body": "`DELETE /api/schedule/{id}` is guarded by role only and doesn’t validate schedule ownership. Because the service deletes by ID, a CHIEF could delete another user’s schedule entry if they know the ID. Add an ownership check (admin or owner).",
+    "created_at": "2026-04-09T19:35:06Z",
+    "updated_at": "2026-04-09T19:35:11Z",
+    "html_url": "https://github.com/don-t-read-this-name-organization/upb-wp-project/pull/17#discussion_r3060222819",
+    "pull_request_url": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/17",
+    "_links": {
+      "self": {
+        "href": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/comments/3060222819"
+      },
+      "html": {
+        "href": "https://github.com/don-t-read-this-name-organization/upb-wp-project/pull/17#discussion_r3060222819"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/17"
+      }
+    },
+    "reactions": {
+      "url": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/comments/3060222819/reactions",
+      "total_count": 0,
+      "+1": 0,
+      "-1": 0,
+      "laugh": 0,
+      "hooray": 0,
+      "confused": 0,
+      "heart": 0,
+      "rocket": 0,
+      "eyes": 0
+    },
+    "start_line": 58,
+    "original_start_line": 58,
+    "start_side": "RIGHT",
+    "line": 62,
+    "original_line": 62,
+    "side": "RIGHT",
+    "author_association": "NONE",
+    "original_position": 62,
+    "position": 62,
+    "subject_type": "line"
+  },
+  {
+    "url": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/comments/3060222842",
+    "pull_request_review_id": 4084940656,
+    "id": 3060222842,
+    "node_id": "PRRC_kwDORX82Fs62Z0t6",
+    "diff_hunk": "@@ -22,9 +26,14 @@ public class NoteController {\n     final NoteService noteService;\n \n     @GetMapping\n+    @PreAuthorize(\"isAuthenticated()\")\n     public ResponseEntity<List<NoteResponse>> getNotes(\n-            @RequestParam Integer userId,\n+            @AuthenticationPrincipal AuthenticatedUser currentUser,\n             @RequestParam(required = false) String search) {",
+    "path": "unimate_backend/src/main/java/org/unimate/unimate/api/controller/NoteController.java",
+    "commit_id": "5143ae8bfff9eda3dabb15d2452ca162b9d28c32",
+    "original_commit_id": "1e55945f436eb6be5c6232b291baeff5a34bc362",
+    "user": {
+      "login": "Copilot",
+      "id": 175728472,
+      "node_id": "BOT_kgDOCnlnWA",
+      "avatar_url": "https://avatars.githubusercontent.com/in/946600?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/Copilot",
+      "html_url": "https://github.com/apps/copilot-pull-request-reviewer",
+      "followers_url": "https://api.github.com/users/Copilot/followers",
+      "following_url": "https://api.github.com/users/Copilot/following{/other_user}",
+      "gists_url": "https://api.github.com/users/Copilot/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/Copilot/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/Copilot/subscriptions",
+      "organizations_url": "https://api.github.com/users/Copilot/orgs",
+      "repos_url": "https://api.github.com/users/Copilot/repos",
+      "events_url": "https://api.github.com/users/Copilot/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/Copilot/received_events",
+      "type": "Bot",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "body": "Only `GET /api/notes` is guarded with `@PreAuthorize`. The `{id}` endpoints (GET/PUT/DELETE) remain unguarded and don’t use the authenticated principal, so notes can be accessed/modified by guessing IDs. Add ownership/admin checks on the `{id}` endpoints (e.g., via `AuthorizationService`).",
+    "created_at": "2026-04-09T19:35:06Z",
+    "updated_at": "2026-04-09T19:35:11Z",
+    "html_url": "https://github.com/don-t-read-this-name-organization/upb-wp-project/pull/17#discussion_r3060222842",
+    "pull_request_url": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/17",
+    "_links": {
+      "self": {
+        "href": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/comments/3060222842"
+      },
+      "html": {
+        "href": "https://github.com/don-t-read-this-name-organization/upb-wp-project/pull/17#discussion_r3060222842"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/17"
+      }
+    },
+    "reactions": {
+      "url": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/comments/3060222842/reactions",
+      "total_count": 0,
+      "+1": 0,
+      "-1": 0,
+      "laugh": 0,
+      "hooray": 0,
+      "confused": 0,
+      "heart": 0,
+      "rocket": 0,
+      "eyes": 0
+    },
+    "start_line": 28,
+    "original_start_line": 28,
+    "start_side": "RIGHT",
+    "line": 32,
+    "original_line": 32,
+    "side": "RIGHT",
+    "author_association": "NONE",
+    "original_position": 22,
+    "position": 22,
+    "subject_type": "line"
+  },
+  {
+    "url": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/comments/3060222865",
+    "pull_request_review_id": 4084940656,
+    "id": 3060222865,
+    "node_id": "PRRC_kwDORX82Fs62Z0uR",
+    "diff_hunk": "@@ -0,0 +1,52 @@\n+databaseChangeLog:\n+  - changeSet:\n+      id: \"30-migrate-timetables-to-faculty\"\n+      author: \"demesup\"\n+      changes:\n+        # Drop old foreign key and index\n+        - dropForeignKeyConstraint:\n+            baseTableName: timetables\n+            constraintName: fk_timetables_user\n+        - dropIndex:\n+            tableName: timetables\n+            indexName: idx_timetables_user_active\n+\n+        # Drop old user_id column\n+        - dropColumn:\n+            tableName: timetables\n+            columnName: user_id\n+\n+        # Add faculty_id column\n+        - addColumn:\n+            tableName: timetables\n+            columns:\n+              - column:\n+                  name: faculty_id\n+                  type: INT\n+                  constraints:\n+                    nullable: false\n+                  afterColumn: id\n+\n+        # Create new index on faculty_id and active\n+        - createIndex:\n+            tableName: timetables\n+            indexName: idx_timetables_faculty_active\n+            columns:\n+              - column:\n+                  name: faculty_id\n+              - column:\n+                  name: active\n+\n+        # Add unique constraint on faculty_id (one timetable per faculty)\n+        - addUniqueConstraint:\n+            tableName: timetables\n+            columnNames: faculty_id, active\n+            constraintName: uq_timetables_faculty_active",
+    "path": "unimate_backend/src/main/resources/db/changelog/master/30-migrate-timetables-to-faculty.yaml",
+    "commit_id": "5143ae8bfff9eda3dabb15d2452ca162b9d28c32",
+    "original_commit_id": "1e55945f436eb6be5c6232b291baeff5a34bc362",
+    "user": {
+      "login": "Copilot",
+      "id": 175728472,
+      "node_id": "BOT_kgDOCnlnWA",
+      "avatar_url": "https://avatars.githubusercontent.com/in/946600?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/Copilot",
+      "html_url": "https://github.com/apps/copilot-pull-request-reviewer",
+      "followers_url": "https://api.github.com/users/Copilot/followers",
+      "following_url": "https://api.github.com/users/Copilot/following{/other_user}",
+      "gists_url": "https://api.github.com/users/Copilot/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/Copilot/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/Copilot/subscriptions",
+      "organizations_url": "https://api.github.com/users/Copilot/orgs",
+      "repos_url": "https://api.github.com/users/Copilot/repos",
+      "events_url": "https://api.github.com/users/Copilot/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/Copilot/received_events",
+      "type": "Bot",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "body": "The unique constraint on `(faculty_id, active)` prevents having more than one inactive timetable per faculty. After multiple uploads, you’ll accumulate multiple `active=false` rows and the next upload will fail due to the uniqueness violation. Consider enforcing uniqueness only for `active=true` (e.g., via a partial unique index workaround / separate “active_faculty_id” column) or handle history differently (e.g., hard-delete old rows).",
+    "created_at": "2026-04-09T19:35:06Z",
+    "updated_at": "2026-04-09T19:35:11Z",
+    "html_url": "https://github.com/don-t-read-this-name-organization/upb-wp-project/pull/17#discussion_r3060222865",
+    "pull_request_url": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/17",
+    "_links": {
+      "self": {
+        "href": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/comments/3060222865"
+      },
+      "html": {
+        "href": "https://github.com/don-t-read-this-name-organization/upb-wp-project/pull/17#discussion_r3060222865"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/17"
+      }
+    },
+    "reactions": {
+      "url": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/comments/3060222865/reactions",
+      "total_count": 0,
+      "+1": 0,
+      "-1": 0,
+      "laugh": 0,
+      "hooray": 0,
+      "confused": 0,
+      "heart": 0,
+      "rocket": 0,
+      "eyes": 0
+    },
+    "start_line": 40,
+    "original_start_line": 40,
+    "start_side": "RIGHT",
+    "line": 44,
+    "original_line": 44,
+    "side": "RIGHT",
+    "author_association": "NONE",
+    "original_position": 44,
+    "position": 44,
+    "subject_type": "line"
+  },
+  {
+    "url": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/comments/3060222888",
+    "pull_request_review_id": 4084940656,
+    "id": 3060222888,
+    "node_id": "PRRC_kwDORX82Fs62Z0uo",
+    "diff_hunk": "@@ -0,0 +1,52 @@\n+databaseChangeLog:\n+  - changeSet:\n+      id: \"30-migrate-timetables-to-faculty\"\n+      author: \"demesup\"\n+      changes:\n+        # Drop old foreign key and index\n+        - dropForeignKeyConstraint:\n+            baseTableName: timetables\n+            constraintName: fk_timetables_user\n+        - dropIndex:\n+            tableName: timetables\n+            indexName: idx_timetables_user_active\n+\n+        # Drop old user_id column\n+        - dropColumn:\n+            tableName: timetables\n+            columnName: user_id\n+",
+    "path": "unimate_backend/src/main/resources/db/changelog/master/30-migrate-timetables-to-faculty.yaml",
+    "commit_id": "5143ae8bfff9eda3dabb15d2452ca162b9d28c32",
+    "original_commit_id": "1e55945f436eb6be5c6232b291baeff5a34bc362",
+    "user": {
+      "login": "Copilot",
+      "id": 175728472,
+      "node_id": "BOT_kgDOCnlnWA",
+      "avatar_url": "https://avatars.githubusercontent.com/in/946600?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/Copilot",
+      "html_url": "https://github.com/apps/copilot-pull-request-reviewer",
+      "followers_url": "https://api.github.com/users/Copilot/followers",
+      "following_url": "https://api.github.com/users/Copilot/following{/other_user}",
+      "gists_url": "https://api.github.com/users/Copilot/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/Copilot/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/Copilot/subscriptions",
+      "organizations_url": "https://api.github.com/users/Copilot/orgs",
+      "repos_url": "https://api.github.com/users/Copilot/repos",
+      "events_url": "https://api.github.com/users/Copilot/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/Copilot/received_events",
+      "type": "Bot",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "body": "This migration drops `user_id` and adds `faculty_id` as `nullable: false`, but it doesn’t backfill `faculty_id` for existing rows. If `timetables` already contains data, the NOT NULL add will fail (or you’ll lose the ability to map existing timetables). Add a data backfill step before enforcing NOT NULL / dropping `user_id`.",
+    "created_at": "2026-04-09T19:35:07Z",
+    "updated_at": "2026-04-09T19:35:11Z",
+    "html_url": "https://github.com/don-t-read-this-name-organization/upb-wp-project/pull/17#discussion_r3060222888",
+    "pull_request_url": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/17",
+    "_links": {
+      "self": {
+        "href": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/comments/3060222888"
+      },
+      "html": {
+        "href": "https://github.com/don-t-read-this-name-organization/upb-wp-project/pull/17#discussion_r3060222888"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/17"
+      }
+    },
+    "reactions": {
+      "url": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/comments/3060222888/reactions",
+      "total_count": 0,
+      "+1": 0,
+      "-1": 0,
+      "laugh": 0,
+      "hooray": 0,
+      "confused": 0,
+      "heart": 0,
+      "rocket": 0,
+      "eyes": 0
+    },
+    "start_line": 14,
+    "original_start_line": 14,
+    "start_side": "RIGHT",
+    "line": 18,
+    "original_line": 18,
+    "side": "RIGHT",
+    "author_association": "NONE",
+    "original_position": 18,
+    "position": 18,
+    "subject_type": "line"
+  },
+  {
+    "url": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/comments/3060222920",
+    "pull_request_review_id": 4084940656,
+    "id": 3060222920,
+    "node_id": "PRRC_kwDORX82Fs62Z0vI",
+    "diff_hunk": "@@ -0,0 +1,204 @@\n+package org.unimate.unimate.service.impl;\n+\n+import lombok.experimental.FieldDefaults;\n+import lombok.extern.slf4j.Slf4j;\n+import org.springframework.beans.factory.annotation.Value;\n+import org.springframework.core.io.Resource;\n+import org.springframework.core.io.UrlResource;\n+import org.springframework.stereotype.Service;\n+import org.springframework.transaction.support.TransactionSynchronization;\n+import org.springframework.transaction.support.TransactionSynchronizationManager;\n+import org.springframework.transaction.annotation.Transactional;\n+import org.springframework.web.multipart.MultipartFile;\n+import org.unimate.unimate.api.dto.timetable.response.TimetableResponse;\n+import org.unimate.unimate.domain.entities.Timetable;\n+import org.unimate.unimate.domain.entities.User;\n+import org.unimate.unimate.exception.NotFoundException;\n+import org.unimate.unimate.exception.ValidationException;\n+import org.unimate.unimate.repository.TimetableRepository;\n+import org.unimate.unimate.repository.UserRepository;\n+import org.unimate.unimate.service.TimetableService;\n+\n+import java.io.IOException;\n+import java.nio.file.Files;\n+import java.nio.file.Path;\n+import java.nio.file.Paths;\n+import java.util.UUID;\n+\n+import static lombok.AccessLevel.PRIVATE;\n+\n+@Slf4j\n+@Service\n+@FieldDefaults(level = PRIVATE)\n+public class TimetableServiceImpl implements TimetableService {\n+\n+  private static final long MAX_TIMETABLE_SIZE_BYTES = 10L * 1024L * 1024L;\n+\n+  final TimetableRepository timetableRepository;\n+  final UserRepository userRepository;\n+\n+  String timetableUploadPath;\n+\n+  public TimetableServiceImpl(\n+      TimetableRepository timetableRepository,\n+      UserRepository userRepository,\n+      @Value(\"${app.upload.timetable-path:${app.upload.path:./uploads/timetables/}}\") String timetableUploadPath\n+  ) {\n+    this.timetableRepository = timetableRepository;\n+    this.userRepository = userRepository;\n+    this.timetableUploadPath = timetableUploadPath;\n+  }\n+\n+  /**\n+   * Get faculty ID from user ID\n+   */\n+  private Integer getFacultyIdFromUser(Integer userId) {\n+    User user = userRepository.findById(userId)\n+        .orElseThrow(() -> new NotFoundException(\"User\", userId));\n+    \n+    if (user.getFaculty() == null) {\n+      throw new ValidationException(\"User is not assigned to a faculty\");\n+    }\n+    \n+    return user.getFaculty().getId();\n+  }\n+\n+  @Override\n+  @Transactional\n+  public TimetableResponse uploadTimetable(Integer userId, MultipartFile file) {\n+    validateFile(file);\n+\n+    Integer facultyId = getFacultyIdFromUser(userId);\n+\n+    // Deactivate previous timetable for this faculty\n+    String previousFilePath = timetableRepository.findByFacultyIdAndActive(facultyId, true)\n+        .map(existing -> {\n+          existing.setActive(false);\n+          timetableRepository.save(existing);\n+          return existing.getFilePath();\n+        })\n+        .orElse(null);\n+\n+    Path absoluteFilePath = null;\n+\n+    try {\n+      // Create directory based on faculty ID\n+      Path facultyDir = Paths.get(timetableUploadPath, facultyId.toString());\n+      if (!Files.exists(facultyDir)) {\n+        Files.createDirectories(facultyDir);\n+      }\n+\n+      String originalFilename = file.getOriginalFilename() != null ? file.getOriginalFilename() : \"timetable.pdf\";\n+      String storedFilename = UUID.randomUUID() + \".pdf\";\n+      absoluteFilePath = facultyDir.resolve(storedFilename);\n+      Files.copy(file.getInputStream(), absoluteFilePath);\n+\n+      Timetable timetable = Timetable.builder()\n+          .faculty(userRepository.findById(userId).orElseThrow().getFaculty())\n+          .filename(originalFilename)\n+          .filePath(absoluteFilePath.toString())\n+          .active(true)\n+          .build();\n+\n+      Timetable saved = timetableRepository.save(timetable);\n+      log.info(\"Timetable uploaded for faculty {}: {}\", facultyId, originalFilename);\n+      \n+      if (previousFilePath != null && !previousFilePath.isBlank()) {\n+        registerDeleteAfterCommit(previousFilePath);\n+      }\n+      return TimetableResponse.fromEntity(saved);\n+    } catch (IOException ex) {\n+      deletePhysicalFile(absoluteFilePath);\n+      throw new ValidationException(\"Failed to upload timetable\");\n+    }\n+  }\n+\n+  @Override\n+  @Transactional(readOnly = true)\n+  public Resource getTimetable(Integer userId) throws IOException {\n+    Integer facultyId = getFacultyIdFromUser(userId);\n+    \n+    Timetable timetable = timetableRepository.findByFacultyIdAndActive(facultyId, true)\n+        .orElseThrow(() -> new NotFoundException(\"Timetable\", \"facultyId\", facultyId));\n+\n+    Path path = Paths.get(timetable.getFilePath());\n+    Resource resource = new UrlResource(path.toUri());\n+    if (!resource.exists() || !resource.isReadable()) {\n+      throw new IOException(\"Timetable file not found or unreadable\");\n+    }\n+    return resource;\n+  }\n+\n+  @Override\n+  @Transactional(readOnly = true)\n+  public TimetableResponse getTimetableMetadata(Integer userId) {\n+    Integer facultyId = getFacultyIdFromUser(userId);\n+    \n+    Timetable timetable = timetableRepository.findByFacultyIdAndActive(facultyId, true)\n+        .orElseThrow(() -> new NotFoundException(\"Timetable\", \"facultyId\", facultyId));\n+    return TimetableResponse.fromEntity(timetable);\n+  }\n+\n+  @Override\n+  @Transactional\n+  public void deleteTimetable(Integer userId) {\n+    Integer facultyId = getFacultyIdFromUser(userId);\n+    \n+    Timetable timetable = timetableRepository.findByFacultyIdAndActive(facultyId, true)\n+        .orElseThrow(() -> new NotFoundException(\"Timetable\", \"facultyId\", facultyId));\n+\n+    timetable.setActive(false);\n+    timetableRepository.save(timetable);\n+    deletePhysicalFile(timetable.getFilePath());\n+    log.info(\"Timetable deleted for faculty {}\", facultyId);\n+  }",
+    "path": "unimate_backend/src/main/java/org/unimate/unimate/service/impl/TimetableServiceImpl.java",
+    "commit_id": "5143ae8bfff9eda3dabb15d2452ca162b9d28c32",
+    "original_commit_id": "1e55945f436eb6be5c6232b291baeff5a34bc362",
+    "user": {
+      "login": "Copilot",
+      "id": 175728472,
+      "node_id": "BOT_kgDOCnlnWA",
+      "avatar_url": "https://avatars.githubusercontent.com/in/946600?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/Copilot",
+      "html_url": "https://github.com/apps/copilot-pull-request-reviewer",
+      "followers_url": "https://api.github.com/users/Copilot/followers",
+      "following_url": "https://api.github.com/users/Copilot/following{/other_user}",
+      "gists_url": "https://api.github.com/users/Copilot/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/Copilot/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/Copilot/subscriptions",
+      "organizations_url": "https://api.github.com/users/Copilot/orgs",
+      "repos_url": "https://api.github.com/users/Copilot/repos",
+      "events_url": "https://api.github.com/users/Copilot/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/Copilot/received_events",
+      "type": "Bot",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "body": "`deleteTimetable()` deletes the physical file inside the DB transaction. If the transaction rolls back, metadata may remain inconsistent while the file is already deleted. Consider deleting the file only after commit (similar to `registerDeleteAfterCommit(...)` used in `uploadTimetable()`).",
+    "created_at": "2026-04-09T19:35:07Z",
+    "updated_at": "2026-04-09T19:35:11Z",
+    "html_url": "https://github.com/don-t-read-this-name-organization/upb-wp-project/pull/17#discussion_r3060222920",
+    "pull_request_url": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/17",
+    "_links": {
+      "self": {
+        "href": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/comments/3060222920"
+      },
+      "html": {
+        "href": "https://github.com/don-t-read-this-name-organization/upb-wp-project/pull/17#discussion_r3060222920"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/17"
+      }
+    },
+    "reactions": {
+      "url": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/comments/3060222920/reactions",
+      "total_count": 0,
+      "+1": 0,
+      "-1": 0,
+      "laugh": 0,
+      "hooray": 0,
+      "confused": 0,
+      "heart": 0,
+      "rocket": 0,
+      "eyes": 0
+    },
+    "start_line": 150,
+    "original_start_line": 150,
+    "start_side": "RIGHT",
+    "line": 154,
+    "original_line": 154,
+    "side": "RIGHT",
+    "author_association": "NONE",
+    "original_position": 154,
+    "position": 154,
+    "subject_type": "line"
+  },
+  {
+    "url": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/comments/3060222939",
+    "pull_request_review_id": 4084940656,
+    "id": 3060222939,
+    "node_id": "PRRC_kwDORX82Fs62Z0vb",
+    "diff_hunk": "@@ -0,0 +1,56 @@\n+# Access Control Overview\n+\n+This document describes the current role-based access behavior in the backend.\n+\n+## Current Effective Security\n+\n+- HTTP-level security currently permits all API routes:\n+  - `SecurityConfig` has `.requestMatchers(\"/api/**\").permitAll()`.\n+  - File: `src/main/java/org/unimate/unimate/api/security/SecurityConfig.java`\n+- Because of that, requests are not blocked at URL level by role.",
+    "path": "unimate_backend/access.md",
+    "commit_id": "5143ae8bfff9eda3dabb15d2452ca162b9d28c32",
+    "original_commit_id": "1e55945f436eb6be5c6232b291baeff5a34bc362",
+    "user": {
+      "login": "Copilot",
+      "id": 175728472,
+      "node_id": "BOT_kgDOCnlnWA",
+      "avatar_url": "https://avatars.githubusercontent.com/in/946600?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/Copilot",
+      "html_url": "https://github.com/apps/copilot-pull-request-reviewer",
+      "followers_url": "https://api.github.com/users/Copilot/followers",
+      "following_url": "https://api.github.com/users/Copilot/following{/other_user}",
+      "gists_url": "https://api.github.com/users/Copilot/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/Copilot/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/Copilot/subscriptions",
+      "organizations_url": "https://api.github.com/users/Copilot/orgs",
+      "repos_url": "https://api.github.com/users/Copilot/repos",
+      "events_url": "https://api.github.com/users/Copilot/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/Copilot/received_events",
+      "type": "Bot",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "body": "This document claims `SecurityConfig` uses `.requestMatchers(\"/api/**\").permitAll()`, but in this PR `SecurityConfig` is changed to require authentication for `/api/**`. Please update this section so it matches the actual configuration, otherwise it will mislead future changes/reviews.",
+    "created_at": "2026-04-09T19:35:07Z",
+    "updated_at": "2026-04-09T19:35:11Z",
+    "html_url": "https://github.com/don-t-read-this-name-organization/upb-wp-project/pull/17#discussion_r3060222939",
+    "pull_request_url": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/17",
+    "_links": {
+      "self": {
+        "href": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/comments/3060222939"
+      },
+      "html": {
+        "href": "https://github.com/don-t-read-this-name-organization/upb-wp-project/pull/17#discussion_r3060222939"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/17"
+      }
+    },
+    "reactions": {
+      "url": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/comments/3060222939/reactions",
+      "total_count": 0,
+      "+1": 0,
+      "-1": 0,
+      "laugh": 0,
+      "hooray": 0,
+      "confused": 0,
+      "heart": 0,
+      "rocket": 0,
+      "eyes": 0
+    },
+    "start_line": 7,
+    "original_start_line": 7,
+    "start_side": "RIGHT",
+    "line": 10,
+    "original_line": 10,
+    "side": "RIGHT",
+    "author_association": "NONE",
+    "original_position": 10,
+    "position": 10,
+    "subject_type": "line"
+  },
+  {
+    "url": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/comments/3060222958",
+    "pull_request_review_id": 4084940656,
+    "id": 3060222958,
+    "node_id": "PRRC_kwDORX82Fs62Z0vu",
+    "diff_hunk": "@@ -0,0 +1,79 @@\n+# Unimate Backend Features Overview\n+\n+This document describes the currently implemented backend features in `unimate_backend`.\n+\n+## Core Platform\n+\n+- Spring Boot 4 API with MySQL persistence.\n+- Liquibase-managed schema and seed data.\n+- Soft-delete pattern (`active` flag) across most domain entities.\n+- Global JSON error handling with consistent response format.\n+\n+## Authentication and Users\n+\n+- JWT-based auth:\n+  - `POST /api/auth/login`\n+  - `POST /api/auth/register`\n+  - `POST /api/auth/refresh`\n+  - `POST /api/auth/logout`\n+- User management:",
+    "path": "unimate_backend/FEATURES_OVERVIEW.md",
+    "commit_id": "5143ae8bfff9eda3dabb15d2452ca162b9d28c32",
+    "original_commit_id": "1e55945f436eb6be5c6232b291baeff5a34bc362",
+    "user": {
+      "login": "Copilot",
+      "id": 175728472,
+      "node_id": "BOT_kgDOCnlnWA",
+      "avatar_url": "https://avatars.githubusercontent.com/in/946600?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/Copilot",
+      "html_url": "https://github.com/apps/copilot-pull-request-reviewer",
+      "followers_url": "https://api.github.com/users/Copilot/followers",
+      "following_url": "https://api.github.com/users/Copilot/following{/other_user}",
+      "gists_url": "https://api.github.com/users/Copilot/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/Copilot/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/Copilot/subscriptions",
+      "organizations_url": "https://api.github.com/users/Copilot/orgs",
+      "repos_url": "https://api.github.com/users/Copilot/repos",
+      "events_url": "https://api.github.com/users/Copilot/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/Copilot/received_events",
+      "type": "Bot",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "body": "Auth endpoints listed here don’t match the code in this PR (there is no `POST /api/auth/register`, and refresh is `POST /api/auth/refresh-token`, not `/api/auth/refresh`). Please align the documented routes with `AuthController`/`UserController` so the overview stays accurate.",
+    "created_at": "2026-04-09T19:35:07Z",
+    "updated_at": "2026-04-09T19:35:11Z",
+    "html_url": "https://github.com/don-t-read-this-name-organization/upb-wp-project/pull/17#discussion_r3060222958",
+    "pull_request_url": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/17",
+    "_links": {
+      "self": {
+        "href": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/comments/3060222958"
+      },
+      "html": {
+        "href": "https://github.com/don-t-read-this-name-organization/upb-wp-project/pull/17#discussion_r3060222958"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/17"
+      }
+    },
+    "reactions": {
+      "url": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/comments/3060222958/reactions",
+      "total_count": 0,
+      "+1": 0,
+      "-1": 0,
+      "laugh": 0,
+      "hooray": 0,
+      "confused": 0,
+      "heart": 0,
+      "rocket": 0,
+      "eyes": 0
+    },
+    "start_line": 14,
+    "original_start_line": 14,
+    "start_side": "RIGHT",
+    "line": 19,
+    "original_line": 19,
+    "side": "RIGHT",
+    "author_association": "NONE",
+    "original_position": 19,
+    "position": 19,
+    "subject_type": "line"
+  },
+  {
+    "url": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/comments/3060222965",
+    "pull_request_review_id": 4084940656,
+    "id": 3060222965,
+    "node_id": "PRRC_kwDORX82Fs62Z0v1",
+    "diff_hunk": "@@ -0,0 +1,79 @@\n+# Unimate Backend Features Overview\n+\n+This document describes the currently implemented backend features in `unimate_backend`.\n+\n+## Core Platform\n+\n+- Spring Boot 4 API with MySQL persistence.\n+- Liquibase-managed schema and seed data.\n+- Soft-delete pattern (`active` flag) across most domain entities.\n+- Global JSON error handling with consistent response format.\n+\n+## Authentication and Users\n+\n+- JWT-based auth:\n+  - `POST /api/auth/login`\n+  - `POST /api/auth/register`\n+  - `POST /api/auth/refresh`\n+  - `POST /api/auth/logout`\n+- User management:\n+  - Registration approval flow for pending users.\n+  - Admin approval/rejection endpoints.\n+  - Profile/user CRUD with role/ownership checks.\n+  - Password change endpoint.\n+\n+## Academic and Content Modules\n+\n+- Faculties:\n+  - Public read endpoints.\n+  - Admin write endpoints (create/update/delete).\n+  - Translation-aware read behavior.\n+- Groups:\n+  - Public read endpoints.\n+  - Admin write endpoints (create/update/delete).\n+  - Faculty-scoped group listing.\n+- Faculty Links:\n+  - Public read endpoints.\n+  - Admin write endpoints (create/update/delete).\n+  - Translation-aware response DTO.\n+- Professors:\n+  - Public read endpoints.\n+  - Admin write endpoints (create/update/delete).\n+- News:\n+  - Public read endpoints (`list`, `latest`, `by id`).\n+  - Admin write endpoints.\n+- Quotes:\n+  - Public read/random endpoints.\n+  - User quote submission as pending.\n+  - Admin approve/reject/update/delete flows.\n+\n+## Productivity Modules\n+\n+- Tasks and Subtasks:\n+  - User-owned task CRUD with ownership enforcement.\n+  - Subtask add/update/delete flows.\n+- Notes:\n+  - User-owned note CRUD with ownership enforcement.\n+- Files and Folders:\n+  - User-owned file/folder management with ownership checks.\n+\n+## New Feature Modules\n+\n+- Reviews:\n+  - `POST /api/reviews` for authenticated users.\n+  - Public professor review listing and rating statistics endpoints.\n+  - Ownership/admin-controlled delete behavior.\n+- Timetable:\n+  - Upload/download/delete own timetable.\n+  - PDF-only, max 10MB validation.\n+  - One active timetable per user.\n+- Schedule:",
+    "path": "unimate_backend/FEATURES_OVERVIEW.md",
+    "commit_id": "5143ae8bfff9eda3dabb15d2452ca162b9d28c32",
+    "original_commit_id": "1e55945f436eb6be5c6232b291baeff5a34bc362",
+    "user": {
+      "login": "Copilot",
+      "id": 175728472,
+      "node_id": "BOT_kgDOCnlnWA",
+      "avatar_url": "https://avatars.githubusercontent.com/in/946600?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/Copilot",
+      "html_url": "https://github.com/apps/copilot-pull-request-reviewer",
+      "followers_url": "https://api.github.com/users/Copilot/followers",
+      "following_url": "https://api.github.com/users/Copilot/following{/other_user}",
+      "gists_url": "https://api.github.com/users/Copilot/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/Copilot/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/Copilot/subscriptions",
+      "organizations_url": "https://api.github.com/users/Copilot/orgs",
+      "repos_url": "https://api.github.com/users/Copilot/repos",
+      "events_url": "https://api.github.com/users/Copilot/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/Copilot/received_events",
+      "type": "Bot",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "body": "Timetable docs say “One active timetable per user”, but the DB migration + service implement one active timetable per *faculty* (and upload derives faculty from the current user). Update this section to reflect the faculty-scoped behavior.",
+    "created_at": "2026-04-09T19:35:08Z",
+    "updated_at": "2026-04-09T19:35:11Z",
+    "html_url": "https://github.com/don-t-read-this-name-organization/upb-wp-project/pull/17#discussion_r3060222965",
+    "pull_request_url": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/17",
+    "_links": {
+      "self": {
+        "href": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/comments/3060222965"
+      },
+      "html": {
+        "href": "https://github.com/don-t-read-this-name-organization/upb-wp-project/pull/17#discussion_r3060222965"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/17"
+      }
+    },
+    "reactions": {
+      "url": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/comments/3060222965/reactions",
+      "total_count": 0,
+      "+1": 0,
+      "-1": 0,
+      "laugh": 0,
+      "hooray": 0,
+      "confused": 0,
+      "heart": 0,
+      "rocket": 0,
+      "eyes": 0
+    },
+    "start_line": 66,
+    "original_start_line": 66,
+    "start_side": "RIGHT",
+    "line": 70,
+    "original_line": 70,
+    "side": "RIGHT",
+    "author_association": "NONE",
+    "original_position": 70,
+    "position": 70,
+    "subject_type": "line"
+  },
+  {
+    "url": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/comments/3060222984",
+    "pull_request_review_id": 4084940656,
+    "id": 3060222984,
+    "node_id": "PRRC_kwDORX82Fs62Z0wI",
+    "diff_hunk": "@@ -13,5 +13,17 @@\n       </jdbc-additional-properties>\r\n       <working-dir>$ProjectFileDir$</working-dir>\r\n     </data-source>\r\n+    <data-source source=\"LOCAL\" name=\"unimate@localhost [2]\" uuid=\"fa075d91-4a4d-4427-9dff-eb6ca9d59f51\">\r\n+      <driver-ref>mysql.8</driver-ref>\r\n+      <synchronize>true</synchronize>\r\n+      <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>\r\n+      <jdbc-url>jdbc:mysql://localhost:3306/unimate</jdbc-url>\r",
+    "path": "unimate_backend/.idea/dataSources.xml",
+    "commit_id": "5143ae8bfff9eda3dabb15d2452ca162b9d28c32",
+    "original_commit_id": "1e55945f436eb6be5c6232b291baeff5a34bc362",
+    "user": {
+      "login": "Copilot",
+      "id": 175728472,
+      "node_id": "BOT_kgDOCnlnWA",
+      "avatar_url": "https://avatars.githubusercontent.com/in/946600?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/Copilot",
+      "html_url": "https://github.com/apps/copilot-pull-request-reviewer",
+      "followers_url": "https://api.github.com/users/Copilot/followers",
+      "following_url": "https://api.github.com/users/Copilot/following{/other_user}",
+      "gists_url": "https://api.github.com/users/Copilot/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/Copilot/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/Copilot/subscriptions",
+      "organizations_url": "https://api.github.com/users/Copilot/orgs",
+      "repos_url": "https://api.github.com/users/Copilot/repos",
+      "events_url": "https://api.github.com/users/Copilot/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/Copilot/received_events",
+      "type": "Bot",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "body": "`.idea/dataSources.xml` is committed and contains developer-local DB datasource configuration. Since `.gitignore` now ignores `.idea/`, consider removing this file (and other `.idea/**`) from version control to avoid leaking local settings and causing noisy diffs.",
+    "created_at": "2026-04-09T19:35:08Z",
+    "updated_at": "2026-04-09T19:35:11Z",
+    "html_url": "https://github.com/don-t-read-this-name-organization/upb-wp-project/pull/17#discussion_r3060222984",
+    "pull_request_url": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/17",
+    "_links": {
+      "self": {
+        "href": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/comments/3060222984"
+      },
+      "html": {
+        "href": "https://github.com/don-t-read-this-name-organization/upb-wp-project/pull/17#discussion_r3060222984"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/17"
+      }
+    },
+    "reactions": {
+      "url": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/comments/3060222984/reactions",
+      "total_count": 0,
+      "+1": 0,
+      "-1": 0,
+      "laugh": 0,
+      "hooray": 0,
+      "confused": 0,
+      "heart": 0,
+      "rocket": 0,
+      "eyes": 0
+    },
+    "start_line": 16,
+    "original_start_line": 16,
+    "start_side": "RIGHT",
+    "line": 20,
+    "original_line": 20,
+    "side": "RIGHT",
+    "author_association": "NONE",
+    "original_position": 8,
+    "position": 8,
+    "subject_type": "line"
+  },
+  {
+    "url": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/comments/3060223003",
+    "pull_request_review_id": 4084940656,
+    "id": 3060223003,
+    "node_id": "PRRC_kwDORX82Fs62Z0wb",
+    "diff_hunk": "@@ -1,9 +1,10 @@\n-<script setup lang=\"ts\">\n+﻿<script setup lang=\"ts\">",
+    "path": "unimate_frontend/src/views/NotesView.vue",
+    "commit_id": "5143ae8bfff9eda3dabb15d2452ca162b9d28c32",
+    "original_commit_id": "1e55945f436eb6be5c6232b291baeff5a34bc362",
+    "user": {
+      "login": "Copilot",
+      "id": 175728472,
+      "node_id": "BOT_kgDOCnlnWA",
+      "avatar_url": "https://avatars.githubusercontent.com/in/946600?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/Copilot",
+      "html_url": "https://github.com/apps/copilot-pull-request-reviewer",
+      "followers_url": "https://api.github.com/users/Copilot/followers",
+      "following_url": "https://api.github.com/users/Copilot/following{/other_user}",
+      "gists_url": "https://api.github.com/users/Copilot/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/Copilot/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/Copilot/subscriptions",
+      "organizations_url": "https://api.github.com/users/Copilot/orgs",
+      "repos_url": "https://api.github.com/users/Copilot/repos",
+      "events_url": "https://api.github.com/users/Copilot/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/Copilot/received_events",
+      "type": "Bot",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "body": "The file starts with a UTF-8 BOM (invisible character before `<script>`). This often causes lint/formatting issues and noisy diffs. Please remove the BOM from the file.",
+    "created_at": "2026-04-09T19:35:08Z",
+    "updated_at": "2026-04-09T19:35:11Z",
+    "html_url": "https://github.com/don-t-read-this-name-organization/upb-wp-project/pull/17#discussion_r3060223003",
+    "pull_request_url": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/17",
+    "_links": {
+      "self": {
+        "href": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/comments/3060223003"
+      },
+      "html": {
+        "href": "https://github.com/don-t-read-this-name-organization/upb-wp-project/pull/17#discussion_r3060223003"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/17"
+      }
+    },
+    "reactions": {
+      "url": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/comments/3060223003/reactions",
+      "total_count": 0,
+      "+1": 0,
+      "-1": 0,
+      "laugh": 0,
+      "hooray": 0,
+      "confused": 0,
+      "heart": 0,
+      "rocket": 0,
+      "eyes": 0
+    },
+    "start_line": null,
+    "original_start_line": null,
+    "start_side": null,
+    "line": 1,
+    "original_line": 1,
+    "side": "RIGHT",
+    "author_association": "NONE",
+    "original_position": 2,
+    "position": 2,
+    "subject_type": "line"
+  },
+  {
+    "url": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/comments/3060223013",
+    "pull_request_review_id": 4084940656,
+    "id": 3060223013,
+    "node_id": "PRRC_kwDORX82Fs62Z0wl",
+    "diff_hunk": "@@ -1,8 +1,9 @@\n-<script setup lang=\"ts\">\n+﻿<script setup lang=\"ts\">",
+    "path": "unimate_frontend/src/views/LoginView.vue",
+    "commit_id": "5143ae8bfff9eda3dabb15d2452ca162b9d28c32",
+    "original_commit_id": "1e55945f436eb6be5c6232b291baeff5a34bc362",
+    "user": {
+      "login": "Copilot",
+      "id": 175728472,
+      "node_id": "BOT_kgDOCnlnWA",
+      "avatar_url": "https://avatars.githubusercontent.com/in/946600?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/Copilot",
+      "html_url": "https://github.com/apps/copilot-pull-request-reviewer",
+      "followers_url": "https://api.github.com/users/Copilot/followers",
+      "following_url": "https://api.github.com/users/Copilot/following{/other_user}",
+      "gists_url": "https://api.github.com/users/Copilot/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/Copilot/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/Copilot/subscriptions",
+      "organizations_url": "https://api.github.com/users/Copilot/orgs",
+      "repos_url": "https://api.github.com/users/Copilot/repos",
+      "events_url": "https://api.github.com/users/Copilot/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/Copilot/received_events",
+      "type": "Bot",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "body": "The file starts with a UTF-8 BOM (invisible character before `<script>`). This often causes lint/formatting issues and noisy diffs. Please remove the BOM from the file.",
+    "created_at": "2026-04-09T19:35:08Z",
+    "updated_at": "2026-04-09T19:35:11Z",
+    "html_url": "https://github.com/don-t-read-this-name-organization/upb-wp-project/pull/17#discussion_r3060223013",
+    "pull_request_url": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/17",
+    "_links": {
+      "self": {
+        "href": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/comments/3060223013"
+      },
+      "html": {
+        "href": "https://github.com/don-t-read-this-name-organization/upb-wp-project/pull/17#discussion_r3060223013"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/17"
+      }
+    },
+    "reactions": {
+      "url": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/comments/3060223013/reactions",
+      "total_count": 0,
+      "+1": 0,
+      "-1": 0,
+      "laugh": 0,
+      "hooray": 0,
+      "confused": 0,
+      "heart": 0,
+      "rocket": 0,
+      "eyes": 0
+    },
+    "start_line": null,
+    "original_start_line": null,
+    "start_side": null,
+    "line": 1,
+    "original_line": 1,
+    "side": "RIGHT",
+    "author_association": "NONE",
+    "original_position": 2,
+    "position": 2,
+    "subject_type": "line"
+  },
+  {
+    "url": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/comments/3060223026",
+    "pull_request_review_id": 4084940656,
+    "id": 3060223026,
+    "node_id": "PRRC_kwDORX82Fs62Z0wy",
+    "diff_hunk": "@@ -1,8 +1,9 @@\n-<script setup lang=\"ts\">\n+﻿<script setup lang=\"ts\">",
+    "path": "unimate_frontend/src/views/KanbanView.vue",
+    "commit_id": "5143ae8bfff9eda3dabb15d2452ca162b9d28c32",
+    "original_commit_id": "1e55945f436eb6be5c6232b291baeff5a34bc362",
+    "user": {
+      "login": "Copilot",
+      "id": 175728472,
+      "node_id": "BOT_kgDOCnlnWA",
+      "avatar_url": "https://avatars.githubusercontent.com/in/946600?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/Copilot",
+      "html_url": "https://github.com/apps/copilot-pull-request-reviewer",
+      "followers_url": "https://api.github.com/users/Copilot/followers",
+      "following_url": "https://api.github.com/users/Copilot/following{/other_user}",
+      "gists_url": "https://api.github.com/users/Copilot/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/Copilot/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/Copilot/subscriptions",
+      "organizations_url": "https://api.github.com/users/Copilot/orgs",
+      "repos_url": "https://api.github.com/users/Copilot/repos",
+      "events_url": "https://api.github.com/users/Copilot/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/Copilot/received_events",
+      "type": "Bot",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "body": "The file starts with a UTF-8 BOM (invisible character before `<script>`). This often causes lint/formatting issues and noisy diffs. Please remove the BOM from the file.",
+    "created_at": "2026-04-09T19:35:09Z",
+    "updated_at": "2026-04-09T19:35:11Z",
+    "html_url": "https://github.com/don-t-read-this-name-organization/upb-wp-project/pull/17#discussion_r3060223026",
+    "pull_request_url": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/17",
+    "_links": {
+      "self": {
+        "href": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/comments/3060223026"
+      },
+      "html": {
+        "href": "https://github.com/don-t-read-this-name-organization/upb-wp-project/pull/17#discussion_r3060223026"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/17"
+      }
+    },
+    "reactions": {
+      "url": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/comments/3060223026/reactions",
+      "total_count": 0,
+      "+1": 0,
+      "-1": 0,
+      "laugh": 0,
+      "hooray": 0,
+      "confused": 0,
+      "heart": 0,
+      "rocket": 0,
+      "eyes": 0
+    },
+    "start_line": null,
+    "original_start_line": null,
+    "start_side": null,
+    "line": 1,
+    "original_line": 1,
+    "side": "RIGHT",
+    "author_association": "NONE",
+    "original_position": 2,
+    "position": 2,
+    "subject_type": "line"
+  },
+  {
+    "url": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/comments/3060223047",
+    "pull_request_review_id": 4084940656,
+    "id": 3060223047,
+    "node_id": "PRRC_kwDORX82Fs62Z0xH",
+    "diff_hunk": "@@ -1,36 +1,57 @@\n-<script setup lang=\"ts\">\n+﻿<script setup lang=\"ts\">",
+    "path": "unimate_frontend/src/views/HomeView.vue",
+    "commit_id": "5143ae8bfff9eda3dabb15d2452ca162b9d28c32",
+    "original_commit_id": "1e55945f436eb6be5c6232b291baeff5a34bc362",
+    "user": {
+      "login": "Copilot",
+      "id": 175728472,
+      "node_id": "BOT_kgDOCnlnWA",
+      "avatar_url": "https://avatars.githubusercontent.com/in/946600?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/Copilot",
+      "html_url": "https://github.com/apps/copilot-pull-request-reviewer",
+      "followers_url": "https://api.github.com/users/Copilot/followers",
+      "following_url": "https://api.github.com/users/Copilot/following{/other_user}",
+      "gists_url": "https://api.github.com/users/Copilot/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/Copilot/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/Copilot/subscriptions",
+      "organizations_url": "https://api.github.com/users/Copilot/orgs",
+      "repos_url": "https://api.github.com/users/Copilot/repos",
+      "events_url": "https://api.github.com/users/Copilot/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/Copilot/received_events",
+      "type": "Bot",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "body": "The file starts with a UTF-8 BOM (invisible character before `<script>`). This often causes lint/formatting issues and noisy diffs. Please remove the BOM from the file.",
+    "created_at": "2026-04-09T19:35:09Z",
+    "updated_at": "2026-04-09T19:35:11Z",
+    "html_url": "https://github.com/don-t-read-this-name-organization/upb-wp-project/pull/17#discussion_r3060223047",
+    "pull_request_url": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/17",
+    "_links": {
+      "self": {
+        "href": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/comments/3060223047"
+      },
+      "html": {
+        "href": "https://github.com/don-t-read-this-name-organization/upb-wp-project/pull/17#discussion_r3060223047"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/17"
+      }
+    },
+    "reactions": {
+      "url": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/comments/3060223047/reactions",
+      "total_count": 0,
+      "+1": 0,
+      "-1": 0,
+      "laugh": 0,
+      "hooray": 0,
+      "confused": 0,
+      "heart": 0,
+      "rocket": 0,
+      "eyes": 0
+    },
+    "start_line": null,
+    "original_start_line": null,
+    "start_side": null,
+    "line": 1,
+    "original_line": 1,
+    "side": "RIGHT",
+    "author_association": "NONE",
+    "original_position": 2,
+    "position": 2,
+    "subject_type": "line"
+  },
+  {
+    "url": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/comments/3060223058",
+    "pull_request_review_id": 4084940656,
+    "id": 3060223058,
+    "node_id": "PRRC_kwDORX82Fs62Z0xS",
+    "diff_hunk": "@@ -1,8 +1,9 @@\n-<script setup lang=\"ts\">\n+﻿<script setup lang=\"ts\">",
+    "path": "unimate_frontend/src/views/AdminView.vue",
+    "commit_id": "5143ae8bfff9eda3dabb15d2452ca162b9d28c32",
+    "original_commit_id": "1e55945f436eb6be5c6232b291baeff5a34bc362",
+    "user": {
+      "login": "Copilot",
+      "id": 175728472,
+      "node_id": "BOT_kgDOCnlnWA",
+      "avatar_url": "https://avatars.githubusercontent.com/in/946600?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/Copilot",
+      "html_url": "https://github.com/apps/copilot-pull-request-reviewer",
+      "followers_url": "https://api.github.com/users/Copilot/followers",
+      "following_url": "https://api.github.com/users/Copilot/following{/other_user}",
+      "gists_url": "https://api.github.com/users/Copilot/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/Copilot/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/Copilot/subscriptions",
+      "organizations_url": "https://api.github.com/users/Copilot/orgs",
+      "repos_url": "https://api.github.com/users/Copilot/repos",
+      "events_url": "https://api.github.com/users/Copilot/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/Copilot/received_events",
+      "type": "Bot",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "body": "The file starts with a UTF-8 BOM (invisible character before `<script>`). This often causes lint/formatting issues and noisy diffs. Please remove the BOM from the file.",
+    "created_at": "2026-04-09T19:35:09Z",
+    "updated_at": "2026-04-09T19:35:11Z",
+    "html_url": "https://github.com/don-t-read-this-name-organization/upb-wp-project/pull/17#discussion_r3060223058",
+    "pull_request_url": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/17",
+    "_links": {
+      "self": {
+        "href": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/comments/3060223058"
+      },
+      "html": {
+        "href": "https://github.com/don-t-read-this-name-organization/upb-wp-project/pull/17#discussion_r3060223058"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/17"
+      }
+    },
+    "reactions": {
+      "url": "https://api.github.com/repos/don-t-read-this-name-organization/upb-wp-project/pulls/comments/3060223058/reactions",
+      "total_count": 0,
+      "+1": 0,
+      "-1": 0,
+      "laugh": 0,
+      "hooray": 0,
+      "confused": 0,
+      "heart": 0,
+      "rocket": 0,
+      "eyes": 0
+    },
+    "start_line": null,
+    "original_start_line": null,
+    "start_side": null,
+    "line": 1,
+    "original_line": 1,
+    "side": "RIGHT",
+    "author_association": "NONE",
+    "original_position": 2,
+    "position": 2,
+    "subject_type": "line"
+  }
+]

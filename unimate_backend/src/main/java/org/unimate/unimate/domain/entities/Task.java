@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -15,7 +16,7 @@ import static lombok.AccessLevel.PRIVATE;
 @Entity
 @Getter
 @Setter
-@ToString
+@ToString(exclude = {"user", "subtasks"})
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -56,6 +57,10 @@ public class Task {
   @Column(name = "created_at")
   @CreationTimestamp
   LocalDateTime createdAt;
+
+  @Column(name = "updated_at")
+  @UpdateTimestamp
+  LocalDateTime updatedAt;
 
   @Column(columnDefinition = "TINYINT(1)", nullable = false)
   @Builder.Default

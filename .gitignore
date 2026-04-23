@@ -67,4 +67,3 @@ unimate_backend/logs/
 # General logs
 *.log
 
-".idea/" 

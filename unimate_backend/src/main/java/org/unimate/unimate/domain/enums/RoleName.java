@@ -4,5 +4,6 @@ public enum RoleName {
     STUDENT,
     CHIEF,
     ADMIN,
+    SUPERADMIN,
     VISITOR
 }

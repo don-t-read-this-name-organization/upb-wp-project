@@ -28,11 +28,20 @@ public class Timetable {
   @JoinColumn(name = "faculty_id", nullable = false)
   Faculty faculty;
 
-  @Column(name = "filename", nullable = false)
+  @Column(name = "filename")
   String filename;
 
-  @Column(name = "file_path", nullable = false, length = 500)
+  @Column(name = "file_path", length = 500)
   String filePath;
+
+  @Column(name = "schedule_json", columnDefinition = "LONGTEXT")
+  String scheduleJson;
+
+  @Column(name = "semester")
+  String semester;
+
+  @Column(name = "year")
+  Integer year;
 
   @CreationTimestamp
   @Column(name = "uploaded_at")

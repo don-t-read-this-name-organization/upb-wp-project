@@ -76,10 +76,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
   }
 
   private Collection<? extends GrantedAuthority> getAuthorities(RoleName roleName) {
-    List<GrantedAuthority> authorities = List.of(
-        new SimpleGrantedAuthority("ROLE_" + roleName.name())
-    );
-    return authorities;
+    if (roleName == RoleName.SUPERADMIN) {
+      return List.of(
+          new SimpleGrantedAuthority("ROLE_SUPERADMIN"),
+          new SimpleGrantedAuthority("ROLE_ADMIN"),
+          new SimpleGrantedAuthority("ROLE_CHIEF"),
+          new SimpleGrantedAuthority("ROLE_STUDENT"),
+          new SimpleGrantedAuthority("ROLE_VISITOR")
+      );
+    }
+
+    return List.of(new SimpleGrantedAuthority("ROLE_" + roleName.name()));
   }
 
   private String extractTokenFromRequest(HttpServletRequest request) {

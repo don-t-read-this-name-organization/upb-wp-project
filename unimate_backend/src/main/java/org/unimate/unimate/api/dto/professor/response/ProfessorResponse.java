@@ -9,6 +9,10 @@ public record ProfessorResponse(
     String name,
     String department,
     String faculty,
+    String phone,
+    String email,
+    String officeLocation,
+    String officeHours,
     Boolean active
 ) {
   public static ProfessorResponse fromEntity(Professor professor) {
@@ -17,6 +21,10 @@ public record ProfessorResponse(
         .name(professor.getName())
         .department(professor.getDepartment())
         .faculty(professor.getFaculty())
+        .phone(professor.getPhone())
+        .email(professor.getEmail())
+        .officeLocation(professor.getOfficeLocation())
+        .officeHours(professor.getOfficeHours())
         .active(professor.getActive())
         .build();
   }

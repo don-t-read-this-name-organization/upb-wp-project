@@ -85,7 +85,6 @@ public class SecurityConfig {
                 // Public news and content
                 .requestMatchers(HttpMethod.GET, "/api/news/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/quotes/**").permitAll()
-                .requestMatchers(HttpMethod.GET, "/api/reviews/professor/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/faculty-links/**").permitAll()
                 
                 // ========== PROTECTED ENDPOINTS (Authentication required) ==========

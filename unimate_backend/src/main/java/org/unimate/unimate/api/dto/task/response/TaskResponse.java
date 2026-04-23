@@ -27,6 +27,7 @@ public class TaskResponse {
     private LocalDate deadline;
     private Integer userId;
     private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
     private Boolean active;
     private List<SubtaskResponse> subtasks;
 
@@ -41,6 +42,7 @@ public class TaskResponse {
             .deadline(task.getDeadline())
             .userId(task.getUser() != null ? task.getUser().getId() : null)
             .createdAt(task.getCreatedAt())
+            .updatedAt(task.getUpdatedAt())
             .active(task.getActive())
             .subtasks(task.getSubtasks() != null 
                 ? task.getSubtasks().stream().map(SubtaskResponse::fromEntity).toList()

@@ -46,7 +46,11 @@ public class ProfessorController {
         professorService.create(
             request.name().trim(),
             request.department() != null ? request.department().trim() : null,
-            request.faculty() != null ? request.faculty().trim() : null
+            request.faculty() != null ? request.faculty().trim() : null,
+            request.phone() != null ? request.phone().trim() : null,
+            request.email() != null ? request.email().trim() : null,
+            request.officeLocation() != null ? request.officeLocation().trim() : null,
+            request.officeHours() != null ? request.officeHours().trim() : null
         )
     );
   }
@@ -59,7 +63,11 @@ public class ProfessorController {
             id,
             request.name().trim(),
             request.department() != null ? request.department().trim() : null,
-            request.faculty() != null ? request.faculty().trim() : null
+            request.faculty() != null ? request.faculty().trim() : null,
+            request.phone() != null ? request.phone().trim() : null,
+            request.email() != null ? request.email().trim() : null,
+            request.officeLocation() != null ? request.officeLocation().trim() : null,
+            request.officeHours() != null ? request.officeHours().trim() : null
         )
     );
   }

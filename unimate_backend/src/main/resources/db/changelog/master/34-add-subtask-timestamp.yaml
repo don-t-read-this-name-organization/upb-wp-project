@@ -1,0 +1,19 @@
+databaseChangeLog:
+  - changeSet:
+      id: "34-add-subtask-updated-at"
+      author: "migration"
+      changes:
+        - addColumn:
+            tableName: subtasks
+            columns:
+              - column:
+                  name: updated_at
+                  type: TIMESTAMP
+                  defaultValueComputed: CURRENT_TIMESTAMP
+        - addColumn:
+            tableName: tasks
+            columns:
+              - column:
+                  name: updated_at
+                  type: TIMESTAMP
+                  defaultValueComputed: CURRENT_TIMESTAMP

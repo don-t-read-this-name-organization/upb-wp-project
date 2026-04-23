@@ -50,6 +50,7 @@ const showMap = computed(() => !store.isAdmin)
 const showNews = computed(() => !store.isAdmin)
 const showQuotes = computed(() => !store.isAdmin)
 const showWelcome = computed(() => true)
+const showVisitorCta = computed(() => !store.isLoggedIn)
 
 const news = computed<NewsCard[]>(() => {
   return newsData.value.map((item) => {
@@ -136,6 +137,21 @@ const nextMap = () => {
 
 <template>
   <div class="home-container">
+    <section v-if="showVisitorCta" class="card fade-in cta-card">
+      <h2 class="card-title">{{ $t('gettingStarted.ctaTitle') }}</h2>
+      <p class="welcome-text">{{ $t('gettingStarted.ctaBody') }}</p>
+      <div class="cta-actions">
+        <router-link to="/register" class="btn btn-primary">
+          <i class="fas fa-user-plus"></i>
+          {{ $t('gettingStarted.register') }}
+        </router-link>
+        <router-link to="/getting-started" class="btn btn-secondary">
+          <i class="fas fa-compass"></i>
+          {{ $t('gettingStarted.learnMore') }}
+        </router-link>
+      </div>
+    </section>
+
     <section v-if="showWelcome" class="card fade-in">
       <h1 class="card-title">{{ $t('welcome') }}</h1>
       <p class="welcome-text">{{ $t('description') }}</p>
@@ -225,6 +241,24 @@ const nextMap = () => {
 .home-container {
   max-width: 1100px;
   margin: 0 auto;
+}
+
+.cta-card {
+  border: 1px solid rgba(99, 102, 241, 0.25);
+}
+
+.cta-actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-top: 1.25rem;
+}
+
+.cta-actions .btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
 }
 
 .welcome-text {

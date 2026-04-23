@@ -16,38 +16,42 @@ import static lombok.AccessLevel.PRIVATE;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(
-    name = "reviews",
-    uniqueConstraints = {
-        @UniqueConstraint(name = "uq_reviews_user_professor", columnNames = {"user_id", "professor_id"})
-    }
-)
+@Table(name = "notifications")
 @FieldDefaults(level = PRIVATE)
-public class Review {
+public class Notification {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   Integer id;
 
   @ManyToOne(optional = false, fetch = FetchType.LAZY)
-  @JoinColumn(name = "professor_id", nullable = false)
-  Professor professor;
-
-  @ManyToOne(optional = false, fetch = FetchType.LAZY)
   @JoinColumn(name = "user_id", nullable = false)
   User user;
 
   @Column(nullable = false)
-  Integer rating;
+  String type;
 
-  @Column(length = 1000)
-  String comment;
+  @Column(nullable = false)
+  String title;
+
+  @Column(columnDefinition = "TEXT")
+  String message;
+
+  @Column(name = "related_entity_type")
+  String relatedEntityType;
+
+  @Column(name = "related_entity_id")
+  Integer relatedEntityId;
+
+  @Column(columnDefinition = "TINYINT(1)", nullable = false)
+  @Builder.Default
+  Boolean read = false;
 
   @CreationTimestamp
   @Column(name = "created_at")
   LocalDateTime createdAt;
 
-  @Builder.Default
   @Column(columnDefinition = "TINYINT(1)", nullable = false)
+  @Builder.Default
   Boolean active = true;
 }

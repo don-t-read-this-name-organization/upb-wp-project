@@ -1,0 +1,16 @@
+databaseChangeLog:
+  - changeSet:
+      id: "33-drop-reviews-table"
+      author: "migration"
+      changes:
+        - dropForeignKeyConstraint:
+            baseTableName: reviews
+            constraintName: fk_reviews_professor
+        - dropForeignKeyConstraint:
+            baseTableName: reviews
+            constraintName: fk_reviews_user
+        - dropUniqueConstraint:
+            tableName: reviews
+            constraintName: uq_reviews_user_professor
+        - dropTable:
+            tableName: reviews

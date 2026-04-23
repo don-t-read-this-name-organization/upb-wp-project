@@ -9,9 +9,10 @@ import org.springframework.web.bind.annotation.*;
 import org.unimate.unimate.api.security.AuthenticatedUser;
 import org.unimate.unimate.api.dto.task.request.TaskRequest;
 import org.unimate.unimate.api.dto.task.response.TaskResponse;
-import org.unimate.unimate.domain.enums.RoleName;
 import org.unimate.unimate.domain.entities.Subtask;
 import org.unimate.unimate.domain.entities.Task;
+import org.unimate.unimate.domain.enums.RoleName;
+import org.unimate.unimate.api.dto.subtask.response.SubtaskResponse;
 import org.unimate.unimate.exception.NotFoundException;
 import org.unimate.unimate.exception.ValidationException;
 import org.unimate.unimate.service.TaskService;
@@ -103,7 +104,7 @@ public class TaskController {
 
   @PutMapping("/subtasks/{subtaskId}")
   @PreAuthorize("hasRole('ADMIN') or @authorizationService.ownsSubtask(#subtaskId)")
-  public Subtask updateSubtask(@PathVariable Integer subtaskId, @RequestBody Map<String, Object> request) {
+  public SubtaskResponse updateSubtask(@PathVariable Integer subtaskId, @RequestBody Map<String, Object> request) {
     String title = (String) request.get("title");
     Boolean completed = request.get("completed") != null ? (Boolean) request.get("completed") : null;
     return taskService.updateSubtask(subtaskId, title, completed);

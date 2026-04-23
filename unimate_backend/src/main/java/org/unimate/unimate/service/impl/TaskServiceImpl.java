@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.unimate.unimate.api.dto.task.request.TaskRequest;
 import org.unimate.unimate.api.dto.task.response.TaskResponse;
+import org.unimate.unimate.api.dto.subtask.response.SubtaskResponse;
 import org.unimate.unimate.domain.entities.Subtask;
 import org.unimate.unimate.domain.entities.Task;
 import org.unimate.unimate.domain.entities.User;
@@ -115,18 +116,20 @@ public class TaskServiceImpl implements TaskService {
       List<Integer> requestSubtaskIds = new ArrayList<>();
 
       for (var subtaskReq : request.getSubtasks()) {
-        Subtask subtask;
         if (subtaskReq.getId() != null) {
-          subtask = subtaskRepository.findById(subtaskReq.getId()).orElse(null);
-          if (subtask != null && subtask.getTask().getId().equals(task.getId())) {
-            subtask.setTitle(subtaskReq.getTitle());
-            subtask.setCompleted(subtaskReq.getCompleted() != null ? subtaskReq.getCompleted() : false);
+          // Find in already-loaded subtasks to avoid duplicate managed entities
+          Subtask existingSubtask = task.getSubtasks().stream()
+              .filter(s -> s.getId().equals(subtaskReq.getId()))
+              .findFirst()
+              .orElse(null);
+          
+          if (existingSubtask != null) {
+            existingSubtask.setTitle(subtaskReq.getTitle());
+            existingSubtask.setCompleted(subtaskReq.getCompleted() != null ? subtaskReq.getCompleted() : false);
             requestSubtaskIds.add(subtaskReq.getId());
-            if (!task.getSubtasks().contains(subtask)) {
-              task.getSubtasks().add(subtask);
-            }
           } else {
-            subtask = Subtask.builder()
+            // Subtask doesn't belong to this task - create new one
+            Subtask subtask = Subtask.builder()
                 .task(task)
                 .title(subtaskReq.getTitle())
                 .completed(subtaskReq.getCompleted() != null ? subtaskReq.getCompleted() : false)
@@ -134,7 +137,8 @@ public class TaskServiceImpl implements TaskService {
             task.getSubtasks().add(subtask);
           }
         } else {
-          subtask = Subtask.builder()
+          // New subtask
+          Subtask subtask = Subtask.builder()
               .task(task)
               .title(subtaskReq.getTitle())
               .completed(subtaskReq.getCompleted() != null ? subtaskReq.getCompleted() : false)
@@ -180,7 +184,7 @@ public class TaskServiceImpl implements TaskService {
 
   @Transactional
   @Override
-  public Subtask updateSubtask(Integer subtaskId, String title, Boolean completed) {
+  public SubtaskResponse updateSubtask(Integer subtaskId, String title, Boolean completed) {
     Subtask subtask = subtaskRepository.findById(subtaskId)
         .orElseThrow(() -> new IllegalArgumentException("Subtask not found"));
 
@@ -191,7 +195,8 @@ public class TaskServiceImpl implements TaskService {
       subtask.setCompleted(completed);
     }
 
-    return subtaskRepository.save(subtask);
+    subtaskRepository.save(subtask);
+    return SubtaskResponse.fromEntity(subtask);
   }
 
   @Transactional

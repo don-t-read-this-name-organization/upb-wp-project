@@ -30,6 +30,18 @@ public class Professor {
   @Column
   String faculty;
 
+  @Column
+  String phone;
+
+  @Column
+  String email;
+
+  @Column(name = "office_location")
+  String officeLocation;
+
+  @Column(name = "office_hours", columnDefinition = "TEXT")
+  String officeHours;
+
   @Column(columnDefinition = "TINYINT(1)", nullable = false)
   @Builder.Default
   Boolean active = true;

@@ -13,7 +13,7 @@ export const useAppStore = defineStore('app', {
     user: (() => {
       const stored = localStorage.getItem('user')
       return stored ? JSON.parse(stored) : null
-    })() as { name: string; role: string; id?: number; email?: string; firstName?: string; lastName?: string; faculty?: { id?: number; name: string; shortName?: string; website?: string }; group?: { name: string } } | null,
+    })() as { name: string; role: string; id?: number; email?: string; firstName?: string; lastName?: string; faculty?: { id?: number; name: string; shortName?: string; website?: string }; group?: { id?: number; name: string } } | null,
     language: getInitialLanguage(),
   }),
   getters: {
@@ -21,7 +21,8 @@ export const useAppStore = defineStore('app', {
     isVisitor: (state) => !state.user || state.user.role === 'VISITOR',
     isStudent: (state) => state.user?.role === 'STUDENT',
     isChief: (state) => state.user?.role === 'CHIEF',
-    isAdmin: (state) => state.user?.role === 'ADMIN',
+    isSuperadmin: (state) => state.user?.role === 'SUPERADMIN',
+    isAdmin: (state) => state.user?.role === 'ADMIN' || state.user?.role === 'SUPERADMIN',
     isStudentOrChief: (state) => state.user?.role === 'STUDENT' || state.user?.role === 'CHIEF',
     userRole: (state) => state.user?.role || 'VISITOR',
     userName: (state) => state.user?.name || '',

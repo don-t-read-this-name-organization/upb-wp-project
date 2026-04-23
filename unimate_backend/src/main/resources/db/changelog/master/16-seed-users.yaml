@@ -1,8 +1,9 @@
 databaseChangeLog:
   - changeSet:
       id: "16-seed-users"
-      author: "frihetselsker"
+      author: "demesup"
       changes:
+        # Admin user
         - insert:
             tableName: users
             columns:
@@ -27,6 +28,8 @@ databaseChangeLog:
               - column:
                   name: active
                   valueBoolean: true
+
+        # FILS Users
         - insert:
             tableName: users
             columns:
@@ -84,6 +87,220 @@ databaseChangeLog:
               - column:
                   name: role
                   value: CHIEF
+              - column:
+                  name: active
+                  valueBoolean: true
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: first_name
+                  value: "Ana"
+              - column:
+                  name: last_name
+                  value: "Ionescu"
+              - column:
+                  name: username
+                  value: ana.ionescu
+              - column:
+                  name: email
+                  value: ana.ionescu@unimate.ro
+              - column:
+                  name: password_hash
+                  value: "$2a$10$uV8wX2yZ9aB1cD4eF7gH0jI3kL6mN9oP2qR5sT8uV1wX4yZ7aB0cD"
+              - column:
+                  name: role
+                  value: STUDENT
+              - column:
+                  name: faculty_id
+                  valueNumeric: 12
+              - column:
+                  name: group_id
+                  valueNumeric: 1
+              - column:
+                  name: active
+                  valueBoolean: true
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: first_name
+                  value: "Mihai"
+              - column:
+                  name: last_name
+                  value: "Ghitescu"
+              - column:
+                  name: username
+                  value: mihai.ghitescu
+              - column:
+                  name: email
+                  value: mihai.ghitescu@unimate.ro
+              - column:
+                  name: password_hash
+                  value: "$2a$10$eF3gH6iJ9kL2mN5oP8qR1sT4uV7wX0yZ3aB6cD9eF2gH5iJ8kL1mN"
+              - column:
+                  name: role
+                  value: STUDENT
+              - column:
+                  name: faculty_id
+                  valueNumeric: 12
+              - column:
+                  name: group_id
+                  valueNumeric: 2
+              - column:
+                  name: active
+                  valueBoolean: true
+
+        # ACS (Automatic Control and Computer Science) Users
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: first_name
+                  value: "Cristian"
+              - column:
+                  name: last_name
+                  value: "Stoica"
+              - column:
+                  name: username
+                  value: cristian.stoica
+              - column:
+                  name: email
+                  value: cristian.stoica@unimate.ro
+              - column:
+                  name: password_hash
+                  value: "$2a$10$qR4sT7uV0wX3yZ6aB9cD2eF5gH8iJ1kL4mN7oP0qR3sT6uV9wX2yZ"
+              - column:
+                  name: role
+                  value: STUDENT
+              - column:
+                  name: faculty_id
+                  valueNumeric: 3
+              - column:
+                  name: group_id
+                  valueNumeric: 6
+              - column:
+                  name: active
+                  valueBoolean: true
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: first_name
+                  value: "Elena"
+              - column:
+                  name: last_name
+                  value: "Radu"
+              - column:
+                  name: username
+                  value: elena.radu
+              - column:
+                  name: email
+                  value: elena.radu@unimate.ro
+              - column:
+                  name: password_hash
+                  value: "$2a$10$iJ5kL8mN1oP4qR7sT0uV3wX6yZ9aB2cD5eF8gH1iJ4kL7mN0oP3qR"
+              - column:
+                  name: role
+                  value: STUDENT
+              - column:
+                  name: faculty_id
+                  valueNumeric: 3
+              - column:
+                  name: group_id
+                  valueNumeric: 7
+              - column:
+                  name: active
+                  valueBoolean: true
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: first_name
+                  value: "Adrian"
+              - column:
+                  name: last_name
+                  value: "Vasilescu"
+              - column:
+                  name: username
+                  value: adrian.vasilescu
+              - column:
+                  name: email
+                  value: adrian.vasilescu@unimate.ro
+              - column:
+                  name: password_hash
+                  value: "$2a$10$wX6yZ9aB2cD5eF8gH1iJ4kL7mN0oP3qR6sT9uV2wX5yZ8aB1cD4eF"
+              - column:
+                  name: role
+                  value: CHIEF
+              - column:
+                  name: faculty_id
+                  valueNumeric: 3
+              - column:
+                  name: group_id
+                  valueNumeric: 6
+              - column:
+                  name: active
+                  valueBoolean: true
+
+        # Additional FILS and ACS students
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: first_name
+                  value: "Roxana"
+              - column:
+                  name: last_name
+                  value: "Cosmescu"
+              - column:
+                  name: username
+                  value: roxana.cosmescu
+              - column:
+                  name: email
+                  value: roxana.cosmescu@unimate.ro
+              - column:
+                  name: password_hash
+                  value: "$2a$10$uV7wX0yZ3aB6cD9eF2gH5iJ8kL1mN4oP7qR0sT3uV6wX9yZ2aB5cD"
+              - column:
+                  name: role
+                  value: STUDENT
+              - column:
+                  name: faculty_id
+                  valueNumeric: 12
+              - column:
+                  name: group_id
+                  valueNumeric: 3
+              - column:
+                  name: active
+                  valueBoolean: true
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: first_name
+                  value: "Rares"
+              - column:
+                  name: last_name
+                  value: "Nicolae"
+              - column:
+                  name: username
+                  value: rares.nicolae
+              - column:
+                  name: email
+                  value: rares.nicolae@unimate.ro
+              - column:
+                  name: password_hash
+                  value: "$2a$10$qP9cT1kL6rZ2aB5eM3xN7eJ4hD8fG1sI9pO5wL3kJ7nM2yU9vX6lB"
+              - column:
+                  name: role
+                  value: STUDENT
+              - column:
+                  name: faculty_id
+                  valueNumeric: 3
+              - column:
+                  name: group_id
+                  valueNumeric: 8
               - column:
                   name: active
                   valueBoolean: true

@@ -98,7 +98,7 @@ public class User implements UserDetails {
         .build();
   }
 
-  public void update(UserRequest request, Faculty faculty, Group group) {
+  public void update(UserRequest request, Faculty faculty, Group group, String encodedPassword) {
     username = request.getUsername();
     firstName = request.getFirstName();
     lastName = request.getLastName();
@@ -106,6 +106,9 @@ public class User implements UserDetails {
     email = request.getEmail();
     this.faculty = faculty;
     this.studyGroup = group;
+    if (encodedPassword != null && !encodedPassword.isEmpty()) {
+      this.passwordHash = encodedPassword;
+    }
   }
 
   public void delete() {

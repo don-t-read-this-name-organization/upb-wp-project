@@ -13,11 +13,11 @@ interface User {
   id: number
   username: string
   email: string
-  role: 'ADMIN' | 'CHIEF' | 'STUDENT' | 'VISITOR'
+  role: 'SUPERADMIN' | 'ADMIN' | 'CHIEF' | 'STUDENT' | 'VISITOR'
   firstName?: string
   lastName?: string
-  faculty?: { name: string; shortName?: string }
-  group?: { name: string }
+  faculty?: { id?: number; name: string; shortName?: string }
+  group?: { id?: number; name: string }
   createdAt?: string
 }
 
@@ -25,9 +25,23 @@ interface UserForm {
   username: string
   email: string
   password: string
-  role: 'ADMIN' | 'CHIEF' | 'STUDENT' | 'VISITOR'
+  role: 'SUPERADMIN' | 'ADMIN' | 'CHIEF' | 'STUDENT' | 'VISITOR'
   firstName?: string
   lastName?: string
+  facultyId?: number | null
+  groupId?: number | null
+}
+
+interface Faculty {
+  id: number
+  name: string
+  shortName?: string
+}
+
+interface Group {
+  id: number
+  name: string
+  facultyId?: number
 }
 
 interface Quote {
@@ -37,6 +51,8 @@ interface Quote {
 }
 
 const users = ref<User[]>([])
+const faculties = ref<Faculty[]>([])
+const groups = ref<Group[]>([])
 const pendingQuotes = ref<Quote[]>([])
 const pendingRegistrations = ref<User[]>([])
 const loading = ref(false)
@@ -53,6 +69,8 @@ const form = ref<UserForm>({
   role: 'STUDENT',
   firstName: '',
   lastName: '',
+  facultyId: null,
+  groupId: null,
 })
 
 const showConfirmModal = ref(false)
@@ -136,6 +154,31 @@ const getRoleLabel = (role: string) => {
   }
 }
 
+const filteredGroups = computed(() => {
+  if (!form.value.facultyId) return []
+  return groups.value.filter((g) => g.facultyId === form.value.facultyId)
+})
+
+const fetchFaculties = async () => {
+  try {
+    const response = await fetch('/api/faculties')
+    if (!response.ok) throw new Error('Failed to fetch faculties')
+    faculties.value = await response.json()
+  } catch (e) {
+    console.error('Failed to fetch faculties:', e)
+  }
+}
+
+const fetchGroups = async () => {
+  try {
+    const response = await fetch('/api/groups')
+    if (!response.ok) throw new Error('Failed to fetch groups')
+    groups.value = await response.json()
+  } catch (e) {
+    console.error('Failed to fetch groups:', e)
+  }
+}
+
 const fetchUsers = async () => {
   loading.value = true
   error.value = ''
@@ -157,7 +200,7 @@ const fetchUsers = async () => {
 
 const openAddModal = () => {
   editingUser.value = null
-  form.value = { username: '', email: '', password: '', role: 'STUDENT', firstName: '', lastName: '' }
+  form.value = { username: '', email: '', password: '', role: 'STUDENT', firstName: '', lastName: '', facultyId: null, groupId: null }
   showModal.value = true
 }
 
@@ -170,6 +213,8 @@ const openEditModal = (user: User) => {
     role: user.role,
     firstName: user.firstName || '',
     lastName: user.lastName || '',
+    facultyId: user.faculty?.id || null,
+    groupId: user.group?.id || null,
   }
   showModal.value = true
 }
@@ -177,7 +222,7 @@ const openEditModal = (user: User) => {
 const closeModal = () => {
   showModal.value = false
   editingUser.value = null
-  form.value = { username: '', email: '', password: '', role: 'STUDENT', firstName: '', lastName: '' }
+  form.value = { username: '', email: '', password: '', role: 'STUDENT', firstName: '', lastName: '', facultyId: null, groupId: null }
 }
 
 const handleSubmit = async () => {
@@ -304,6 +349,8 @@ const handleRejectRegistration = async (user: User) => {
 
 onMounted(() => {
   fetchUsers()
+  fetchFaculties()
+  fetchGroups()
   fetchPendingQuotes()
   fetchPendingRegistrations()
 })
@@ -526,6 +573,31 @@ onMounted(() => {
               class="form-control"
               :required="!editingUser"
             />
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="faculty">Faculty</label>
+              <select
+                v-model.number="form.facultyId"
+                id="faculty"
+                class="form-control"
+                @change="form.groupId = null"
+              >
+                <option :value="null">-- Select Faculty --</option>
+                <option v-for="fac in faculties" :key="fac.id" :value="fac.id">
+                  {{ fac.name }}
+                </option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="group">Group</label>
+              <select v-model.number="form.groupId" id="group" class="form-control" :disabled="!form.facultyId">
+                <option :value="null">-- Select Group --</option>
+                <option v-for="grp in filteredGroups" :key="grp.id" :value="grp.id">
+                  {{ grp.name }}
+                </option>
+              </select>
+            </div>
           </div>
           <div class="form-group">
             <label for="role">{{ t('admin.role') }}</label>
@@ -950,4 +1022,3 @@ onMounted(() => {
 }
 
 </style>
-

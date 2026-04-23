@@ -44,8 +44,20 @@ public class UserServiceImpl implements UserService {
 
   @Override
   @Transactional(readOnly = true)
+  public List<User> findAllIncludingInactive() {
+    return userRepository.findAllIncludingInactive();
+  }
+
+  @Override
+  @Transactional(readOnly = true)
   public Optional<User> findById(Integer id) {
     return userRepository.findById(id);
+  }
+
+  @Override
+  @Transactional(readOnly = true)
+  public Optional<User> findByIdIncludingInactive(Integer id) {
+    return userRepository.findByIdIncludingInactive(id);
   }
 
   @Override
@@ -76,12 +88,16 @@ public class UserServiceImpl implements UserService {
     if (userRepository.findIdByEmail(email).isPresent()) {
       throw new AlreadyExistsException("User", email);
     }
-    if (request.getRole() == RoleName.ADMIN) {
-      throw new ValidationException("An admin already exists. Only one admin is allowed.");
+    if (request.getPassword() == null || request.getPassword().isEmpty()) {
+      throw new ValidationException("Password cannot be empty");
     }
 
     Faculty faculty = getFacultyFromRequest(request);
     Group group = getGroupFromRequest(request);
+
+    if (request.getRole() == RoleName.ADMIN && faculty == null) {
+      throw new ValidationException("Admin must be assigned to a faculty");
+    }
 
     User user = User.create(request, passwordEncoder.encode(request.getPassword()));
     user.setFaculty(faculty);
@@ -101,8 +117,11 @@ public class UserServiceImpl implements UserService {
     if (userRepository.findIdByEmail(email).isPresent()) {
       throw new AlreadyExistsException("User", email);
     }
-    if (request.getRole() == RoleName.ADMIN) {
-      throw new ValidationException("An admin already exists. Only one admin is allowed.");
+    if (request.getRole() == RoleName.ADMIN || request.getRole() == RoleName.SUPERADMIN) {
+      throw new ValidationException("You cannot register as admin");
+    }
+    if (request.getPassword() == null || request.getPassword().isEmpty()) {
+      throw new ValidationException("Password cannot be empty");
     }
 
     if (request.getFirstName() != null && request.getLastName() != null) {
@@ -113,13 +132,18 @@ public class UserServiceImpl implements UserService {
       }
     }
 
+    request.setRole(RoleName.STUDENT);
+
     Faculty faculty = getFacultyFromRequest(request);
     Group group = getGroupFromRequest(request);
+    if (faculty == null) {
+      throw new ValidationException("Faculty is required for registration");
+    }
 
     User user = User.create(request, passwordEncoder.encode(request.getPassword()));
     user.setFaculty(faculty);
     user.setStudyGroup(group);
-    user.setActive(true);  // Auto-approve registration to allow immediate login
+    user.setActive(false);  // Requires admin approval before login
     user.setLockedUntil(null);  // Ensure no account lock
 
     final User savedUser = save(user);
@@ -164,14 +188,15 @@ public class UserServiceImpl implements UserService {
   @Transactional
   @Override
   public UserResponse update(User user, UserRequest request) {
-    if (request.getRole() == RoleName.ADMIN && user.getRole() != RoleName.ADMIN) {
-      throw new ValidationException("An admin already exists. Only one admin is allowed.");
-    }
-
     Faculty faculty = getFacultyFromRequest(request);
     Group group = getGroupFromRequest(request);
+    
+    String encodedPassword = null;
+    if (request.getPassword() != null && !request.getPassword().isEmpty()) {
+      encodedPassword = passwordEncoder.encode(request.getPassword());
+    }
 
-    user.update(request, faculty, group);
+    user.update(request, faculty, group, encodedPassword);
     User updatedUser = save(user);
     return UserResponse.fromEntity(updatedUser);
   }

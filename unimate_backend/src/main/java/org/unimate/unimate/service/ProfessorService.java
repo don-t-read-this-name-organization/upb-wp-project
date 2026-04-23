@@ -10,9 +10,9 @@ public interface ProfessorService {
 
   Optional<Professor> findById(Integer id);
 
-  Professor create(String name, String department, String faculty);
+  Professor create(String name, String department, String faculty, String phone, String email, String officeLocation, String officeHours);
 
-  Professor update(Integer id, String name, String department, String faculty);
+  Professor update(Integer id, String name, String department, String faculty, String phone, String email, String officeLocation, String officeHours);
 
   void delete(Integer id);
 }

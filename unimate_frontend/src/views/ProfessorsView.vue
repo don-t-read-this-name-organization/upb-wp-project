@@ -10,22 +10,10 @@ interface Professor {
   name: string
   department: string | null
   faculty: string | null
-}
-
-interface RatingStats {
-  average: number
-  count: number
-  distribution: Record<number, number>
-}
-
-interface Review {
-  id: number
-  professorId: number
-  userId: number
-  username: string
-  rating: number
-  comment: string
-  createdAt: string
+  phone: string | null
+  email: string | null
+  officeLocation: string | null
+  officeHours: string | null
 }
 
 const { t } = useI18n()
@@ -34,19 +22,9 @@ const store = useAppStore()
 const loading = ref(true)
 const error = ref('')
 const professors = ref<Professor[]>([])
-const ratings = ref<Record<number, RatingStats>>({})
 
-const showReviewsModal = ref(false)
+const showContactModal = ref(false)
 const selectedProfessor = ref<Professor | null>(null)
-const reviews = ref<Review[]>([])
-const reviewsLoading = ref(false)
-const submittingReview = ref(false)
-const reviewError = ref('')
-const reviewComment = ref('')
-const reviewRating = ref(5)
-
-const isLoggedIn = computed(() => store.isLoggedIn)
-const currentUserId = computed(() => store.user?.id || null)
 
 const deanKeywords = ['dean', 'vice-dean', 'decan', 'secretariat', 'secretary']
 
@@ -78,10 +56,6 @@ function mapProfessorCard(professor: Professor) {
   }
 }
 
-function professorRating(professorId: number): RatingStats {
-  return ratings.value[professorId] || { average: 0, count: 0, distribution: {} }
-}
-
 async function fetchProfessors() {
   loading.value = true
   error.value = ''
@@ -91,19 +65,6 @@ async function fetchProfessors() {
       throw new Error('Failed to load professors')
     }
     professors.value = await response.json()
-
-    const ratingResponses = await Promise.all(
-      professors.value.map(async (prof) => {
-        const ratingResponse = await fetch(`/api/reviews/professor/${prof.id}/rating`)
-        if (!ratingResponse.ok) {
-          return [prof.id, { average: 0, count: 0, distribution: {} }] as const
-        }
-        const data = await ratingResponse.json()
-        return [prof.id, data] as const
-      }),
-    )
-
-    ratings.value = Object.fromEntries(ratingResponses)
   } catch {
     error.value = t('common.error')
   } finally {
@@ -111,81 +72,14 @@ async function fetchProfessors() {
   }
 }
 
-async function openReviewsModal(professor: Professor) {
+function openContactModal(professor: Professor) {
   selectedProfessor.value = professor
-  showReviewsModal.value = true
-  reviewsLoading.value = true
-  reviewError.value = ''
-  reviewComment.value = ''
-  reviewRating.value = 5
-
-  try {
-    const response = await fetch(`/api/reviews/professor/${professor.id}`)
-    if (!response.ok) {
-      throw new Error('Failed to load reviews')
-    }
-    reviews.value = await response.json()
-  } catch {
-    reviewError.value = t('common.error')
-  } finally {
-    reviewsLoading.value = false
-  }
+  showContactModal.value = true
 }
 
-function closeReviewsModal() {
-  showReviewsModal.value = false
+function closeContactModal() {
+  showContactModal.value = false
   selectedProfessor.value = null
-  reviews.value = []
-  reviewComment.value = ''
-  reviewError.value = ''
-}
-
-async function submitReview() {
-  if (!selectedProfessor.value || !reviewComment.value.trim()) {
-    return
-  }
-  submittingReview.value = true
-  reviewError.value = ''
-
-  try {
-    const response = await fetch('/api/reviews', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        professorId: selectedProfessor.value.id,
-        rating: reviewRating.value,
-        comment: reviewComment.value.trim(),
-      }),
-    })
-    if (!response.ok) {
-      const data = await response.json().catch(() => null)
-      throw new Error(data?.message || 'Failed to submit review')
-    }
-
-    await openReviewsModal(selectedProfessor.value)
-    await fetchProfessors()
-  } catch (err: unknown) {
-    reviewError.value = err instanceof Error ? err.message : t('common.error')
-  } finally {
-    submittingReview.value = false
-  }
-}
-
-async function deleteReview(review: Review) {
-  try {
-    const response = await fetch(`/api/reviews/${review.id}`, {
-      method: 'DELETE',
-    })
-    if (!response.ok) {
-      throw new Error('Failed to delete review')
-    }
-    if (selectedProfessor.value) {
-      await openReviewsModal(selectedProfessor.value)
-      await fetchProfessors()
-    }
-  } catch {
-    reviewError.value = t('common.error')
-  }
 }
 
 onMounted(fetchProfessors)
@@ -204,8 +98,8 @@ onMounted(fetchProfessors)
             <div class="carousel">
               <div v-for="professor in decanatStaff" :key="professor.id" class="prof-wrap">
                 <ProfessorCard :prof="mapProfessorCard(professor)" />
-                <button class="btn btn-secondary review-btn" @click="openReviewsModal(professor)">
-                  Reviews ({{ professorRating(professor.id).count }})
+                <button class="btn btn-secondary contact-btn" @click="openContactModal(professor)">
+                  <i class="fas fa-info-circle"></i> Contact Info
                 </button>
               </div>
             </div>
@@ -216,12 +110,9 @@ onMounted(fetchProfessors)
             <div class="carousel">
               <div v-for="professor in teachingStaff" :key="professor.id" class="prof-wrap">
                 <ProfessorCard :prof="mapProfessorCard(professor)" />
-                <div class="rating-line">
-                  <span class="rating-value">Rating: {{ professorRating(professor.id).average?.toFixed(1) || '0.0' }}/5</span>
-                  <button class="btn btn-secondary review-btn" @click="openReviewsModal(professor)">
-                    Reviews ({{ professorRating(professor.id).count }})
-                  </button>
-                </div>
+                <button class="btn btn-secondary contact-btn" @click="openContactModal(professor)">
+                  <i class="fas fa-info-circle"></i> Contact Info
+                </button>
               </div>
             </div>
           </div>
@@ -259,47 +150,36 @@ onMounted(fetchProfessors)
 
     <BaseModal
       v-if="selectedProfessor"
-      v-model="showReviewsModal"
-      :title="`${selectedProfessor.name} - Reviews`"
-      size="lg"
-      @close="closeReviewsModal"
+      v-model="showContactModal"
+      :title="`${selectedProfessor.name}`"
+      size="md"
+      @close="closeContactModal"
     >
-      <div v-if="reviewsLoading" class="loading">{{ t('common.loading') }}</div>
-      <div v-else-if="reviews.length === 0" class="empty">{{ t('quotes.noQuotes') }}</div>
-      <div v-else class="reviews-list">
-        <div v-for="review in reviews" :key="review.id" class="review-card">
-          <div class="review-header">
-            <strong>{{ review.username }}</strong>
-            <span>{{ review.rating }}/5</span>
-          </div>
-          <p>{{ review.comment }}</p>
-          <small>{{ new Date(review.createdAt).toLocaleDateString() }}</small>
-          <button
-            v-if="currentUserId === review.userId || store.isAdmin"
-            class="btn-icon danger"
-            @click="deleteReview(review)"
-          >
-            <i class="fas fa-trash"></i>
-          </button>
+      <div class="contact-info">
+        <div v-if="selectedProfessor.department" class="info-item">
+          <strong><i class="fas fa-briefcase"></i> Department:</strong>
+          <span>{{ selectedProfessor.department }}</span>
         </div>
-      </div>
-
-      <div v-if="isLoggedIn" class="review-form">
-        <h4>Add review</h4>
-        <div class="form-row">
-          <label>Rating</label>
-          <select v-model="reviewRating" class="form-control">
-            <option v-for="value in [5, 4, 3, 2, 1]" :key="value" :value="value">{{ value }}</option>
-          </select>
+        <div v-if="selectedProfessor.faculty" class="info-item">
+          <strong><i class="fas fa-building"></i> Faculty:</strong>
+          <span>{{ selectedProfessor.faculty }}</span>
         </div>
-        <div class="form-row">
-          <label>Comment</label>
-          <textarea v-model="reviewComment" class="form-control" rows="3"></textarea>
+        <div v-if="selectedProfessor.phone" class="info-item">
+          <strong><i class="fas fa-phone"></i> Phone:</strong>
+          <a :href="`tel:${selectedProfessor.phone}`">{{ selectedProfessor.phone }}</a>
         </div>
-        <p v-if="reviewError" class="error-text">{{ reviewError }}</p>
-        <button class="btn btn-primary" :disabled="submittingReview" @click="submitReview">
-          {{ submittingReview ? t('common.loading') : 'Submit review' }}
-        </button>
+        <div v-if="selectedProfessor.email" class="info-item">
+          <strong><i class="fas fa-envelope"></i> Email:</strong>
+          <a :href="`mailto:${selectedProfessor.email}`">{{ selectedProfessor.email }}</a>
+        </div>
+        <div v-if="selectedProfessor.officeLocation" class="info-item">
+          <strong><i class="fas fa-map-marker-alt"></i> Office:</strong>
+          <span>{{ selectedProfessor.officeLocation }}</span>
+        </div>
+        <div v-if="selectedProfessor.officeHours" class="info-item">
+          <strong><i class="fas fa-clock"></i> Office Hours:</strong>
+          <span>{{ selectedProfessor.officeHours }}</span>
+        </div>
       </div>
     </BaseModal>
   </main>

@@ -1,0 +1,17 @@
+databaseChangeLog:
+  - changeSet:
+      id: "35-update-timetable-structure"
+      author: "migration"
+      changes:
+        - addColumn:
+            tableName: timetables
+            columns:
+              - column:
+                  name: schedule_json
+                  type: LONGTEXT
+              - column:
+                  name: semester
+                  type: VARCHAR(50)
+              - column:
+                  name: year
+                  type: INT

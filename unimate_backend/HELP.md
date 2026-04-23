@@ -29,9 +29,13 @@ The project uses Docker to run MySQL locally.
 
 ### Start MySQL
 
-From the project root directory:
+From the `unimate_backend` directory (or use `-f` from the repo root):
 
 docker compose up -d
+
+Or from the repo root:
+
+docker compose -f unimate_backend/docker-compose.yml up -d
 
 This will:
 
@@ -60,6 +64,16 @@ Wait until you see:
 ready for connections
 
 Do not start the application before this appears.
+
+Note: `docker compose up` (without `-d`) runs in the foreground and will keep streaming logs; it won't "finish". Use `-d` if you want the command to return immediately.
+
+First run can take a few minutes because Docker may need to download the `mysql:8.3` image and initialize the data volume; later runs are typically much faster.
+
+If you already created the container once, you can often use these faster commands:
+
+- Start existing container: `docker compose start`
+- Stop without removing: `docker compose stop`
+- Recreate only when needed: avoid `docker compose down -v` unless you want a full reset
 
 
 ## 2. Application Configuration
@@ -162,9 +176,9 @@ pom.xml              Maven configuration
 
 ## Quick Start
 
-From project root:
+From the repo root:
 
-docker compose up -d
+docker compose -f unimate_backend/docker-compose.yml up -d
 mvnw.cmd spring-boot:run
 
 Open:

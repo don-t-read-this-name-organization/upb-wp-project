@@ -1,12 +1,19 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { RouterLink, RouterView } from 'vue-router'
 import { useAppStore } from '@/stores/appStore'
 import { useI18n } from 'vue-i18n'
+import ToastNotification from '@/components/ToastNotification.vue'
+import { toastRef } from '@/utils/useToast'
 
 const store = useAppStore()
 const { t } = useI18n()
 const isSidebarOpen = ref(false)
+const toastComponent = ref<InstanceType<typeof ToastNotification>>()
+
+onMounted(() => {
+  toastRef.value = toastComponent.value
+})
 
 const toggleSidebar = () => {
   isSidebarOpen.value = !isSidebarOpen.value
@@ -28,6 +35,10 @@ const showUserProfile = computed(() => store.isLoggedIn && !store.isAdmin)
       <RouterLink :to="store.isAdmin ? '/admin' : '/'" class="logo"> <i class="fas fa-graduation-cap"></i> UniMate </RouterLink>
 
       <div class="header-controls">
+        <RouterLink v-if="!store.isLoggedIn" to="/getting-started" class="btn btn-secondary header-link">
+          <i class="fas fa-compass"></i> {{ t('menu.gettingStarted') }}
+        </RouterLink>
+
         <a v-if="showFacultyLink && store.userFacultyWebsite" :href="store.userFacultyWebsite" target="_blank" class="faculty-link">
           {{ store.userFacultyShortName || store.userFaculty }}
         </a>
@@ -129,6 +140,8 @@ const showUserProfile = computed(() => store.isLoggedIn && !store.isAdmin)
       </p>
     </div>
   </footer>
+
+  <ToastNotification ref="toastComponent" />
 </template>
 
 <style>
@@ -137,6 +150,9 @@ const showUserProfile = computed(() => store.isLoggedIn && !store.isAdmin)
 .sidebar {
   transition: transform 0.3s ease;
   transform: translateX(-100%);
+}
+.header-link {
+  text-decoration: none;
 }
 .sidebar.open {
   transform: translateX(0);

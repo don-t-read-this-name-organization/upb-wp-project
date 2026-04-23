@@ -4,13 +4,15 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
+import org.unimate.unimate.domain.entities.User;
+import org.unimate.unimate.domain.enums.RoleName;
 import org.unimate.unimate.repository.FileRepository;
 import org.unimate.unimate.repository.FolderRepository;
 import org.unimate.unimate.repository.NoteRepository;
-import org.unimate.unimate.repository.ReviewRepository;
 import org.unimate.unimate.repository.ScheduleRepository;
 import org.unimate.unimate.repository.SubtaskRepository;
 import org.unimate.unimate.repository.TaskRepository;
+import org.unimate.unimate.repository.UserRepository;
 
 @Component("authorizationService")
 @RequiredArgsConstructor
@@ -21,8 +23,8 @@ public class AuthorizationService {
   private final NoteRepository noteRepository;
   private final FileRepository fileRepository;
   private final FolderRepository folderRepository;
-  private final ReviewRepository reviewRepository;
   private final ScheduleRepository scheduleRepository;
+  private final UserRepository userRepository;
 
   public boolean isCurrentUser(Integer userId) {
     Integer currentUserId = getCurrentUserId();
@@ -30,7 +32,43 @@ public class AuthorizationService {
   }
 
   public boolean canAccessUser(Integer userId) {
-    return isAdmin() || isCurrentUser(userId);
+    return isSuperadmin() || isCurrentUser(userId) || canManageUser(userId);
+  }
+
+  public boolean canManageUser(Integer userId) {
+    if (userId == null) {
+      return false;
+    }
+
+    if (isSuperadmin()) {
+      return true;
+    }
+
+    if (!isAdmin()) {
+      return false;
+    }
+
+    Integer currentUserId = getCurrentUserId();
+    if (currentUserId == null) {
+      return false;
+    }
+
+    User currentUser = userRepository.findByIdIncludingInactive(currentUserId).orElse(null);
+    User targetUser = userRepository.findByIdIncludingInactive(userId).orElse(null);
+    if (currentUser == null || targetUser == null) {
+      return false;
+    }
+
+    if (currentUser.getFaculty() == null || targetUser.getFaculty() == null) {
+      return false;
+    }
+
+    boolean isTargetStudent = targetUser.getRole() == RoleName.STUDENT;
+    if (!isTargetStudent) {
+      return false;
+    }
+
+    return currentUser.getFaculty().getId().equals(targetUser.getFaculty().getId());
   }
 
   public boolean ownsTask(Integer taskId) {
@@ -88,17 +126,6 @@ public class AuthorizationService {
         .orElse(false);
   }
 
-  public boolean ownsReview(Integer reviewId) {
-    Integer currentUserId = getCurrentUserId();
-    if (currentUserId == null) {
-      return false;
-    }
-    return reviewRepository.findById(reviewId)
-        .filter(review -> Boolean.TRUE.equals(review.getActive()))
-        .map(review -> review.getUser().getId().equals(currentUserId))
-        .orElse(false);
-  }
-
   public boolean ownsSchedule(Integer scheduleId) {
     Integer currentUserId = getCurrentUserId();
     if (currentUserId == null) {
@@ -130,6 +157,15 @@ public class AuthorizationService {
     }
     return authentication.getAuthorities().stream()
         .anyMatch(authority -> "ROLE_ADMIN".equals(authority.getAuthority()));
+  }
+
+  public boolean isSuperadmin() {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    if (authentication == null || !authentication.isAuthenticated()) {
+      return false;
+    }
+    return authentication.getAuthorities().stream()
+        .anyMatch(authority -> "ROLE_SUPERADMIN".equals(authority.getAuthority()));
   }
 
   public boolean isChief() {

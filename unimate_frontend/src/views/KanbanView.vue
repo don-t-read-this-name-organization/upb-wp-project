@@ -3,9 +3,11 @@ import { ref, computed, onMounted } from 'vue'
 import draggable from 'vuedraggable'
 import { useAppStore } from '@/stores/appStore'
 import { useI18n } from 'vue-i18n'
+import { useToast } from '@/utils/useToast'
 import BaseModal from '@/components/BaseModal.vue'
 
 const { t } = useI18n()
+const toast = useToast()
 
 interface Subtask {
   id: number
@@ -97,15 +99,16 @@ const createTask = async () => {
     if (response.ok) {
       const newTask = await response.json()
       tasks.value.push(newTask)
+      toast.success('Task created', `"${formTitle.value}" added to your kanban board`)
       closeModal()
     } else {
       const error = await response.json()
       console.error('Failed to create task:', error)
-      alert('Failed to create task: ' + (error.error || 'Unknown error'))
+      toast.error('Failed to create task', error.error || 'Unknown error')
     }
   } catch (error) {
     console.error('Failed to create task:', error)
-    alert('Failed to create task. Check console for details.')
+    toast.error('Failed to create task', 'Check console for details')
   }
 }
 
@@ -146,13 +149,16 @@ const updateTask = async () => {
       if (idx !== -1) {
         tasks.value[idx] = updatedTask
       }
+      toast.success('Task updated', `"${formTitle.value}" has been updated`)
       closeModal()
     } else {
       const error = await response.json()
       console.error('Failed to update task:', error)
+      toast.error('Failed to update task', error.error || 'Unknown error')
     }
   } catch (error) {
     console.error('Failed to update task:', error)
+    toast.error('Failed to update task', 'Check console for details')
   }
 }
 
@@ -168,9 +174,14 @@ const toggleSubtask = async (subtask: { id?: number; completed: boolean }) => {
     })
     if (response.ok) {
       subtask.completed = !subtask.completed
+      const status = subtask.completed ? 'completed' : 'uncompleted'
+      toast.success('Subtask updated', `Subtask marked as ${status}`)
+    } else {
+      toast.error('Failed to update subtask', 'Please try again')
     }
   } catch (error) {
     console.error('Failed to toggle subtask:', error)
+    toast.error('Failed to update subtask', 'Check console for details')
   }
 }
 
@@ -194,10 +205,15 @@ const deleteTask = async () => {
     })
 
     if (response.ok) {
+      const deletedTask = tasks.value.find(t => t.id === taskToDelete.value)
       tasks.value = tasks.value.filter((t) => t.id !== taskToDelete.value)
+      toast.success('Task deleted', `"${deletedTask?.title}" has been removed`)
+    } else {
+      toast.error('Failed to delete task', 'Please try again')
     }
   } catch (error) {
     console.error('Failed to delete task:', error)
+    toast.error('Failed to delete task', 'Check console for details')
   } finally {
     cancelDelete()
   }

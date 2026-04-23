@@ -24,7 +24,6 @@ public class UserRequest {
   @NotEmpty
   private String email;
 
-  @NotEmpty(message = "Password cannot be empty")
   @Size(min = 6, max = 256)
   private String password;
 

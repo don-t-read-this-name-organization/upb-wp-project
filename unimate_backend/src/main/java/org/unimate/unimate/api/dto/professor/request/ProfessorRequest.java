@@ -6,6 +6,10 @@ import jakarta.validation.constraints.Size;
 public record ProfessorRequest(
     @NotBlank @Size(max = 255) String name,
     @Size(max = 255) String department,
-    @Size(max = 255) String faculty
+    @Size(max = 255) String faculty,
+    @Size(max = 20) String phone,
+    @Size(max = 255) String email,
+    @Size(max = 255) String officeLocation,
+    String officeHours
 ) {
 }

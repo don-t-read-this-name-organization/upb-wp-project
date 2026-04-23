@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.experimental.FieldDefaults;
 import org.unimate.unimate.domain.entities.Subtask;
 
+import java.time.LocalDateTime;
+
 import static lombok.AccessLevel.PRIVATE;
 
 @Data
@@ -17,6 +19,8 @@ public class SubtaskResponse {
   private Integer taskId;
   private String title;
   private Boolean completed;
+  private LocalDateTime createdAt;
+  private LocalDateTime updatedAt;
 
   public static SubtaskResponse fromEntity(Subtask subtask) {
     return SubtaskResponse.builder()
@@ -24,6 +28,8 @@ public class SubtaskResponse {
         .taskId(subtask.getTask().getId())
         .title(subtask.getTitle())
         .completed(subtask.getCompleted())
+        .createdAt(subtask.getCreatedAt())
+        .updatedAt(subtask.getUpdatedAt())
         .build();
   }
 }

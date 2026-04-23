@@ -1,8 +1,9 @@
 databaseChangeLog:
   - changeSet:
       id: "15-seed-groups"
-      author: "frihetselsker"
+      author: "demesup"
       changes:
+        # FILS Groups
         - insert:
             tableName: student_groups
             columns:
@@ -63,3 +64,52 @@ databaseChangeLog:
               - column:
                   name: faculty_id
                   valueNumeric: 12
+        # ACS (Automatic Control and Computer Science) Groups
+        - insert:
+            tableName: student_groups
+            columns:
+              - column:
+                  name: name
+                  value: "1211AC"
+              - column:
+                  name: year
+                  valueNumeric: 1
+              - column:
+                  name: faculty_id
+                  valueNumeric: 3
+        - insert:
+            tableName: student_groups
+            columns:
+              - column:
+                  name: name
+                  value: "1221AC"
+              - column:
+                  name: year
+                  valueNumeric: 2
+              - column:
+                  name: faculty_id
+                  valueNumeric: 3
+        - insert:
+            tableName: student_groups
+            columns:
+              - column:
+                  name: name
+                  value: "1231AC"
+              - column:
+                  name: year
+                  valueNumeric: 3
+              - column:
+                  name: faculty_id
+                  valueNumeric: 3
+        - insert:
+            tableName: student_groups
+            columns:
+              - column:
+                  name: name
+                  value: "1241AC"
+              - column:
+                  name: year
+                  valueNumeric: 4
+              - column:
+                  name: faculty_id
+                  valueNumeric: 3

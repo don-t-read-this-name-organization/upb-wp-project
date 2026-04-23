@@ -32,81 +32,155 @@ public class UserController {
 
   UserService userService;
 
+  private User requireCurrentUserEntity(AuthenticatedUser currentUser) {
+    if (currentUser == null) {
+      throw new ValidationException("User is not authenticated");
+    }
+    return userService.findById(currentUser.getId())
+        .orElseThrow(() -> new ValidationException("User is not authenticated"));
+  }
+
   @PostMapping("/register")
   public UserResponse register(@RequestBody UserRequest request) {
     return userService.createPending(request);
   }
 
   @PostMapping
-  @Secured({"ROLE_ADMIN"})
-  public UserResponse create(@RequestBody UserRequest request) {
+  @Secured({"ROLE_ADMIN", "ROLE_SUPERADMIN"})
+  public UserResponse create(@RequestBody UserRequest request, @AuthenticationPrincipal AuthenticatedUser currentUser) {
+    if (currentUser == null) {
+      throw new ValidationException("User is not authenticated");
+    }
+
+    if (currentUser.getRole() == RoleName.ADMIN) {
+      User admin = requireCurrentUserEntity(currentUser);
+      if (admin.getFaculty() == null) {
+        throw new ValidationException("Admin must be assigned to a faculty");
+      }
+
+      request.setRole(RoleName.STUDENT);
+      request.setFacultyId(admin.getFaculty().getId());
+    }
     return userService.create(request);
   }
 
 
   @GetMapping("/{id}")
-  @PreAuthorize("hasRole('ADMIN') or @authorizationService.isCurrentUser(#id)")
+  @PreAuthorize("@authorizationService.canAccessUser(#id)")
   public UserResponse getById(@PathVariable Integer id) {
-    return userService.findById(id).map(UserResponse::fromEntity)
+    return userService.findByIdIncludingInactive(id).map(UserResponse::fromEntity)
         .orElseThrow(() -> new NotFoundException("User", id));
   }
 
   @GetMapping
-  @PreAuthorize("hasRole('ADMIN')")
-  public List<UserResponse> list() {
-    return userService.findAll().stream().map(UserResponse::fromEntity).toList();
+  @PreAuthorize("hasAnyRole('ADMIN','SUPERADMIN')")
+  public List<UserResponse> list(@AuthenticationPrincipal AuthenticatedUser currentUser) {
+    if (currentUser == null) {
+      throw new ValidationException("User is not authenticated");
+    }
+
+    if (currentUser.getRole() == RoleName.SUPERADMIN) {
+      return userService.findAll().stream().map(UserResponse::fromEntity).toList();
+    }
+
+    User admin = requireCurrentUserEntity(currentUser);
+    if (admin.getFaculty() == null) {
+      throw new ValidationException("Admin must be assigned to a faculty");
+    }
+
+    return userService.findAll().stream()
+        .filter(u -> u.getRole() == RoleName.STUDENT)
+        .filter(u -> u.getFaculty() != null && admin.getFaculty().getId().equals(u.getFaculty().getId()))
+        .map(UserResponse::fromEntity)
+        .toList();
   }
 
   @PutMapping("/{id}")
-  @PreAuthorize("hasRole('ADMIN') or @authorizationService.isCurrentUser(#id)")
+  @PreAuthorize("@authorizationService.canAccessUser(#id)")
   public UserResponse update(
       @PathVariable Integer id,
       @RequestBody UserRequest request,
       @AuthenticationPrincipal AuthenticatedUser currentUser
   ) {
-    if (currentUser == null) {
-      throw new ValidationException("User is not authenticated");
-    }
-
+    User actor = requireCurrentUserEntity(currentUser);
+    boolean isSelfUpdate = actor.getId().equals(id);
     boolean isAdmin = currentUser.getRole() == RoleName.ADMIN;
-    if (!isAdmin && !currentUser.getId().equals(id)) {
+    boolean isSuperadmin = currentUser.getRole() == RoleName.SUPERADMIN;
+
+    if (!isSelfUpdate && !isAdmin && !isSuperadmin) {
       throw new AccessDeniedException("You can only update your own user");
     }
 
-    User user = userService.findById(id).orElseThrow(() -> new NotFoundException("User", id));
-    if (!isAdmin) {
+    User user = userService.findByIdIncludingInactive(id).orElseThrow(() -> new NotFoundException("User", id));
+
+    if (isAdmin && !isSelfUpdate) {
+      if (actor.getFaculty() == null) {
+        throw new ValidationException("Admin must be assigned to a faculty");
+      }
+      request.setRole(RoleName.STUDENT);
+      request.setFacultyId(actor.getFaculty().getId());
+    }
+
+    if (isAdmin && isSelfUpdate) {
+      request.setRole(RoleName.ADMIN);
+      if (actor.getFaculty() != null) {
+        request.setFacultyId(actor.getFaculty().getId());
+      }
+    }
+
+    if (!isAdmin && !isSuperadmin) {
       request.setRole(user.getRole());
+      request.setPassword(null); // Non-admin users cannot change password via this endpoint
     }
     return userService.update(user, request);
   }
 
   @DeleteMapping("/{id}")
-  @PreAuthorize("hasRole('ADMIN')")
+  @PreAuthorize("@authorizationService.canManageUser(#id)")
   public void delete(@PathVariable Integer id) {
-    User user = userService.findById(id).orElseThrow(() -> new NotFoundException("User", id));
+    User user = userService.findByIdIncludingInactive(id).orElseThrow(() -> new NotFoundException("User", id));
     userService.delete(user);
   }
 
   @GetMapping("/pending")
-  @PreAuthorize("hasRole('ADMIN')")
-  public List<UserResponse> listPending() {
-    return userService.findPendingUsers().stream().map(UserResponse::fromEntity).toList();
+  @PreAuthorize("hasAnyRole('ADMIN','SUPERADMIN')")
+  public List<UserResponse> listPending(@AuthenticationPrincipal AuthenticatedUser currentUser) {
+    if (currentUser == null) {
+      throw new ValidationException("User is not authenticated");
+    }
+
+    List<User> pending = userService.findPendingUsers();
+
+    if (currentUser.getRole() == RoleName.SUPERADMIN) {
+      return pending.stream().map(UserResponse::fromEntity).toList();
+    }
+
+    User admin = requireCurrentUserEntity(currentUser);
+    if (admin.getFaculty() == null) {
+      throw new ValidationException("Admin must be assigned to a faculty");
+    }
+
+    return pending.stream()
+        .filter(u -> u.getRole() == RoleName.STUDENT)
+        .filter(u -> u.getFaculty() != null && admin.getFaculty().getId().equals(u.getFaculty().getId()))
+        .map(UserResponse::fromEntity)
+        .toList();
   }
 
   @PostMapping("/{id}/approve")
-  @PreAuthorize("hasRole('ADMIN')")
+  @PreAuthorize("@authorizationService.canManageUser(#id)")
   public UserResponse approve(@PathVariable Integer id) {
     return userService.approveUser(id);
   }
 
   @PostMapping("/{id}/reject")
-  @PreAuthorize("hasRole('ADMIN')")
+  @PreAuthorize("@authorizationService.canManageUser(#id)")
   public void reject(@PathVariable Integer id) {
     userService.rejectUser(id);
   }
 
   @PostMapping("/{id}/change-password")
-  @PreAuthorize("hasRole('ADMIN') or @authorizationService.isCurrentUser(#id)")
+  @PreAuthorize("@authorizationService.canAccessUser(#id)")
   public ResponseEntity<?> changePassword(@PathVariable Integer id, @RequestBody Map<String, String> request) {
     try {
       String oldPassword = request.get("oldPassword");

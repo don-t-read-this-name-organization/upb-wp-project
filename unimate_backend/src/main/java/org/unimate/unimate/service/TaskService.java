@@ -3,6 +3,7 @@ package org.unimate.unimate.service;
 import org.springframework.transaction.annotation.Transactional;
 import org.unimate.unimate.api.dto.task.request.TaskRequest;
 import org.unimate.unimate.api.dto.task.response.TaskResponse;
+import org.unimate.unimate.api.dto.subtask.response.SubtaskResponse;
 import org.unimate.unimate.domain.entities.Subtask;
 import org.unimate.unimate.domain.entities.Task;
 
@@ -31,7 +32,7 @@ public interface TaskService {
   Subtask addSubtask(Integer taskId, String title);
 
   @Transactional
-  Subtask updateSubtask(Integer subtaskId, String title, Boolean completed);
+  SubtaskResponse updateSubtask(Integer subtaskId, String title, Boolean completed);
 
   @Transactional
   void deleteSubtask(Integer subtaskId);

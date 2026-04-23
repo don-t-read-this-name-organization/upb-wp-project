@@ -4,6 +4,19 @@ const messages = {
   en: {
     welcome: 'Welcome to UniMate',
     description: 'Your all-in-one student assistant',
+    gettingStarted: {
+      title: 'Getting Started',
+      subtitle: 'Create an account and wait for an admin from your faculty to approve it. Once approved, you can log in and use the platform.',
+      stepsTitle: 'How it works',
+      step1: 'Register with your university email, faculty, and group.',
+      step2: 'Wait for approval from a faculty administrator.',
+      step3: 'Log in and start using UniMate.',
+      register: 'Register',
+      login: 'Login',
+      learnMore: 'Learn more',
+      ctaTitle: 'New here?',
+      ctaBody: 'Create an account to access timetables, notes, files, and more. Registrations require admin approval.',
+    },
     profile: {
       firstName: 'First Name',
       lastName: 'Last Name',
@@ -30,6 +43,7 @@ const messages = {
       files: 'Files',
       professors: 'Professors',
       kanban: 'Kanban',
+      gettingStarted: 'Getting Started',
       login: 'Login',
       admin: 'Admin',
       logout: 'Log out'
@@ -399,6 +413,19 @@ const messages = {
   },
   ro: {
     welcome: 'Bine ai venit la UniMate',
+    gettingStarted: {
+      title: 'Ghid de Început',
+      subtitle: 'Creează un cont și așteaptă aprobarea unui administrator din facultatea ta. După aprobare, te poți autentifica și folosi platforma.',
+      stepsTitle: 'Cum funcționează',
+      step1: 'Înregistrează-te cu email-ul, facultatea și grupa.',
+      step2: 'Așteaptă aprobarea unui administrator al facultății.',
+      step3: 'Autentifică-te și începe să folosești UniMate.',
+      register: 'Înregistrare',
+      login: 'Autentificare',
+      learnMore: 'Află mai mult',
+      ctaTitle: 'Ești nou aici?',
+      ctaBody: 'Creează un cont pentru a accesa orarul, notițele, fișierele și multe altele. Înregistrările necesită aprobare.',
+    },
     description: 'Asistentul tÄƒu universal pentru studenÈ›i',
     profile: {
       firstName: 'Prenume',
@@ -426,6 +453,7 @@ const messages = {
       files: 'FiÈ™iere',
       professors: 'Profesori',
       kanban: 'Kanban',
+      gettingStarted: 'Ghid de Început',
       login: 'Autentificare',
       admin: 'Admin',
       logout: 'Deconectare'
@@ -795,6 +823,19 @@ const messages = {
   },
   de: {
     welcome: 'Willkommen bei UniMate',
+    gettingStarted: {
+      title: 'Erste Schritte',
+      subtitle: 'Erstelle ein Konto und warte auf die Freigabe durch einen Admin deiner Fakultät. Danach kannst du dich anmelden und die Plattform nutzen.',
+      stepsTitle: 'So funktioniert es',
+      step1: 'Registriere dich mit E-Mail, Fakultät und Gruppe.',
+      step2: 'Warte auf die Freigabe durch einen Fakultäts-Administrator.',
+      step3: 'Melde dich an und nutze UniMate.',
+      register: 'Registrieren',
+      login: 'Anmelden',
+      learnMore: 'Mehr erfahren',
+      ctaTitle: 'Neu hier?',
+      ctaBody: 'Erstelle ein Konto, um Stundenplan, Notizen, Dateien und mehr zu nutzen. Registrierungen benötigen eine Admin-Freigabe.',
+    },
     description: 'Ihr All-in-One-Studentenassistent',
     profile: {
       firstName: 'Vorname',
@@ -822,6 +863,7 @@ const messages = {
       files: 'Dateien',
       professors: 'Professoren',
       kanban: 'Kanban',
+      gettingStarted: 'Erste Schritte',
       login: 'Anmelden',
       admin: 'Admin',
       logout: 'Abmelden'
@@ -1199,6 +1241,19 @@ const messages = {
   },
   fr: {
     welcome: 'Bienvenue sur UniMate',
+    gettingStarted: {
+      title: 'Bien démarrer',
+      subtitle: 'Crée un compte et attends l’approbation d’un admin de ta faculté. Une fois approuvé, tu peux te connecter et utiliser la plateforme.',
+      stepsTitle: 'Comment ça marche',
+      step1: 'Inscris-toi avec ton email, ta faculté et ton groupe.',
+      step2: 'Attends l’approbation d’un administrateur de faculté.',
+      step3: 'Connecte-toi et commence à utiliser UniMate.',
+      register: 'S’inscrire',
+      login: 'Se connecter',
+      learnMore: 'En savoir plus',
+      ctaTitle: 'Nouveau ici ?',
+      ctaBody: 'Crée un compte pour accéder à l’emploi du temps, aux notes, aux fichiers, et plus. Les inscriptions nécessitent une approbation.',
+    },
     description: 'Votre assistant Ã©tudiant tout-en-un',
     profile: {
       firstName: 'PrÃ©nom',
@@ -1226,6 +1281,7 @@ const messages = {
       files: 'Fichiers',
       professors: 'Professeurs',
       kanban: 'Kanban',
+      gettingStarted: 'Bien démarrer',
       login: 'Connexion',
       admin: 'Admin',
       logout: 'DÃ©connexion'

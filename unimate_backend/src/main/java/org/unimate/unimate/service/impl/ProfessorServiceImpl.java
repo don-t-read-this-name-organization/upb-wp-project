@@ -35,11 +35,15 @@ public class ProfessorServiceImpl implements ProfessorService {
 
   @Override
   @Transactional
-  public Professor create(String name, String department, String faculty) {
+  public Professor create(String name, String department, String faculty, String phone, String email, String officeLocation, String officeHours) {
     Professor professor = Professor.builder()
         .name(name)
         .department(department)
         .faculty(faculty)
+        .phone(phone)
+        .email(email)
+        .officeLocation(officeLocation)
+        .officeHours(officeHours)
         .active(true)
         .build();
     return professorRepository.save(professor);
@@ -47,13 +51,17 @@ public class ProfessorServiceImpl implements ProfessorService {
 
   @Override
   @Transactional
-  public Professor update(Integer id, String name, String department, String faculty) {
+  public Professor update(Integer id, String name, String department, String faculty, String phone, String email, String officeLocation, String officeHours) {
     Professor professor = professorRepository.findByIdAndActiveTrue(id)
         .orElseThrow(() -> new NotFoundException("Professor", id));
 
     professor.setName(name);
     professor.setDepartment(department);
     professor.setFaculty(faculty);
+    professor.setPhone(phone);
+    professor.setEmail(email);
+    professor.setOfficeLocation(officeLocation);
+    professor.setOfficeHours(officeHours);
     return professorRepository.save(professor);
   }
 
